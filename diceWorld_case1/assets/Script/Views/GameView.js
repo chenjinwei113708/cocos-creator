@@ -8,7 +8,8 @@
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 import {
-    BRICK_STATUS
+    BRICK_STATUS,
+    BRICK_BOX
 } from '../Model/ConstValue.js';
 
 cc.Class({
@@ -20,6 +21,11 @@ cc.Class({
         empty1: cc.Node, // 空格子 （3,2） 左下角第一个是（1,1）
         empty2: cc.Node, // 空格子 （3,3） 左下角第一个是（1,1）
         empty3: cc.Node, // 空格子 （4,3） 左下角第一个是（1,1）
+        kongBox: cc.Node, // 激活状态
+        bomb: cc.Node, // 炸弹
+        wind: cc.Node, // 旋风
+        bombParticle: cc.Node, // 粒子特效
+        bombShadow: cc.Node, // 炸弹痕迹
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -32,16 +38,15 @@ cc.Class({
             lastGroup: null, // 上次选中的分组
             brickDistance: -50, // 上次选中的分组
             isGameStarted: false, // 用户有没有开始游戏
-            isFirstBrick: true, // 是不是第一张方块
-            isSecondBrick: false, // 是不是第一张方块
-            brickWidth: 97,
-            brickHeight: 141,
-            // inputBox: [ // 输入位置
-            //     cc.v2(this.kong1.position.x, this.kong1.position.y-200),
-            //     cc.v2(this.kong2.position.x, this.kong2.position.y-150),
-            //     cc.v2(this.kong3.position.x, this.kong3.position.y-100),
-            //     cc.v2(this.kong4.position.x, this.kong4.position.y-50),
-            // ],
+            gestureDistance: 70, // 用户手指和移动的方块之间的距离
+            brickWidth: 72,
+            brickHeight: 72,
+            inputOrder: [], // 用户放置的顺序
+            inputBox: [ // 输入位置
+                cc.v2(this.empty1.position.x, this.empty1.position.y),
+                cc.v2(this.empty2.position.x, this.empty2.position.y),
+                cc.v2(this.empty3.position.x, this.empty3.position.y),
+            ],
         };
         this.setBrickClickListener();
     },
@@ -82,71 +87,39 @@ cc.Class({
         // console.log('touch move, ', this.gameInfo.brickStatus === BRICK_STATUS.IS_MOVE);
         if (this.gameInfo.brickStatus === BRICK_STATUS.IS_MOVE) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
-            touchPos = cc.v2(touchPos.x, touchPos.y+70);
+            touchPos = cc.v2(touchPos.x, touchPos.y+this.gameInfo.gestureDistance);
             // console.log('touch move, ', touchPos);
             this.user.position = touchPos;
-            // this.checkGroup(touchPos, false);
+            this.checkGroup(touchPos, false);
         }
     },
     onTouchEnd (touch) {
-        return;
         if (this.gameInfo.brickStatus === BRICK_STATUS.IS_MOVE) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
-            touchPos = cc.v2(touchPos.x, touchPos.y+50);
-            this.user.active = false;
+            touchPos = cc.v2(touchPos.x, touchPos.y+this.gameInfo.gestureDistance);
+            // this.user.active = false;
             // 用户真正选择的分组
             let group = this.checkGroup(touchPos, true);
-            // console.log('-- onTouchEnd, 用户选择分组:', group);
+            console.log('-- onTouchEnd, 用户选择分组:', group);
             this.deactivateLastGroup();
             
             if (!group) { // 如果没放到方块牌组里去
-                this.brick2.active = true;
+                this.begin.active = true;
+                this.user.active = false;
                 this.setBrickStatus(BRICK_STATUS.CAN_MOVE);
                 return;
             } else { // 如果放到了方块牌组里面去
-                if (this.gameInfo.isFirstBrick) {
-                    // 如果是第一次放，只能放到第一组
-                    if (group !== CARD_GROUP.KONG1) {
-                        this.brick2.active = true;
-                        this.setBrickStatus(BRICK_STATUS.CAN_MOVE);
-                        return;
-                    } else {
-                        this.gameInfo.isFirstBrick = false;
-                        this.gameInfo.isSecondBrick = true;
-                        this.changeSwipeHand();
-                    }
-                } else if (this.gameInfo.isSecondBrick) {
-                    // 如果是第二次放，只能放到第二组
-                    if (group !== CARD_GROUP.KONG2) {
-                        this.brick2.active = true;
-                        this.setBrickStatus(BRICK_STATUS.CAN_MOVE);
-                        return;
-                    } else {
-                        this.hideSwipeHand();
-                        this.gameInfo.isSecondBrick = false;
-                        this.changeTimeout && clearTimeout(this.changeTimeout);
-                    }
-                }
                 this.setBrickStatus(BRICK_STATUS.DONE_MOVE);
-                let nowBrick = this.gameController.gameModel.getNowBrick();
-                this.putBrickIntoGroup(group, nowBrick);
+                this.putBrickIntoGroup(group, 6);
             }
         }
     },
 
     /**生成新的方块 */
     createNewBrick () {
-        let newBrickValue = this.gameController.gameModel.generateNewBrick();
-        // console.log('createNewBrick, newBrickValue', newBrickValue, ' brickindex: ',CARD_VALUE.indexOf(newBrickValue));
-        this.brick2.scale = 0.836;
-        this.brick2.position = cc.v2(this.brick1.position.x, this.brick1.position.y);
-        this.brick2.getComponent(cc.Sprite).spriteFrame = this.brick1.getComponent(cc.Sprite).spriteFrame;
-        this.brick2.active = true;
-        this.brick1.getComponent(cc.Sprite).spriteFrame = this.brickSprites[CARD_VALUE.indexOf(newBrickValue)];
-        this.brick2.runAction(cc.spawn(
-            cc.moveTo(0.1, cc.v2(10.47, -267.314)),
-            cc.scaleTo(0.1, 1),
-        ));
+        this.begin.position = cc.v2(159.108, -495.666);
+        this.begin.active = true;
+        this.begin.runAction(cc.moveTo(0.3, cc.v2(0, -241.093)));
     },
 
     /**判断是否选择方块片 */
@@ -168,7 +141,7 @@ cc.Class({
 
         let groupName = null;
         if (Date.now() - this.gameInfo.lastGroupTime >= this.gameInfo.groupDelay || isTouchEnd) {
-            const groups = [CARD_GROUP.KONG1, CARD_GROUP.KONG2, CARD_GROUP.KONG3, CARD_GROUP.KONG4];
+            const groups = [BRICK_BOX.EMPTY1, BRICK_BOX.EMPTY2, BRICK_BOX.EMPTY3];
             const leastY = -148.5;
             const lastY = 342.6;
             if (brickPos.y >= leastY && brickPos.y <= lastY) {
@@ -199,7 +172,125 @@ cc.Class({
         }
         return groupName;
     },
+
+    /**把方块放进空格 */
+    putBrickIntoGroup (gourpName, brickValue) {
+        // console.log('--- putBrickIntoGroup,', gourpName, ' brickValue:',brickValue);
+        this.setBrickStatus(BRICK_STATUS.CAN_MOVE);
+        if (this.gameInfo.inputOrder.indexOf(gourpName) > -1) {
+            this.user.active = false;
+            this.begin.active = true;
+            return;
+        }
+        this.createNewBrick();
+        this.user.runAction(cc.sequence(
+            cc.moveTo(0.15, cc.v2(this[gourpName].position.x, this[gourpName].position.y)),
+            cc.callFunc(() => {
+                this[gourpName].active = true;
+                this.setBrickStatus(BRICK_STATUS.CAN_MOVE);
+                // console.log('this[gourpName], ', gourpName, '  ', this[gourpName]);
+                this.gameInfo.inputOrder.push(gourpName);
+                this.user.active = false;
+                // this.createNewBrick();
+                if (this.gameInfo.inputOrder.length >= 3) {
+                    this.setBrickStatus(BRICK_STATUS.DONE_MOVE);
+                    this.generateBomb(gourpName);
+                }
+            })
+        ));
+    },
     
+    /**生成炸弹, 生成炸弹的点 */
+    generateBomb (groupName) {
+        console.log('generateBomb---,', groupName);
+        let destNode = this[groupName];
+        this.gameInfo.inputOrder.splice(this.gameInfo.inputOrder.indexOf(groupName), 1);
+        this.gameInfo.inputOrder.forEach((brickName, index) => {
+            this[brickName].runAction(cc.sequence(
+                cc.moveTo(0.1, cc.v2(destNode.position.x, destNode.position.y)),
+                cc.callFunc(() => {
+                    this[brickName].opacity = 0;
+                    if (index!==1) return;
+                    destNode.runAction(cc.sequence(
+                        cc.scaleTo(0.07, 1.1),
+                        cc.scaleTo(0.1, 0.1),
+                        cc.callFunc(() => {
+                            this.bomb.position = destNode.position;
+                            this.bomb.scale = 0.3;
+                            this.bomb.opacity = 0;
+                            this.bomb.active = true;
+                            destNode.runAction(cc.fadeOut(0.15));
+                            this.bomb.runAction(cc.sequence(
+                                cc.fadeIn(0.1),
+                                cc.scaleTo(0.1, 1),
+                                cc.callFunc(() => {
+                                    this.bombShadow.position = destNode.position;
+                                    this.wind.position = destNode.position;
+                                    this.bombParticle.position = destNode.position;
+                                    this.showBombEffect();
+                                })
+                            ));
+                        }),
+                    ));
+                })
+            ));
+        });
+    },
+
+    showBombEffect () {
+        this.wind.opacity = 0;
+        this.wind.scale = 0.7;
+        this.wind.active =true;
+        this.bomb.runAction(cc.sequence(
+            cc.scaleTo(0.4, 0.9),
+            cc.spawn(
+                cc.scaleTo(0.3, 1.2),
+                cc.fadeOut(0.35)
+            ),
+            cc.callFunc(() => {
+                this.node.runAction(cc.sequence(
+                    cc.moveTo(0.1, cc.v2(5,5)),
+                    cc.moveTo(0.1, cc.v2(-6,-3)),
+                    cc.moveTo(0.1, cc.v2(5,-1)),
+                    cc.callFunc(() => {
+                        this.clearAllBricks();
+                    }),
+                    cc.moveTo(0.1, cc.v2(-2,5)),
+                    cc.moveTo(0.1, cc.v2(0,0)),
+                ));
+                this.bombParticle.getComponent(cc.ParticleSystem).life = 0.5;
+                this.bombParticle.getComponent(cc.ParticleSystem).emissionRate = 500;
+                this.bombParticle.getComponent(cc.ParticleSystem).duration = 0.5;
+                this.bombParticle.getComponent(cc.ParticleSystem).resetSystem();
+            })
+        ));
+        this.wind.runAction(cc.sequence(
+            cc.spawn(
+                cc.fadeTo(0.1, 250),
+                cc.rotateBy(0.1, 30),
+            ),
+            cc.spawn(
+                cc.fadeOut(1.5),
+                cc.rotateBy(1.2, 360),
+                cc.scaleTo(0.4, 0.4),
+            ),
+            
+        ));
+    },
+
+    clearAllBricks () {
+        let bricks = [
+            ...cc.find('Canvas/center/game/bricks/a').children,
+            ...cc.find('Canvas/center/game/bricks/b').children,
+            ...cc.find('Canvas/center/game/bricks/c').children,
+            ...cc.find('Canvas/center/game/bricks/d').children,
+            ...cc.find('Canvas/center/game/bricks/e').children,
+        ];
+        bricks.forEach(item => {
+            item.runAction(cc.fadeOut(0.3));
+        });
+    },
+
     deactivateLastGroup () {
         this.kongBox.active = false;
     },
