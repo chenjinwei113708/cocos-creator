@@ -117,7 +117,29 @@ export default class GameModel {
             // }
         }
         this.VerticalConfig = {
-            
+            game: {
+                position: cc.v2(0, 0),
+                scale: 1
+            },
+            UI: {
+                children: {
+                    paypal: {
+                        children:{
+                            icon: {
+                                position: cc.v2(-137, -70.548)
+                            }
+                        }
+                    },
+                    guide: {
+                        children: {
+                            paypalCard: {
+                                position: cc.v2(0, 3.302),
+                                scale: 0.8,
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         //guiding用来记录是否还需要继续进行拖动手势引导
@@ -157,8 +179,10 @@ export default class GameModel {
 
     //初始化游戏模型
     gameInit() {
-        
+    }
 
-
+    /**获得坐标config */
+    getPositionConfig () {
+        return this.isLandscape ? this.HorizontalConfig : this.VerticalConfig;
     }
 }

@@ -20,12 +20,16 @@ cc.Class({
         begin: cc.Node, // 开始的方块
         empty1: cc.Node, // 空格子 （3,2） 左下角第一个是（1,1）
         empty2: cc.Node, // 空格子 （3,3） 左下角第一个是（1,1）
-        empty3: cc.Node, // 空格子 （4,3） 左下角第一个是（1,1）
+        empty3: cc.Node, // 空格子 （2,2） 左下角第一个是（1,1）
+        empty4: cc.Node, // 空格子 （2,3） 左下角第一个是（1,1）
         kongBox: cc.Node, // 激活状态
         bomb: cc.Node, // 炸弹
         wind: cc.Node, // 旋风
         bombParticle: cc.Node, // 粒子特效
         bombShadow: cc.Node, // 炸弹痕迹
+        guideHand: cc.Node, // 提示
+        guideDesc: cc.Node, // 提示
+        brick6Spriteframe: cc.SpriteFrame // 方块6的图
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -46,6 +50,7 @@ cc.Class({
                 cc.v2(this.empty1.position.x, this.empty1.position.y),
                 cc.v2(this.empty2.position.x, this.empty2.position.y),
                 cc.v2(this.empty3.position.x, this.empty3.position.y),
+                cc.v2(this.empty4.position.x, this.empty4.position.y),
             ],
         };
         this.setBrickClickListener();
@@ -64,10 +69,10 @@ cc.Class({
     onTouchStart (touch) {
         // console.log('touch start, ', this.gameInfo.brickStatus === BRICK_STATUS.CAN_MOVE);
         if (this.gameInfo.brickStatus === BRICK_STATUS.CAN_MOVE) {
-            // if (!this.gameInfo.isGameStarted) {
-            //     this.gameInfo.isGameStarted = true;
-            //     this.hideSwipeHint();
-            // }
+            if (!this.gameInfo.isGameStarted) {
+                this.gameInfo.isGameStarted = true;
+                this.hideGuide();
+            }
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
             if (!this.isTouchInBrick2(touchPos)) {
                 // 如果点击的不是可选择方块片
@@ -110,7 +115,7 @@ cc.Class({
                 return;
             } else { // 如果放到了方块牌组里面去
                 this.setBrickStatus(BRICK_STATUS.DONE_MOVE);
-                this.putBrickIntoGroup(group, 6);
+                this.putBrickIntoGroup(group);
             }
         }
     },
@@ -118,6 +123,7 @@ cc.Class({
     /**生成新的方块 */
     createNewBrick () {
         this.begin.position = cc.v2(159.108, -495.666);
+        this.begin.getChildByName('kuai1').getComponent(cc.Sprite).spriteFrame = this.brick6Spriteframe;
         this.begin.active = true;
         this.begin.runAction(cc.moveTo(0.3, cc.v2(0, -241.093)));
     },
@@ -141,7 +147,7 @@ cc.Class({
 
         let groupName = null;
         if (Date.now() - this.gameInfo.lastGroupTime >= this.gameInfo.groupDelay || isTouchEnd) {
-            const groups = [BRICK_BOX.EMPTY1, BRICK_BOX.EMPTY2, BRICK_BOX.EMPTY3];
+            const groups = [BRICK_BOX.EMPTY1, BRICK_BOX.EMPTY2, BRICK_BOX.EMPTY3, BRICK_BOX.EMPTY4];
             const leastY = -148.5;
             const lastY = 342.6;
             if (brickPos.y >= leastY && brickPos.y <= lastY) {
@@ -175,7 +181,7 @@ cc.Class({
 
     /**把方块放进空格 */
     putBrickIntoGroup (gourpName, brickValue) {
-        // console.log('--- putBrickIntoGroup,', gourpName, ' brickValue:',brickValue);
+        console.log('--- putBrickIntoGroup,', gourpName, ' brickValue:',brickValue);
         this.setBrickStatus(BRICK_STATUS.CAN_MOVE);
         if (this.gameInfo.inputOrder.indexOf(gourpName) > -1) {
             this.user.active = false;
@@ -192,12 +198,55 @@ cc.Class({
                 this.gameInfo.inputOrder.push(gourpName);
                 this.user.active = false;
                 // this.createNewBrick();
+                if (this.gameInfo.inputOrder.length === 1) {
+                    this.generateSix(gourpName);
+                }
                 if (this.gameInfo.inputOrder.length >= 3) {
                     this.setBrickStatus(BRICK_STATUS.DONE_MOVE);
                     this.generateBomb(gourpName);
                 }
             })
         ));
+    },
+
+    /**生成方块6,  groupName：生成方块6的点*/
+    generateSix (groupName) {
+        console.log('generateSix---,', groupName);
+        let destNode = this[groupName];
+        let fives = [BRICK_BOX.EMPTY3, BRICK_BOX.EMPTY4];
+        let originPos = {
+            [BRICK_BOX.EMPTY3]: cc.v2(this[BRICK_BOX.EMPTY3].position.x, this[BRICK_BOX.EMPTY3].position.y),
+            [BRICK_BOX.EMPTY4]: cc.v2(this[BRICK_BOX.EMPTY4].position.x, this[BRICK_BOX.EMPTY4].position.y),
+        }
+        fives.forEach((brickName, index) => {
+            this[brickName].runAction(cc.sequence(
+                cc.moveTo(0.1, cc.v2(destNode.position.x, destNode.position.y)),
+                cc.callFunc(() => {
+                    this[brickName].opacity = 0;
+                    if (index===1) {
+                        destNode.runAction(cc.sequence(
+                            cc.scaleTo(0.07, 1.1),
+                            cc.scaleTo(0.1, 0.1),
+                            cc.callFunc(() => {
+                                this[BRICK_BOX.EMPTY1].getChildByName('kuai1').getComponent(cc.Sprite).spriteFrame = this.brick6Spriteframe;
+                                this[BRICK_BOX.EMPTY2].getChildByName('kuai1').getComponent(cc.Sprite).spriteFrame = this.brick6Spriteframe;
+                                this.gameController.addCash(100);
+                                
+                            }),
+                            cc.scaleTo(0.1, 1),
+                            cc.delayTime(0.25),
+                            cc.callFunc(() => {
+                                this.gameController.guideView.showPaypalCardFly();
+                            })
+                        ));
+                    }
+                    this[brickName].position = originPos[brickName];
+                    this[brickName].getChildByName('kuai1').getComponent(cc.Sprite).spriteFrame = this.brick6Spriteframe;
+                    this[brickName].active = false;
+                    this[brickName].opacity = 255;
+                }),
+            ));
+        });
     },
     
     /**生成炸弹, 生成炸弹的点 */
@@ -254,6 +303,17 @@ cc.Class({
                     cc.moveTo(0.1, cc.v2(5,-1)),
                     cc.callFunc(() => {
                         this.clearAllBricks();
+                        this.bombShadow.opacity = 0;
+                        this.bombShadow.active = true;
+                        this.bombShadow.runAction(cc.sequence(
+                            cc.fadeIn(0.1),
+                            cc.delayTime(1),
+                            cc.fadeOut(0.5)
+                        ));
+                        this.gameController.addCash(200);
+                        this.gameController.guideView.showPaypalCardFly(() => {
+                            this.gameController.guideView.showCashoutHand();
+                        });
                     }),
                     cc.moveTo(0.1, cc.v2(-2,5)),
                     cc.moveTo(0.1, cc.v2(0,0)),
@@ -270,7 +330,7 @@ cc.Class({
                 cc.rotateBy(0.1, 30),
             ),
             cc.spawn(
-                cc.fadeOut(1.5),
+                cc.fadeOut(1.2),
                 cc.rotateBy(1.2, 360),
                 cc.scaleTo(0.4, 0.4),
             ),
@@ -289,6 +349,17 @@ cc.Class({
         bricks.forEach(item => {
             item.runAction(cc.fadeOut(0.3));
         });
+    },
+
+    hideGuide () {
+        this.guideHand.runAction(cc.sequence(
+            cc.fadeOut(0.3),
+            cc.callFunc(() => {
+                this.guideHand.getComponent(cc.Animation).stop();
+                this.guideHand.active = false;
+            }),
+        ));
+        this.guideDesc.runAction(cc.fadeOut(0.3));
     },
 
     deactivateLastGroup () {

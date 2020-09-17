@@ -12,4 +12,5 @@ export const BRICK_BOX = {
     EMPTY1: 'empty1',
     EMPTY2: 'empty2',
     EMPTY3: 'empty3',
+    EMPTY4: 'empty4',
 };
