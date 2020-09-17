@@ -1,37 +1,47 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+        light1: cc.Node,
+        light1s: cc.Node,
+        light2: cc.Node,
+        light2s: cc.Node,
+        light3: cc.Node,
+        light3s: cc.Node,
+        light4: cc.Node,
+        light4s: cc.Node,
+        light5: cc.Node,
+        light5s: cc.Node,
+        light6: cc.Node,
+        light6s: cc.Node
     },
 
-    // LIFE-CYCLE CALLBACKS:
+    setLightAction(){
+        let action = cc.repeatForever(
+            cc.sequence(cc.scaleTo(0.5,2.5,2.5), 
+                        cc.scaleTo(0.5,0.5,0.5), 
+                        cc.scaleTo(0.5,2.5,2.5), 
+                        cc.scaleTo(0.5,0.5,0.5), 
+                        cc.scaleTo(0.5,1.5,1.5), 
+                        cc.spawn(cc.scaleTo(1,0,0), cc.moveBy(2, 10, 10)),
+                        cc.moveBy(2,-10,-10)));
+        
+        this.light1.runAction(action);
+        
+        this.light2.runAction(action);
+        
+        this.light3.runAction(action);
+        this.light4.runAction(action);
+        this.light5.runAction(action);
+        this.light6.runAction(action);
+    },
 
-    // onLoad () {},
+
+    onLoad () {
+        this.setLightAction();
+    },
 
     start () {
 
