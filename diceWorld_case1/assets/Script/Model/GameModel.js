@@ -10,123 +10,112 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.HorizontalConfig = {
-            // // 横屏
-            // background: {
-            //     position: cc.v2(0, 0),
-            //     width: 1030,
-            //     height: 540,
-            //     scale: 1.4,
-            //     children: {
-            //         shanhu: {
-            //             position: cc.v2(-268, -22),
-            //             width: 317,
-            //             height: 98
-            //         },
-            //         bgEffect: {
-            //             position: cc.v2(-380, 0),
-            //             children: {
-            //                 waterWaveTop: {
-            //                     position: cc.v2(444, 286)
-            //                 }
-            //             }
-            //         },
-            //         rightPlant: {
-            //             position: cc.v2(380, -235),
-            //             width: 513,
-            //             height: 424,
-            //             rotation: -2
-            //         },
-            //         leftPlant: {
-            //             position: cc.v2(-323, -329),
-            //             width: 586,
-            //             height: 322,
-            //             rotation: 9
-            //         }
-            //     }
-            // },
-            // progress: {
-            //     position: cc.v2(-280, 0),
-            //     rotation: 0,
-            //     children: {
-            //         skillProgress: {
-            //             position: cc.v2(0, -191),
-            //             rotation: 0,
-            //         },
-            //         collectProgress: {
-            //             progressBarDirection: false,
-            //             rotation: 180,
-            //             children: {
-            //                 shell: {
-            //                     position: cc.v2(0, 90),
-            //                     rotation: 0
-            //                 },
-            //                 text: {
-            //                     position: cc.v2(0, 143),
-            //                     rotation: 180
-            //                 }
-            //             }
-            //         },
-            //         icon: {
-            //             position: cc.v2(-2, 204),
-            //             rotation: 0
-            //         }
-            //     }
-            // },
-            // grid: {
-            //     position: cc.v2(-150, -240)
-            // },
-            // effectLayer: {
-            //     position: cc.v2(-150, -240),
-            //     children: {
-            //         thunder: {
-            //             position: cc.v2(-132, 57)
-            //         }
-            //     }
-            // },
-            // guide: {
-            //     children: {
-            //         guideMask3: {
-            //             position: cc.v2(-280, -191)
-            //         },
-            //         tip: {
-            //             children: {
-            //                 tipStart: {
-            //                     position: cc.v2(347, 126)
-            //                 },
-            //                 tipStartEnd: {
-            //                     width: 175,
-            //                     height: 120,
-            //                     position: cc.v2(244, 38)
-            //                 },
-            //                 tipSkill: {
-            //                     position: cc.v2(-195, -175)
-            //                 },
-            //                 tipNormal1: {
-            //                     position: cc.v2(394, -68)
-            //                 },
-            //                 tipNormal2: {
-            //                     position: cc.v2(420, -155)
-            //                 }
-
-            //             }
-            //         }
-            //     }
-            // },
-            // tipEnd: {
-            //     position: cc.v2(-245, -240)
-            // }
-        }
-        this.VerticalConfig = {
             game: {
-                position: cc.v2(0, 0),
-                scale: 1
+                position: cc.v2(226.398, 8.775),
+                scale: 0.8,
+                children:{
+                    background: {
+                        width: 1000,
+                        height: 1280
+                    }
+                }
             },
             UI: {
                 children: {
                     paypal: {
+                        width: 820,
+                        height: 455,
+                        position: cc.v2(-429.402, 111.673),
+                        children:{
+                            icon: {
+                                position: cc.v2(61.814, -51.673)
+                            },
+                            cash: {
+                                position: cc.v2(270.683, -6.734)
+                            },
+                            btn: {
+                                position: cc.v2(272.809, -101.121)
+                            }
+                        }
+                    },
+                    banner: {
+                        width: 706,
+                        height: 206,
+                        position: cc.v2(-371.711, -215.366),
+                        children:{
+                            icon: {
+                                position: cc.v2(-37.74, 23.148)
+                            },
+                            logo: {
+                                position: cc.v2(195.87, 50.957)
+                            },
+                            btn: {
+                                position: cc.v2(192.2, -10.904)
+                            }
+                        }
+                    },
+                    guide: {
+                        children: {
+                            paypalCard: {
+                                position: cc.v2(232.14, 3.302),
+                                scale: 0.8,
+                            }
+                        }
+                    },
+                    congrat: {
+                        angle: 90
+                    },
+                    congratBlur: {
+                        angle: 90
+                    },
+                    audioBtn: {
+                        position: cc.v2(-424.717, 228.227)
+                    }
+                }
+            }
+        }
+        this.VerticalConfig = {
+            game: {
+                position: cc.v2(0, 0),
+                scale: 1,
+                children:{
+                    background: {
+                        width: 720,
+                        height: 1280
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    paypal: {
+                        width: 618,
+                        height: 343,
+                        position: cc.v2(0, 446.678),
                         children:{
                             icon: {
                                 position: cc.v2(-137, -70.548)
+                            },
+                            cash: {
+                                position: cc.v2(152.4, -25.609)
+                            },
+                            btn: {
+                                position: cc.v2(154.527, -119.996)
+                            }
+                        }
+                    },
+                    banner: {
+                        width: 566,
+                        height: 165,
+                        position: cc.v2(0, -422),
+                        children:{
+                            icon: {
+                                position: cc.v2(-153.505, 13.148)
+                            },
+                            logo: {
+                                position: cc.v2(80.105, 40.957)
+                            },
+                            btn: {
+                                position: cc.v2(76.436, -20.904)
                             }
                         }
                     },
@@ -137,6 +126,15 @@ export default class GameModel {
                                 scale: 0.8,
                             }
                         }
+                    },
+                    congrat: {
+                        angle: 0
+                    },
+                    congratBlur: {
+                        angle: 0
+                    },
+                    audioBtn: {
+                        position: cc.v2(0, 380.914)
                     }
                 }
             }

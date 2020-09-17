@@ -183,6 +183,13 @@ cc.Class({
     putBrickIntoGroup (gourpName, brickValue) {
         console.log('--- putBrickIntoGroup,', gourpName, ' brickValue:',brickValue);
         this.setBrickStatus(BRICK_STATUS.CAN_MOVE);
+        // 最开始第一个只允许放在第一 第二个空格
+        if (this.gameInfo.inputOrder.length === 0 && (gourpName===BRICK_BOX.EMPTY3 || gourpName===BRICK_BOX.EMPTY4)){
+            this.user.active = false;
+            this.begin.active = true;
+            return;
+        }
+        // 如果这个位置已经放了，就不能再放
         if (this.gameInfo.inputOrder.indexOf(gourpName) > -1) {
             this.user.active = false;
             this.begin.active = true;
@@ -298,9 +305,9 @@ cc.Class({
             ),
             cc.callFunc(() => {
                 this.node.runAction(cc.sequence(
-                    cc.moveTo(0.1, cc.v2(5,5)),
-                    cc.moveTo(0.1, cc.v2(-6,-3)),
-                    cc.moveTo(0.1, cc.v2(5,-1)),
+                    cc.moveBy(0.1, cc.v2(5,5)),
+                    cc.moveBy(0.1, cc.v2(-11,-8)),
+                    cc.moveBy(0.1, cc.v2(16,7)),
                     cc.callFunc(() => {
                         this.clearAllBricks();
                         this.bombShadow.opacity = 0;
@@ -315,8 +322,8 @@ cc.Class({
                             this.gameController.guideView.showCashoutHand();
                         });
                     }),
-                    cc.moveTo(0.1, cc.v2(-2,5)),
-                    cc.moveTo(0.1, cc.v2(0,0)),
+                    cc.moveBy(0.1, cc.v2(-18,-2)),
+                    cc.moveBy(0.1, cc.v2(18,2)),
                 ));
                 this.bombParticle.getComponent(cc.ParticleSystem).life = 0.5;
                 this.bombParticle.getComponent(cc.ParticleSystem).emissionRate = 500;
