@@ -13,6 +13,7 @@ cc.Class({
         center:cc.Node,
         // 整个游戏
         game: cc.Node,
+        cash: cc.Node,
     },
 
     onLoad() {
@@ -49,6 +50,8 @@ cc.Class({
         //用centerView脚本来布置整个画面，包括横竖屏的响应方法。
         this.centerScript = this.center.getComponent("CenterView");
         this.centerScript.setGameController(this);
+
+        this.cashView = this.cash.getComponent("CashView");
 
         // 根据model渲染各个元素状态 大小 位置等
         this.centerScript.initWithModel(this.gameModel);
@@ -98,11 +101,16 @@ cc.Class({
         return this.AudioUtils.getComponent('AudioUtils')
     },
 
-    // 调用View显示操作方法
-    showEndPage() {
-        this.AudioUtils.getComponent('AudioUtils').playEffect('endMusic', 0.6);
+    // 结束游戏
+    endGame() {
+        // this.AudioUtils.getComponent('AudioUtils').playEffect('endMusic', 0.6);
         PlayformSDK.gameFinish();
-        this.GuideView.showEndPage();
+        // this.GuideView.showEndPage();
+    },
+
+    /**加钱 */
+    addCash (num) {
+        this.cashView.addCash(num);
     },
 
     // 调用Model数据操作方法
