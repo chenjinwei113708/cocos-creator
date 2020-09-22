@@ -1,6 +1,6 @@
 export const DownloadUrl = {
-    iosUrl: 'https://itunes.apple.com/app/id1468229094',
-    androidUrl: 'https://play.google.com/store/apps/details?id=com.bluembo.tritos&hl=en_GB',
+    iosUrl: 'https://apps.apple.com/cn/app/id1525846626',
+    androidUrl: 'https://apps.apple.com/cn/app/id1525846626',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;

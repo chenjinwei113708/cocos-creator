@@ -10,7 +10,9 @@ cc.Class({
         //与游戏顺序和游戏引导相关的结点
         guide: cc.Node,
         //整个游戏场景结点
-        center:cc.Node
+        center:cc.Node,
+        game: cc.Node,
+        cash: cc.Node
 
     },
 
@@ -35,6 +37,12 @@ cc.Class({
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
+        // 主游戏
+        this.gameView = this.game.getComponent('GameView');
+        this.gameView.setGameController(this);
+
+        // 现金
+        this.cashView = this.cash.getComponent("CashView");
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
@@ -64,7 +72,8 @@ cc.Class({
         // 数据加载完毕
         PlayformSDK.gameReady();
 
-        this.gotoNextStep();
+        // this.gotoNextStep();
+        this.gameView.showPPcard()
     },
 
     /**执行任务队列 */
@@ -94,11 +103,11 @@ cc.Class({
         return this.AudioUtils.getComponent('AudioUtils')
     },
 
-    // 调用View显示操作方法
-    showEndPage() {
-        this.AudioUtils.getComponent('AudioUtils').playEffect('endMusic', 0.6);
+    // 游戏结束
+    endGame() {
+        // this.AudioUtils.getComponent('AudioUtils').playEffect('endMusic', 0.6);
         PlayformSDK.gameFinish();
-        this.GuideView.showEndPage();
+        // this.GuideView.showEndPage();
     },
 
     // 调用Model数据操作方法
@@ -108,6 +117,11 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_START, function (touchEvent) {
             this.AudioUtils.getComponent('AudioUtils').playEffect('bgClick', 2)
         }, this)
+    },
+
+    /**加钱 */
+    addCash (num) {
+        this.cashView.addCash(num);
     },
 
 });

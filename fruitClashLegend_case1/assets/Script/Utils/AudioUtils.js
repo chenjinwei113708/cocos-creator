@@ -22,20 +22,23 @@ cc.Class({
         },
 
         // Effect
-        bgClick: {
+        merge: {
+            type: cc.AudioClip,
+            default: null
+        },
+        coin: {
+            type: cc.AudioClip,
+            default: null
+        },
+        spin: {
+            type: cc.AudioClip,
+            default: null
+        },
+        moneyCard: {
             type: cc.AudioClip,
             default: null
         },
 
-        startMusic: {
-            type: cc.AudioClip,
-            default: null
-        },
-
-        endMusic: {
-            type: cc.AudioClip,
-            default: null
-        }
 
     },
 

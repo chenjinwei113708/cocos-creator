@@ -16,6 +16,13 @@ export const CELL_TYPE = {
     TOMATO: 'tomato',
 };
 
+export const CELL_STATUS = {
+    CAN_MOVE: 0,
+    IS_MOVE: 1,
+    DONE_MOVE: 2,
+    LOST_GAME: 3,
+};
+
 export const COMBINE_TYPE = {
     APPLE: CELL_TYPE.GRAPE,
     BANANA: CELL_TYPE.STRAWBERRY,
