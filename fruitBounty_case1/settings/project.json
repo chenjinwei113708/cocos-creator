@@ -1,7 +1,18 @@
 {
+  "assets-sort-type": "name",
   "collision-matrix": [
     [
       true
+    ],
+    [
+      false,
+      false,
+      true
+    ],
+    [
+      false,
+      true,
+      false
     ]
   ],
   "design-resolution-height": 640,
@@ -35,29 +46,29 @@
     "3D",
     "3D Primitive"
   ],
+  "facebook": {
+    "appID": "",
+    "audience": {
+      "enable": false
+    },
+    "enable": false,
+    "live": {
+      "enable": false
+    }
+  },
   "fit-height": true,
   "fit-width": false,
   "group-list": [
-    "default"
+    "default",
+    "knife",
+    "fruit"
   ],
+  "last-module-event-record-time": 0,
   "simulator-orientation": false,
   "simulator-resolution": {
     "height": 640,
     "width": 960
   },
-  "use-customize-simulator": false,
-  "use-project-simulator-setting": false,
-  "start-scene": "current",
-  "last-module-event-record-time": 0,
-  "assets-sort-type": "name",
-  "facebook": {
-    "enable": false,
-    "appID": "",
-    "live": {
-      "enable": false
-    },
-    "audience": {
-      "enable": false
-    }
-  }
+  "use-customize-simulator": true,
+  "use-project-simulator-setting": false
 }
