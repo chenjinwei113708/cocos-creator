@@ -29,6 +29,12 @@ cc.Class({
         //是否显示左下方fps信息
         cc.debug.setDisplayStats(false);
 
+        // 开启碰撞系统
+        var manager = cc.director.getCollisionManager();
+        manager.enabled = true;
+        // 绘制碰撞系统debug信息
+        manager.enabledDebugDraw = true;
+
 
         // GameModel初始化
         this.gameModel = new GameModel();
