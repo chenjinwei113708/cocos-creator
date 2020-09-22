@@ -33,9 +33,11 @@ cc.Class({
 
     /**点击小刀 */
     onClickKnife (touch) {
+        let spinAngle = Math.random() * 400 + 900;
         this.knife.runAction(cc.sequence(
-            cc.moveBy(0.4, 0, 750),
+            cc.spawn(cc.moveBy(0.35, 0, 950), cc.rotateTo(0.35, spinAngle)),
             cc.callFunc(() => {
+                this.knife.angle = 0;
                 this.knife.position = this.gameInfo.knifePos;
             })
         ));
