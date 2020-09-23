@@ -10,7 +10,9 @@ cc.Class({
         //与游戏顺序和游戏引导相关的结点
         guide: cc.Node,
         //整个游戏场景结点
-        center:cc.Node
+        center:cc.Node,
+        // 游戏
+        game: cc.Node,
 
     },
 
@@ -41,6 +43,9 @@ cc.Class({
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
+        // 游戏
+        this.gameView = this.game.getComponent('GameView');
+        this.gameView.setGameController(this);
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');

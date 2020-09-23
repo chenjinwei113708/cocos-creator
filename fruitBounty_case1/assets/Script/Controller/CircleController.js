@@ -43,11 +43,17 @@ cc.Class({
             }
             return origin;
         });
+        
         // console.log(this.degs);
     },
 
     start () {
 
+    },
+
+    /**停止旋转 */
+    disableSpin () {
+        this.enabled = false;
     },
 
     // dt单位秒

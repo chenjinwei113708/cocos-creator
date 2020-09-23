@@ -16,28 +16,40 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        this.circle = cc.find('Canvas/center/game/circle');
+        this.gameController = cc.find('Canvas').getComponent('GameController');
+    },
 
     start () {
 
     },
 
     /**
- * 当碰撞产生的时候调用
- * @param  {Collider} other 产生碰撞的另一个碰撞组件
- * @param  {Collider} self  产生碰撞的自身的碰撞组件
- */
-onCollisionEnter: function (other, self) {
-    let selfNode = self.node;
-    // console.log('on collision enter');
-    // console.log('hit---, self', selfNode.name);
-    selfNode.runAction(cc.sequence(
-        cc.fadeOut(0.1),
-        cc.callFunc(() => {
+     * 当碰撞产生的时候调用
+     * @param  {Collider} other 产生碰撞的另一个碰撞组件
+     * @param  {Collider} self  产生碰撞的自身的碰撞组件
+     */
+    onCollisionEnter: function (other, self) {
+        let selfNode = self.node;
+        // console.log('on collision enter');
+        // console.log('hit---, self', selfNode.name);
+        // // console.log('+++appleWorldPos', appleWorldPos);
+        // console.log('--- self appleWorldPos', appleWorldPos);
+        if (selfNode.active) {
+            let appleWorldPos = cc.v2(selfNode.position.x, selfNode.position.y);
+            selfNode.opacity = 0;
             selfNode.active = false;
-        })
-    ));
-},
+            this.gameController.gameView.showCutApple(appleWorldPos);
+        }
+        
+        // selfNode.runAction(cc.sequence(
+        //     cc.fadeOut(0.1),
+        //     cc.callFunc(() => {
+        //         selfNode.active = false;
+        //     })
+        // ));
+    },
 
     // update (dt) {},
 });
