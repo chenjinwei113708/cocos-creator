@@ -38,6 +38,7 @@ cc.Class({
             progressSpeed: 0.02, // 榨汁机速度
             nowProgress: 0, // 现在榨汁机进度
             targetProgress: 0, // 榨汁机目标进度
+            isGameWin: false, // 游戏胜利了没
         };
     },
 
@@ -139,11 +140,19 @@ cc.Class({
     addJuice (cutTimes) {
         this.gameInfo.targetProgress = cutTimes/this.gameInfo.winTimes;
         this.enabled = true; // 允许执行update
+        if (this.gameInfo.cutAppleNum >= 9) {
+            // 如果砍完了9个苹果，也算游戏胜利
+            this.winGame();
+        }
     },
 
     /**赢得游戏 */
     winGame () {
-        this.offClickListener();
+        if (!this.gameInfo.isGameWin) {
+            console.log('win game, you cut ', this.gameInfo.cutAppleNum, ' apples');
+            this.gameInfo.isGameWin = true;
+            this.offClickListener();
+        }
     },
 
     update (dt) {
