@@ -1,0 +1,105 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "bomb",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.275,
+  "sample": 40,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "e66a411c-9f54-46ea-a73d-5429c35519b9"
+            }
+          },
+          {
+            "frame": 0.025,
+            "value": {
+              "__uuid__": "620a7720-a4e7-4709-9afa-55cdaae9e6bc"
+            }
+          },
+          {
+            "frame": 0.05,
+            "value": {
+              "__uuid__": "f2d581c3-057e-4134-b315-a2a0069a44f3"
+            }
+          },
+          {
+            "frame": 0.075,
+            "value": {
+              "__uuid__": "24f568b4-4964-42ce-861f-e7e698dfe1fa"
+            }
+          },
+          {
+            "frame": 0.1,
+            "value": {
+              "__uuid__": "c3875479-e0d6-4688-8747-cf88d9ce7e6e"
+            }
+          },
+          {
+            "frame": 0.125,
+            "value": {
+              "__uuid__": "ca3a51ef-41d5-40ed-9185-5790402c718d"
+            }
+          },
+          {
+            "frame": 0.15,
+            "value": {
+              "__uuid__": "3c1ee804-783c-493c-a151-eb41a135086e"
+            }
+          },
+          {
+            "frame": 0.175,
+            "value": {
+              "__uuid__": "450780b8-86bb-4195-9928-e9aec4753552"
+            }
+          }
+        ]
+      }
+    },
+    "props": {
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 50
+        },
+        {
+          "frame": 0.05,
+          "value": 255
+        },
+        {
+          "frame": 0.175,
+          "value": 255
+        },
+        {
+          "frame": 0.275,
+          "value": 0
+        }
+      ],
+      "scale": [
+        {
+          "frame": 0.2,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 0.25,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.5,
+            "y": 1.5
+          }
+        }
+      ]
+    }
+  },
+  "events": []
+}

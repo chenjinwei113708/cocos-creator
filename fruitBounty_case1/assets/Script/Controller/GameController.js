@@ -35,7 +35,7 @@ cc.Class({
         var manager = cc.director.getCollisionManager();
         manager.enabled = true;
         // 绘制碰撞系统debug信息
-        manager.enabledDebugDraw = true;
+        // manager.enabledDebugDraw = true;
 
 
         // GameModel初始化

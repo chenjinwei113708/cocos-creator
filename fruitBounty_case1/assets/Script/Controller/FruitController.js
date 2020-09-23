@@ -32,23 +32,12 @@ cc.Class({
      */
     onCollisionEnter: function (other, self) {
         let selfNode = self.node;
-        // console.log('on collision enter');
-        // console.log('hit---, self', selfNode.name);
-        // // console.log('+++appleWorldPos', appleWorldPos);
-        // console.log('--- self appleWorldPos', appleWorldPos);
         if (selfNode.active) {
-            let appleWorldPos = cc.v2(selfNode.position.x, selfNode.position.y);
+            let appleWorldPos = cc.v2(selfNode.position.x, selfNode.position.y+85);
             selfNode.opacity = 0;
             selfNode.active = false;
             this.gameController.gameView.showCutApple(appleWorldPos);
         }
-        
-        // selfNode.runAction(cc.sequence(
-        //     cc.fadeOut(0.1),
-        //     cc.callFunc(() => {
-        //         selfNode.active = false;
-        //     })
-        // ));
     },
 
     // update (dt) {},

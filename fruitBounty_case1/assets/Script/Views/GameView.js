@@ -18,6 +18,9 @@ cc.Class({
         knife: cc.Node, // 小刀
         ban1: [cc.Node], // 切开的苹果瓣1
         ban2: [cc.Node], // 切开的苹果瓣2
+        diamonds: [cc.Node], // 钻石
+        bombs: [cc.Node], // 切水果爆开特效
+        glass: cc.Node, // 装果汁的榨汁机
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -27,7 +30,14 @@ cc.Class({
         this.gameInfo = {
             knifePos: cc.v2(this.knife.position.x, this.knife.position.y),
             knifeStatus: KNIFE_STATUS.CAN_MOVE,
-            cutAppleNum: 0,
+            cutAppleNum: 0, // 切了几个苹果
+            throwTimes: 0, // 第几次丢飞镖
+            winAtThrowTimes: 0, // 上一次丢中是第几次丢飞镖
+            cutTimes: 0, // 第几次丢中飞镖
+            winTimes: 5, // 需要丢中几次才能赢游戏
+            progressSpeed: 0.02, // 榨汁机速度
+            nowProgress: 0, // 现在榨汁机进度
+            targetProgress: 0, // 榨汁机目标进度
         };
     },
 
@@ -46,6 +56,7 @@ cc.Class({
     onClickKnife (touch) {
         if (this.gameInfo.knifeStatus === KNIFE_STATUS.CAN_MOVE) {
             this.setKnifeStatus(KNIFE_STATUS.IS_MOVE);
+            this.gameInfo.throwTimes++; // 增加一次丢飞镖次数
             let spinAngle = Math.random() * 400 + 900;
             this.knife.getComponent(cc.Animation).stop('knife');
             this.knife.runAction(cc.sequence(
@@ -71,8 +82,29 @@ cc.Class({
     /**展示切苹果的动画 */
     showCutApple (appleWorldPos) {
         this.gameInfo.cutAppleNum++;
+        if (this.gameInfo.winAtThrowTimes !== this.gameInfo.throwTimes) {
+            this.gameInfo.winAtThrowTimes = this.gameInfo.throwTimes;
+            this.gameInfo.cutTimes++;
+        }
         const juicePos = cc.v2(-197, -210);
         const moveTime = 0.2;
+
+        let diamond = this.diamonds[(this.gameInfo.cutAppleNum-1)%this.diamonds.length];
+        diamond.position = cc.v2(appleWorldPos.x, appleWorldPos.y-50);
+        diamond.active = true;
+        diamond.opacity = 255;
+        diamond.runAction(cc.sequence(
+            cc.moveBy(moveTime*2, 0, -90),
+            cc.spawn(cc.moveBy(moveTime*3.2, 0, 600), cc.fadeTo(moveTime*2.5, 150)),
+            cc.callFunc(() => {
+                diamond.active = false;
+            })
+        ));
+
+        let bomb = this.bombs[(this.gameInfo.cutAppleNum-1)%this.bombs.length];
+        bomb.position = cc.v2(appleWorldPos.x, appleWorldPos.y);
+        bomb.active = true;
+        bomb.getComponent(cc.Animation).play();
 
         let ban1 = this.ban1[(this.gameInfo.cutAppleNum-1)%this.ban1.length];
         ban1.position = cc.v2(appleWorldPos.x-10, appleWorldPos.y);
@@ -96,9 +128,36 @@ cc.Class({
             cc.moveTo(moveTime, juicePos),
             cc.callFunc(() => {
                 ban2.active = false;
+                this.addJuice(this.gameInfo.cutTimes);
             })
         ));
-    }
+    },
 
-    // update (dt) {},
+    /**增加果汁
+     * @ param {number} cutTimes 丢中第几次飞镖，从1开始
+     */
+    addJuice (cutTimes) {
+        this.gameInfo.targetProgress = cutTimes/this.gameInfo.winTimes;
+        this.enabled = true; // 允许执行update
+    },
+
+    /**赢得游戏 */
+    winGame () {
+        this.offClickListener();
+    },
+
+    update (dt) {
+        if (this.gameInfo.nowProgress < this.gameInfo.targetProgress) {
+            this.gameInfo.nowProgress = this.gameInfo.nowProgress + this.gameInfo.progressSpeed;
+            this.gameInfo.nowProgress = this.gameInfo.nowProgress > this.gameInfo.targetProgress ?
+                this.gameInfo.targetProgress : this.gameInfo.nowProgress;
+            this.glass.getComponent(cc.ProgressBar).progress = this.gameInfo.nowProgress;
+            if (this.gameInfo.nowProgress >= 1) {
+                this.winGame();
+                this.enabled = false;
+            }
+        } else {
+            this.enabled = false; // 停止执行update
+        }
+    },
 });
