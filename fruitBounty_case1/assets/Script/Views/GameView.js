@@ -152,6 +152,7 @@ cc.Class({
             console.log('win game, you cut ', this.gameInfo.cutAppleNum, ' apples');
             this.gameInfo.isGameWin = true;
             this.offClickListener();
+            this.gameController.guideView.showCashOutHand();
         }
     },
 

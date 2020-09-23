@@ -18,7 +18,7 @@ cc.Class({
 
     properties: {
         modal:cc.Node,
-        hand: cc.Node,
+        cashoutHand: cc.Node, // 提现手
     },
     // LIFE-CYCLE CALLBACKS:
     onLoad () { 
@@ -61,6 +61,13 @@ cc.Class({
             cc.fadeIn(.5),
         ));
     },
+
+    /**展示提示手 */
+    showCashOutHand () {
+        this.cashoutHand.getComponent('HandController').showAnim();
+    },
+
+
 
     
 });

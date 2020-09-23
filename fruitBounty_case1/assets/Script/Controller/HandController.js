@@ -14,8 +14,8 @@ cc.Class({
         // anim: cc.Animation,
     },
 
-    
-    onAnimCompleted(){
+    /**提示用户点击 */
+    showAnim(){
         let anim = this.node.getComponent(cc.Animation);
         let animState = anim.play('hand');
         animState.on('finished', function(){
@@ -27,7 +27,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS
 
     onLoad () {
-        this.onAnimCompleted()
+        // this.onAnimCompleted()
     },
 
     start () {
