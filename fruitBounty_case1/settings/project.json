@@ -18,9 +18,13 @@
   "design-resolution-height": 640,
   "design-resolution-width": 960,
   "excluded-modules": [
-    "LabelOutline",
+    "Graphics",
+    "ParticleSystem",
     "TiledMap",
     "Spine Skeleton",
+    "DragonBones",
+    "RichText",
+    "MotionStreak",
     "ScrollBar",
     "ScrollView",
     "Toggle",
@@ -28,20 +32,11 @@
     "PageViewIndicator",
     "Slider",
     "Layout",
-    "EditorBox",
+    "EditBox",
     "VideoPlayer",
     "WebView",
-    "RichText",
-    "MotionStreak",
-    "Collider",
-    "Graphics",
-    "DragonBones",
     "Physics",
     "StudioComponent",
-    "RenderTexture",
-    "Chipmunk",
-    "Camera",
-    "Intersection",
     "Geom Utils",
     "3D",
     "3D Primitive"
@@ -63,13 +58,12 @@
     "knife",
     "fruit"
   ],
-  "last-module-event-record-time": 0,
+  "last-module-event-record-time": 1600919115454,
   "simulator-orientation": false,
   "simulator-resolution": {
     "height": 640,
     "width": 960
   },
   "use-customize-simulator": true,
-  "use-project-simulator-setting": false,
-  "start-scene": "current"
+  "use-project-simulator-setting": false
 }

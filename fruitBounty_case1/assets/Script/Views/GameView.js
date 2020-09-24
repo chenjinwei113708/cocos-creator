@@ -21,12 +21,14 @@ cc.Class({
         diamonds: [cc.Node], // 钻石
         bombs: [cc.Node], // 切水果爆开特效
         glass: cc.Node, // 装果汁的榨汁机
+        gameHand: cc.Node, // 游戏指引手
+        ppcard: cc.Node, // 现金卡片
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.setClickListener();
+        this.showPPCard();
         this.gameInfo = {
             knifePos: cc.v2(this.knife.position.x, this.knife.position.y),
             knifeStatus: KNIFE_STATUS.CAN_MOVE,
@@ -38,12 +40,41 @@ cc.Class({
             progressSpeed: 0.02, // 榨汁机速度
             nowProgress: 0, // 现在榨汁机进度
             targetProgress: 0, // 榨汁机目标进度
+            isGameStarted: false, // 游戏开始没
             isGameWin: false, // 游戏胜利了没
         };
     },
 
     setGameController (gameController) {
         this.gameController = gameController;
+    },
+
+    /**展示开场现金卡 */
+    showPPCard () {
+        this.ppcard.opacity = 0;
+        this.ppcard.active = true;
+        this.ppcard.runAction(cc.sequence(
+            cc.delayTime(0.2),
+            cc.callFunc(() => {
+                this.gameController.getAudioUtils().playEffect('moneyCard', 0.4);
+            }),
+            cc.fadeIn(0.3)
+        ));
+    },
+
+    clickPPCard () {
+        this.ppcard.active = false;
+        this.gameController.getAudioUtils().playEffect('income', 0.4);
+        this.setClickListener();
+        this.gameController.addCash(100);
+        this.gameHand.opacity = 0;
+        this.gameHand.active = true;
+        this.gameHand.runAction(cc.sequence(
+            cc.fadeIn(0.9),
+            cc.callFunc(() => {
+                this.gameHand.getComponent(cc.Animation).play();
+            })
+        ))
     },
 
     setClickListener () {
@@ -56,6 +87,16 @@ cc.Class({
     /**点击小刀 */
     onClickKnife (touch) {
         if (this.gameInfo.knifeStatus === KNIFE_STATUS.CAN_MOVE) {
+            if (!this.gameInfo.isGameStarted) {
+                this.gameInfo.isGameStarted = true;
+                this.gameHand.runAction(cc.sequence(
+                    cc.fadeOut(0.2),
+                    cc.callFunc(() => {
+                        this.gameHand.getComponent(cc.Animation).stop();
+                        this.gameHand.active = false;
+                    })
+                ))
+            }
             this.setKnifeStatus(KNIFE_STATUS.IS_MOVE);
             this.gameInfo.throwTimes++; // 增加一次丢飞镖次数
             let spinAngle = Math.random() * 400 + 900;
@@ -83,9 +124,12 @@ cc.Class({
     /**展示切苹果的动画 */
     showCutApple (appleWorldPos) {
         this.gameInfo.cutAppleNum++;
+        this.gameController.getAudioUtils().playEffect('cut', 0.4);
+        // 判断这一次切苹果是属于第几次丢飞镖，这些苹果是不是同一次切开的
         if (this.gameInfo.winAtThrowTimes !== this.gameInfo.throwTimes) {
             this.gameInfo.winAtThrowTimes = this.gameInfo.throwTimes;
             this.gameInfo.cutTimes++;
+            this.gameController.addCash(40);
         }
         const juicePos = cc.v2(-197, -210);
         const moveTime = 0.2;
@@ -150,6 +194,10 @@ cc.Class({
     winGame () {
         if (!this.gameInfo.isGameWin) {
             console.log('win game, you cut ', this.gameInfo.cutAppleNum, ' apples');
+            if (this.gameController.cashView.targetCash < 300) {
+                this.gameController.addCash(300 - this.gameController.cashView.targetCash);
+            }
+            this.gameController.getAudioUtils().playEffect('cheer', 0.4);
             this.gameInfo.isGameWin = true;
             this.offClickListener();
             this.gameController.guideView.showCashOutHand();
