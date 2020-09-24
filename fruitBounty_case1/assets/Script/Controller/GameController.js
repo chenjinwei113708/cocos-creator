@@ -13,6 +13,8 @@ cc.Class({
         center:cc.Node,
         // 游戏
         game: cc.Node,
+        // 现金
+        cash: cc.Node
 
     },
 
@@ -35,7 +37,7 @@ cc.Class({
         var manager = cc.director.getCollisionManager();
         manager.enabled = true;
         // 绘制碰撞系统debug信息
-        manager.enabledDebugDraw = true;
+        // manager.enabledDebugDraw = true;
 
 
         // GameModel初始化
@@ -47,6 +49,9 @@ cc.Class({
         this.gameView = this.game.getComponent('GameView');
         this.gameView.setGameController(this);
 
+        // 现金脚本
+        this.cashView = this.cash.getComponent('CashView');
+
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
         this.guideView.setGameController(this);
@@ -56,6 +61,8 @@ cc.Class({
         //用centerView脚本来布置整个画面，包括横竖屏的响应方法。
         this.centerScript = this.center.getComponent("CenterView");
         this.centerScript.setGameController(this);
+        // 设置顶部推送消息的位置
+        this.gameModel.setNotificationPos(this.centerScript.getScreenPixel());
 
         // 根据model渲染各个元素状态 大小 位置等
         this.centerScript.initWithModel(this.gameModel);
@@ -89,9 +96,9 @@ cc.Class({
     /**点击开始游戏 */
     clickStartGame() {
         //播放开场音效
-        this.AudioUtils.getComponent('AudioUtils').playEffect('startMusic', 0.6);
-        this.GuideView.startGame();
-        this.gotoNextStep();
+        // this.AudioUtils.getComponent('AudioUtils').playEffect('startMusic', 0.6);
+        // this.GuideView.startGame();
+        // this.gotoNextStep();
     },
 
 
@@ -106,19 +113,22 @@ cc.Class({
     },
 
     // 调用View显示操作方法
-    showEndPage() {
-        this.AudioUtils.getComponent('AudioUtils').playEffect('endMusic', 0.6);
+    endGame() {
         PlayformSDK.gameFinish();
-        this.GuideView.showEndPage();
+    },
+
+    addCash (num) {
+        this.getAudioUtils().playEffect('income', 0.4);
+        this.cashView.addCash(num);
     },
 
     // 调用Model数据操作方法
 
     /**绑定点击音效 */
     bindClickEffect() {
-        this.node.on(cc.Node.EventType.TOUCH_START, function (touchEvent) {
-            this.AudioUtils.getComponent('AudioUtils').playEffect('bgClick', 2)
-        }, this)
+        // this.node.on(cc.Node.EventType.TOUCH_START, function (touchEvent) {
+        //     this.AudioUtils.getComponent('AudioUtils').playEffect('bgClick', 2)
+        // }, this)
     },
 
 });
