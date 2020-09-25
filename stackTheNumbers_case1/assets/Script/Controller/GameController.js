@@ -9,8 +9,12 @@ cc.Class({
         AudioUtils: cc.Node,
         //与游戏顺序和游戏引导相关的结点
         guide: cc.Node,
-        //整个游戏场景结点
-        center:cc.Node
+        //整个场景
+        center:cc.Node,
+        // 游戏节点
+        game: cc.Node,
+        // 现金
+        cash: cc.Node,
 
     },
 
@@ -35,6 +39,12 @@ cc.Class({
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
+        // 游戏节点脚本
+        this.gameView = this.game.getComponent('GameView');
+        this.gameView.setGameController(this);
+
+        // 现金脚本
+        this.cashView = this.cash.getComponent('CashView');
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
@@ -95,10 +105,14 @@ cc.Class({
     },
 
     // 调用View显示操作方法
-    showEndPage() {
-        this.AudioUtils.getComponent('AudioUtils').playEffect('endMusic', 0.6);
+    endGame() {
+        // this.AudioUtils.getComponent('AudioUtils').playEffect('endMusic', 0.6);
         PlayformSDK.gameFinish();
-        this.GuideView.showEndPage();
+        // this.GuideView.showEndPage();
+    },
+
+    addCash (num) {
+        this.cashView.addCash(num);
     },
 
     // 调用Model数据操作方法
