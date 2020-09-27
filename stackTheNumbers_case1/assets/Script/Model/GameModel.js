@@ -13,114 +13,108 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.HorizontalConfig = {
-            // // 横屏
-            // background: {
-            //     position: cc.v2(0, 0),
-            //     width: 1030,
-            //     height: 540,
-            //     scale: 1.4,
-            //     children: {
-            //         shanhu: {
-            //             position: cc.v2(-268, -22),
-            //             width: 317,
-            //             height: 98
-            //         },
-            //         bgEffect: {
-            //             position: cc.v2(-380, 0),
-            //             children: {
-            //                 waterWaveTop: {
-            //                     position: cc.v2(444, 286)
-            //                 }
-            //             }
-            //         },
-            //         rightPlant: {
-            //             position: cc.v2(380, -235),
-            //             width: 513,
-            //             height: 424,
-            //             rotation: -2
-            //         },
-            //         leftPlant: {
-            //             position: cc.v2(-323, -329),
-            //             width: 586,
-            //             height: 322,
-            //             rotation: 9
-            //         }
-            //     }
-            // },
-            // progress: {
-            //     position: cc.v2(-280, 0),
-            //     rotation: 0,
-            //     children: {
-            //         skillProgress: {
-            //             position: cc.v2(0, -191),
-            //             rotation: 0,
-            //         },
-            //         collectProgress: {
-            //             progressBarDirection: false,
-            //             rotation: 180,
-            //             children: {
-            //                 shell: {
-            //                     position: cc.v2(0, 90),
-            //                     rotation: 0
-            //                 },
-            //                 text: {
-            //                     position: cc.v2(0, 143),
-            //                     rotation: 180
-            //                 }
-            //             }
-            //         },
-            //         icon: {
-            //             position: cc.v2(-2, 204),
-            //             rotation: 0
-            //         }
-            //     }
-            // },
-            // grid: {
-            //     position: cc.v2(-150, -240)
-            // },
-            // effectLayer: {
-            //     position: cc.v2(-150, -240),
-            //     children: {
-            //         thunder: {
-            //             position: cc.v2(-132, 57)
-            //         }
-            //     }
-            // },
-            // guide: {
-            //     children: {
-            //         guideMask3: {
-            //             position: cc.v2(-280, -191)
-            //         },
-            //         tip: {
-            //             children: {
-            //                 tipStart: {
-            //                     position: cc.v2(347, 126)
-            //                 },
-            //                 tipStartEnd: {
-            //                     width: 175,
-            //                     height: 120,
-            //                     position: cc.v2(244, 38)
-            //                 },
-            //                 tipSkill: {
-            //                     position: cc.v2(-195, -175)
-            //                 },
-            //                 tipNormal1: {
-            //                     position: cc.v2(394, -68)
-            //                 },
-            //                 tipNormal2: {
-            //                     position: cc.v2(420, -155)
-            //                 }
-
-            //             }
-            //         }
-            //     }
-            // },
-            // tipEnd: {
-            //     position: cc.v2(-245, -240)
-            // }
+            game: {
+                position: cc.v2(201.527, 26.637),
+                scale: 0.8
+            },
+            UI: {
+                children: {
+                    ppcard: {
+                        children: {
+                            flycard: {
+                                position: cc.v2(206.881, -52.595)
+                            }
+                        }
+                    },
+                    paypal: {
+                        position: cc.v2(-338.313, 121.751),
+                        children: {
+                            icon: {
+                                position: cc.v2(-30.77, -10.797)
+                            },
+                            btn: {
+                                position: cc.v2(148.575, -69.848)
+                            },
+                            cash: {
+                                position: cc.v2(148.9, 30.267)
+                            },
+                        }
+                    },
+                    banner: {
+                        position: cc.v2(-338.313, -175.785),
+                        children: {
+                            icon: {
+                                position: cc.v2(-55.871, -14.959)
+                            },
+                            btn: {
+                                position: cc.v2(146.913, -19.035)
+                            },
+                            logo: {
+                                position: cc.v2(61.355, 74.438)
+                            },
+                        }
+                    },
+                    notification: {},
+                    congrat: {
+                        angle: 90
+                    },
+                    congratBlur: {
+                        angle: 90
+                    }
+                }
+            }
         }
         this.VerticalConfig = {
-            
+            game: {
+                position: cc.v2(0, 0),
+                scale: 1
+            },
+            UI: {
+                children: {
+                    ppcard: {
+                        children: {
+                            flycard: {
+                                position: cc.v2(0, -127)
+                            }
+                        }
+                    },
+                    paypal: {
+                        position: cc.v2(0, 496.704),
+                        children: {
+                            icon: {
+                                position: cc.v2(-166.875, -88.83)
+                            },
+                            btn: {
+                                position: cc.v2(139.501, -120.661)
+                            },
+                            cash: {
+                                position: cc.v2(139.826, -53.211)
+                            },
+                        }
+                    },
+                    banner: {
+                        position: cc.v2(0, -552.799),
+                        children: {
+                            icon: {
+                                position: cc.v2(-202.865, 118.304)
+                            },
+                            btn: {
+                                position: cc.v2(159.377, 115.256)
+                            },
+                            logo: {
+                                position: cc.v2(-52.974, 116.177)
+                            },
+                        }
+                    },
+                    notification: {},
+                    congrat: {
+                        angle: 0
+                    },
+                    congratBlur: {
+                        angle: 0
+                    }
+                }
+            }
         }
 
 
@@ -184,6 +178,11 @@ export default class GameModel {
     //设置引导脚本
     setGuideView(guideScript) {
         this.guideScript = guideScript;
+    }
+
+    /**获取不同方向的位置参数 */
+    getPositionConfig () {
+        return this.isLandscape ? this.HorizontalConfig : this.VerticalConfig;
     }
 
     // 设置通知的位置,要让通知在屏幕顶部

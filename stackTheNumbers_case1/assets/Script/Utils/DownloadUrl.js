@@ -1,6 +1,6 @@
 export const DownloadUrl = {
-    iosUrl: 'https://itunes.apple.com/app/id1468229094',
-    androidUrl: 'https://play.google.com/store/apps/details?id=com.bluembo.tritos&hl=en_GB',
+    iosUrl: 'https://play.google.com/store/apps/details?id=org.cocos2d.shuzidieluohan',
+    androidUrl: 'https://play.google.com/store/apps/details?id=org.cocos2d.shuzidieluohan',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;

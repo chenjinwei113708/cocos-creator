@@ -4,7 +4,7 @@ import {
     CARD_VALUE,
     CARD_GROUP,
     LOST_GAME_CARD_NUM
-} from "./ConstValue";
+} from "../Model/ConstValue.js";
 
 cc.Class({
     extends: cc.Component,
@@ -23,6 +23,9 @@ cc.Class({
         // golds: cc.Node, // 金币
         cardPrefab: cc.Prefab, // 卡牌预制资源
         cardSprites: [cc.SpriteFrame], // 卡牌图片
+        mask1: cc.Node, // 指引遮罩
+        mask2: cc.Node, // 指引遮罩
+        hand: cc.Node, // 指引手
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -41,8 +44,9 @@ cc.Class({
             startPosY: 513, // 发牌的时候 y所在位置
             isAutoFall: false, // 是不是自由落下
             fallingCard: null, // 正在下落的牌
+            sendCardTimes: 0,
         };
-        this.sendCard();
+        // this.sendCard();
     },
 
     setGameController (gameController) {
@@ -52,6 +56,7 @@ cc.Class({
     /**发牌 */
     sendCard () {
         if (this.gameInfo.cardStatus === CARD_STATUS.CAN_MOVE) {
+            this.gameInfo.sendCardTimes++;
             this.setCardStatue(CARD_STATUS.IS_MOVE);
             let nowCardValue = this.gameController.gameModel.getNowCard();
             let sendGroup = this.gameController.gameModel.getNextGroup();
@@ -70,24 +75,51 @@ cc.Class({
             newCard.position = cc.v2(0, this.gameInfo.startPosY);
             newCard.active = true;
             this.gameInfo.isAutoFall = true;
-            newCard.runAction(cc.sequence(
+            let fallAction = cc.sequence(
                 cc.moveTo(groupLeftBox*this.gameInfo.speed, cc.v2(0, (LOST_GAME_CARD_NUM-groupLeftBox)*this.gameInfo.cardDistance)),
                 cc.callFunc(() => {
                     if (this.gameInfo.isAutoFall) {
                         this.gameInfo.isAutoFall = false;
                         this.setCardStatue(CARD_STATUS.DONE_MOVE);
-                        console.log('auto fall done, ', newCard);
+                        // console.log('auto fall done, ', newCard);
                         this.addCardToGroup(groupName, newCard, false, this.completeCard.bind(this));
                     }
                 }),
-            ));
+            );
+            newCard.runAction(fallAction);
+            if (this.gameInfo.isFirstCard) {
+                setTimeout(() => {
+                    if (this.gameInfo.isFirstCard) {
+                        newCard.stopAction(fallAction);
+                        this.setGuideMask(1);
+                    }
+                }, 1000);
+            } else if (this.gameInfo.isSecondCard) {
+                setTimeout(() => {
+                    if (this.gameInfo.isSecondCard) {
+                        newCard.stopAction(fallAction);
+                        this.setGuideMask(2);
+                    }
+                }, 1000);
+            }
+            
         }
     },
 
     /**点击切换分组 */
     click2ChangeGroup (touchEvent, groupName) {
         if (this.gameInfo.cardStatus === CARD_STATUS.IS_MOVE && this.gameInfo.isAutoFall) {
-            console.log('click2ChangeGroup:: ,', groupName);
+            // console.log('click2ChangeGroup:: ,', groupName);
+            if (this.gameInfo.isFirstCard) {
+                if (groupName !== CARD_GROUP.KONG1) return;
+                this.gameInfo.isFirstCard = false;
+                this.gameInfo.isSecondCard = true;
+                this.hideGuide();
+            } else if (this.gameInfo.isSecondCard) {
+                if (groupName !== CARD_GROUP.KONG2) return;
+                this.gameInfo.isSecondCard = false;
+                this.hideGuide();
+            }
             this.gameInfo.isAutoFall = false;
             if (!this.gameInfo.fallingCard) return;
             let card = this.gameInfo.fallingCard;
@@ -103,7 +135,7 @@ cc.Class({
                 cc.moveTo(dropSpeed, cc.v2(0, (LOST_GAME_CARD_NUM-groupLeftBox)*this.gameInfo.cardDistance)),
                 cc.callFunc(() => {
                     this.setCardStatue(CARD_STATUS.DONE_MOVE);
-                    console.log('click fall done, ', card);
+                    // console.log('click fall done, ', card);
                     this.addCardToGroup(groupName, card, false, this.completeCard.bind(this));
                 }),
             ));
@@ -114,7 +146,15 @@ cc.Class({
     completeCard () {
         this.gameInfo.fallingCard = null;
         this.setCardStatue(CARD_STATUS.CAN_MOVE);
-        this.sendCard();
+        this.gameController.addCash(80);
+        this.gameController.guideView.showPaypalCardFly(() => {
+            if (this.gameInfo.sendCardTimes < 3) {
+                this.sendCard();
+            } else {
+                this.gameController.getAudioUtils().playEffect('cheer', 0.55);
+                this.gameController.guideView.showCashOutHand();
+            }
+        });
     },
 
     /**把牌最终加到某一组里面去 */
@@ -127,11 +167,12 @@ cc.Class({
             lastCard._name = combine;
             lastCard.getComponent(cc.Sprite).spriteFrame = this.cardSprites[CARD_VALUE.indexOf(combine)];
             lastCard.position = cc.v2(cardNode.position.x, cardNode.position.y);
-
+            
             cardNode.active = false;
             cardNode.parent = this.node;
             cardNode.destroy();
             
+            this.gameController.getAudioUtils().playEffect('combine', 0.4);
             lastCard.runAction(cc.sequence(
                 cc.repeat(cc.sequence(cc.rotateTo(0.09, 11), cc.rotateTo(0.09, -11)), 3),
                 cc.spawn(cc.rotateTo(0.06, 0), cc.moveTo(0.12, destPos)),
@@ -146,6 +187,43 @@ cc.Class({
             } else {
                 callback && callback();
             }
+        }
+    },
+
+    /**设置提示
+     * @ param {number} 第几关，从1开始
+     */
+    setGuideMask (level) {
+        if (level === 1 && this.gameInfo.isFirstCard) {
+            // 如果是第一张卡
+            this.mask1.opacity = 0;
+            this.mask1.active = true;
+            this.mask1.runAction(cc.fadeIn(0.6));
+            this.hand.opacity = 0;
+            this.hand.active = true;
+            this.hand.position = cc.v2(-176.2, 92.54);
+            this.hand.runAction(cc.fadeIn(0.3));
+            this.hand.getComponent(cc.Animation).play();
+        } else if (level === 2 && this.gameInfo.isSecondCard) {
+            // 如果是第二张卡
+            this.mask2.opacity = 0;
+            this.mask2.active = true;
+            this.mask2.runAction(cc.fadeIn(0.6));
+            this.hand.opacity = 0;
+            this.hand.active = true;
+            this.hand.position = cc.v2(-99.1, 92.54);
+            this.hand.runAction(cc.fadeIn(0.3));
+            this.hand.getComponent(cc.Animation).play();
+        }
+    },
+
+    /**隐藏提示 */
+    hideGuide () {
+        if (this.hand.active) {
+            this.mask1.active = false;
+            this.mask2.active = false;
+            this.hand.getComponent(cc.Animation).stop();
+            this.hand.active = false;
         }
     },
 
