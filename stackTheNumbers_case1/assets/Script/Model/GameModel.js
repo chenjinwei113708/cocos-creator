@@ -60,6 +60,9 @@ export default class GameModel {
                     },
                     congratBlur: {
                         angle: 90
+                    },
+                    audioBtn: {
+                        position: cc.v2(-400, 230.265)
                     }
                 }
             }
@@ -112,6 +115,9 @@ export default class GameModel {
                     },
                     congratBlur: {
                         angle: 0
+                    },
+                    audioBtn: {
+                        position: cc.v2(0, 360.265)
                     }
                 }
             }
