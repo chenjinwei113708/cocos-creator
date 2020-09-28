@@ -57,11 +57,15 @@ export default class GameModel {
                         position: cc.v2(-428.42, 218.418)
                     },
                     congrat: {
-                        angle: 90
+                        width: 277.38,
+                        height: 540,
+                        opacity: 190
                     },
                     congratBlur: {
-                        angle: 90
-                    },
+                        width: 277.38,
+                        height: 540,
+                        opacity: 170
+                    }
                 }
             }
         }
@@ -113,11 +117,15 @@ export default class GameModel {
                         position: cc.v2(0, 356.5)
                     },
                     congrat: {
-                        angle: 0
+                        width: 603,
+                        height: 1170,
+                        opacity: 255
                     },
                     congratBlur: {
-                        angle: 0
-                    },
+                        width: 603,
+                        height: 1170,
+                        opacity: 255
+                    }
                 }
             }
         }

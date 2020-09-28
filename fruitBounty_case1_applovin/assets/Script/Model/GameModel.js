@@ -57,10 +57,14 @@ export default class GameModel {
                         }
                     },
                     congrat: {
-                        angle: 90
+                        width: 277.38,
+                        height: 540,
+                        opacity: 150
                     },
                     congratBlur: {
-                        angle: 90
+                        width: 277.38,
+                        height: 540,
+                        opacity: 150
                     }
                 }
             }
@@ -113,10 +117,14 @@ export default class GameModel {
                         }
                     },
                     congrat: {
-                        angle: 0
+                        width: 603,
+                        height: 1170,
+                        opacity: 255
                     },
                     congratBlur: {
-                        angle: 0
+                        width: 603,
+                        height: 1170,
+                        opacity: 255
                     }
                 }
             }
@@ -163,6 +171,11 @@ export default class GameModel {
         let halfHeight = this.guideScript.notification.height/2;
         this.VerticalConfig.UI.children.notification.position = cc.v2(0, long/2 - halfHeight);
         this.HorizontalConfig.UI.children.notification.position = cc.v2(0, short/2 - halfHeight);
+    }
+
+    /**拿到元素位置信息 */
+    getPositionConfig () {
+        return this.isLandscape ? this.HorizontalConfig : this.VerticalConfig;
     }
 
     //设置引导脚本

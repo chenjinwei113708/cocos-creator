@@ -56,10 +56,14 @@ export default class GameModel {
                     },
                     notification: {},
                     congrat: {
-                        angle: 90
+                        width: 277.38,
+                        height: 540,
+                        opacity: 190
                     },
                     congratBlur: {
-                        angle: 90
+                        width: 277.38,
+                        height: 540,
+                        opacity: 170
                     },
                     audioBtn: {
                         position: cc.v2(-400, 230.265)
@@ -111,10 +115,14 @@ export default class GameModel {
                     },
                     notification: {},
                     congrat: {
-                        angle: 0
+                        width: 603,
+                        height: 1170,
+                        opacity: 255
                     },
                     congratBlur: {
-                        angle: 0
+                        width: 603,
+                        height: 1170,
+                        opacity: 255
                     },
                     audioBtn: {
                         position: cc.v2(0, 360.265)
