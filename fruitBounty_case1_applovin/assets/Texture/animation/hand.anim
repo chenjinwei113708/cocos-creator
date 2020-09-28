@@ -1,0 +1,101 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "hand",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.75,
+  "sample": 40,
+  "speed": 1,
+  "wrapMode": 0,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -253,
+            -309
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 0.25,
+          "value": [
+            -128,
+            -196
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 0.5,
+          "value": [
+            -35,
+            -94
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 0.75,
+          "value": [
+            36,
+            -5
+          ],
+          "motionPath": []
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.25,
+          "value": 120
+        },
+        {
+          "frame": 0.5,
+          "value": 200
+        },
+        {
+          "frame": 0.75,
+          "value": 255
+        }
+      ],
+      "scale": [
+        {
+          "frame": 0,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 4,
+            "y": 4
+          }
+        },
+        {
+          "frame": 0.25,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 2,
+            "y": 2
+          }
+        },
+        {
+          "frame": 0.5,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.5,
+            "y": 1.5
+          }
+        },
+        {
+          "frame": 0.75,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        }
+      ]
+    }
+  },
+  "events": []
+}
