@@ -29,6 +29,15 @@ cc.Class({
         //是否显示左下方fps信息
         cc.debug.setDisplayStats(false);
 
+        // 开启物理系统
+        cc.director.getPhysicsManager().enabled = true;
+        // 绘制调试信息  | cc.PhysicsManager.DrawBits.e_aabbBit;
+        cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_shapeBit;
+
+        // 关闭绘制
+        // cc.director.getPhysicsManager().debugDrawFlags = 0;
+        // 设置重力
+        cc.director.getPhysicsManager().gravity = cc.v2(0, -100);
 
         // GameModel初始化
         this.gameModel = new GameModel();
