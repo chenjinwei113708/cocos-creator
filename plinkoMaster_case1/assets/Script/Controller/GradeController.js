@@ -7,7 +7,9 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        this.gameController = cc.find('Canvas').getComponent('GameController');
+    },
 
     // start () {},
 
@@ -19,7 +21,8 @@ cc.Class({
      */
     onCollisionEnter: function (other, self) {
         // console.log('on collision enter');
-        console.log('on collision enter, ', self.node._name);
+        // console.log('on collision enter, ', self.node._name);
+        this.gameController.gameView.receiveGrade(self.node._name);
     },
 
     // update (dt) {},

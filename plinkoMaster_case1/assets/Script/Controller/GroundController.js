@@ -21,8 +21,8 @@ cc.Class({
      */
     onCollisionEnter: function (other, self) {
         // console.log('on collision enter');
-        console.log(' --- -- on ground enter, ', other.node._name);
-        this.gameController.gameView.dropCoin(other.node);
+        // console.log(' --- -- on ground enter, ', other.node._name);
+        this.gameController.gameView.dropCoin(other.node.parent);
     },
 
     // update (dt) {},
