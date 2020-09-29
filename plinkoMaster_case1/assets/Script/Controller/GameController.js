@@ -9,8 +9,9 @@ cc.Class({
         AudioUtils: cc.Node,
         //与游戏顺序和游戏引导相关的结点
         guide: cc.Node,
-        //整个游戏场景结点
-        center:cc.Node
+        //整个场景结点
+        center:cc.Node,
+        game: cc.Node, // 游戏节点
 
     },
 
@@ -29,21 +30,12 @@ cc.Class({
         //是否显示左下方fps信息
         cc.debug.setDisplayStats(false);
 
-        // 开启物理系统
-        cc.director.getPhysicsManager().enabled = true;
-        // 绘制调试信息  | cc.PhysicsManager.DrawBits.e_aabbBit;
-        cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_shapeBit;
-
-        // 关闭绘制
-        // cc.director.getPhysicsManager().debugDrawFlags = 0;
-        // 设置重力
-        cc.director.getPhysicsManager().gravity = cc.v2(0, -100);
-
         // GameModel初始化
         this.gameModel = new GameModel();
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
+        this.gameView = this.game.getComponent('GameView');
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
