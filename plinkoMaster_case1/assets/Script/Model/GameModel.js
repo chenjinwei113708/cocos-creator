@@ -45,12 +45,14 @@ export default class GameModel {
                     },
                     congrat: {
                         angle: 90,
+                        opacity: 190,
                         // width: 277.38,
                         // height: 540,
                         // opacity: 190
                     },
                     congratBlur: {
                         angle: 90,
+                        opacity: 190,
                         // width: 277.38, // applovin
                         // height: 540,
                         // opacity: 190
@@ -97,12 +99,14 @@ export default class GameModel {
                     },
                     congrat: {
                         angle: 0,
+                        opacity: 255,
                         // width: 603, // applovin
                         // height: 1170,
                         // opacity: 255
                     },
                     congratBlur: {
                         angle: 0,
+                        opacity: 255,
                         // width: 603, // applovin
                         // height: 1170,
                         // opacity: 255
