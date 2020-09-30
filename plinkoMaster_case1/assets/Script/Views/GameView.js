@@ -34,11 +34,13 @@ cc.Class({
             coinMinX: -173.9, // 金币位置 x1
             coinMaxX: 173.9, // 金币位置 x2
             isUserClick: false, // 用户是否正在点击
-            clickNumber: 3, // 用户点击的时候一次掉几个金币
+            clickNumber: 4, // 用户点击的时候一次掉几个金币
             isPaused: false, // 是否暂停掉金币
             getCashTimes: 1, // 获得现金的次数
             isPPCardShow: false, // 现金卡展示中
             isSeven: false, // 是不是出现了777
+            tmpGoldNum: 0, // 第二次点击完pp卡还有多少金币
+            isGameStarted: false, // 游戏开始没
             GRADE: { // 每一格各获得多少金币
                 grade1: 1,
                 grade2: 3,
@@ -84,7 +86,6 @@ cc.Class({
         this.gameHand.runAction(cc.fadeIn(0.2));
         this.brickStartMove();
         this.setTouchListener();
-        this.enabled = true; // 允许update
     },
 
     /**打开物理引擎 */
@@ -117,6 +118,10 @@ cc.Class({
 
     onTouchStart (touch) {
         if (this.gameInfo.isPaused || this.gameInfo.isSeven) return;
+        if (!this.gameInfo.isGameStarted) {
+            this.gameInfo.isGameStarted = true;
+            this.enabled = true;
+        }
         this.gameInfo.isUserClick = true;
         this.gameInfo.shootDelay = 400;
         // this.allBricks.active = false;
@@ -234,14 +239,19 @@ cc.Class({
             // console.log('pause 2', this.gameInfo.getCashTimes, ' t:',this.goldView.targetCash);
             this.pauseGame();
             this.showPPCard(target1);
-        } else if (this.gameInfo.getCashTimes === 3){
-            if (this.goldView.targetCash < (target2+target3) || this.gameInfo.isPPCardShow) return;
-            this.pauseGame();
-            this.gameHand.active = false;
-            this.showPPCard(target2);
-            setTimeout(() => {
+        } else if (this.gameInfo.getCashTimes >= 3){
+            if (this.goldView.targetCash < target2+this.gameInfo.tmpGoldNum) return;
+            if (this.gameInfo.getCashTimes === 3) this.showPPCard(target2);
+            // this.pauseGame();
+            if (this.goldView.targetCash >= target2+target3+this.gameInfo.tmpGoldNum) {
+                this.gameHand.active = false;
                 this.showPPCard(target3);
-            }, 900);
+                this.pauseGame();
+            }
+            // this.showPPCard(target2);
+            // setTimeout(() => {
+            //     this.showPPCard(target3);
+            // }, 900);
         }
         
         // console.log('加分', grade);
@@ -286,6 +296,7 @@ cc.Class({
         this.gameInfo.isPPCardShow = true;
         num = Number(num);
         let ppcard = num === 50 ? this.ppcard50 : this.ppcard100;
+        if (ppcard.active) return;
         ppcard.opacity = 0;
         ppcard.active = true;
         ppcard.runAction(cc.sequence(
@@ -308,10 +319,11 @@ cc.Class({
         if (this.gameInfo.getCashTimes === 1) {
             this.startGame();
         } else {
+            this.goldView.addCash(0-num);
+            this.gameInfo.tmpGoldNum = this.goldView.targetCash;
             if (this.gameInfo.getCashTimes === 2) {
                 this.showSevens();
             }
-            this.goldView.addCash(0-num);
         }
         this.gameController.addCash(num);
         this.gameInfo.getCashTimes++;

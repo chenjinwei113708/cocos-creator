@@ -45,9 +45,15 @@ export default class GameModel {
                     },
                     congrat: {
                         angle: 90,
+                        // width: 277.38,
+                        // height: 540,
+                        // opacity: 190
                     },
                     congratBlur: {
                         angle: 90,
+                        // width: 277.38, // applovin
+                        // height: 540,
+                        // opacity: 190
                     },
                     audioBtn: {
                         position: cc.v2(-423.28, 214.908)
@@ -91,9 +97,15 @@ export default class GameModel {
                     },
                     congrat: {
                         angle: 0,
+                        // width: 603, // applovin
+                        // height: 1170,
+                        // opacity: 255
                     },
                     congratBlur: {
                         angle: 0,
+                        // width: 603, // applovin
+                        // height: 1170,
+                        // opacity: 255
                     },
                     audioBtn: {
                         position: cc.v2(0, 397.765)
@@ -152,8 +164,10 @@ export default class GameModel {
 
     //初始化游戏模型
     gameInit() {
-        
+    }
 
-
+    /**获得坐标config */
+    getPositionConfig () {
+        return this.isLandscape ? this.HorizontalConfig : this.VerticalConfig;
     }
 }
