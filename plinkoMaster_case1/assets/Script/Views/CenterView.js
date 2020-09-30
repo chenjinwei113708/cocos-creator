@@ -8,7 +8,8 @@ cc.Class({
 
 
     onLoad () {
-       
+    //    this.mainCamera = cc.find('Canvas/center/game/MainCamera');
+    //    console.log('mainCamera', this.mainCamera);
     },
 
     initWithModel(gameModel) {
@@ -26,6 +27,7 @@ cc.Class({
 
 
     orientCb(isLoad) {
+        const mainCamera = cc.find('Canvas/center/game/MainCamera');
         this.gameModel.isLandscape = this.getLandscape(isLoad);
         let screen = this.getScreenPixel(isLoad); // 适配不同屏幕所需参数
         let _canvas = cc.find('Canvas');
@@ -45,6 +47,13 @@ cc.Class({
 
         // 根据横竖屏绘制元素
         this.drawElements(posObj);
+
+        // 设置摄像机
+        if (this.gameModel.isLandscape) {
+            mainCamera.getComponent(cc.Camera).zoomRatio = 0.6;
+        } else {
+            mainCamera.getComponent(cc.Camera).zoomRatio = 1;
+        }
         
         
     },

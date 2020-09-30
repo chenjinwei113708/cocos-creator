@@ -10,114 +10,96 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.HorizontalConfig = {
-            // // 横屏
-            // background: {
-            //     position: cc.v2(0, 0),
-            //     width: 1030,
-            //     height: 540,
-            //     scale: 1.4,
-            //     children: {
-            //         shanhu: {
-            //             position: cc.v2(-268, -22),
-            //             width: 317,
-            //             height: 98
-            //         },
-            //         bgEffect: {
-            //             position: cc.v2(-380, 0),
-            //             children: {
-            //                 waterWaveTop: {
-            //                     position: cc.v2(444, 286)
-            //                 }
-            //             }
-            //         },
-            //         rightPlant: {
-            //             position: cc.v2(380, -235),
-            //             width: 513,
-            //             height: 424,
-            //             rotation: -2
-            //         },
-            //         leftPlant: {
-            //             position: cc.v2(-323, -329),
-            //             width: 586,
-            //             height: 322,
-            //             rotation: 9
-            //         }
-            //     }
-            // },
-            // progress: {
-            //     position: cc.v2(-280, 0),
-            //     rotation: 0,
-            //     children: {
-            //         skillProgress: {
-            //             position: cc.v2(0, -191),
-            //             rotation: 0,
-            //         },
-            //         collectProgress: {
-            //             progressBarDirection: false,
-            //             rotation: 180,
-            //             children: {
-            //                 shell: {
-            //                     position: cc.v2(0, 90),
-            //                     rotation: 0
-            //                 },
-            //                 text: {
-            //                     position: cc.v2(0, 143),
-            //                     rotation: 180
-            //                 }
-            //             }
-            //         },
-            //         icon: {
-            //             position: cc.v2(-2, 204),
-            //             rotation: 0
-            //         }
-            //     }
-            // },
-            // grid: {
-            //     position: cc.v2(-150, -240)
-            // },
-            // effectLayer: {
-            //     position: cc.v2(-150, -240),
-            //     children: {
-            //         thunder: {
-            //             position: cc.v2(-132, 57)
-            //         }
-            //     }
-            // },
-            // guide: {
-            //     children: {
-            //         guideMask3: {
-            //             position: cc.v2(-280, -191)
-            //         },
-            //         tip: {
-            //             children: {
-            //                 tipStart: {
-            //                     position: cc.v2(347, 126)
-            //                 },
-            //                 tipStartEnd: {
-            //                     width: 175,
-            //                     height: 120,
-            //                     position: cc.v2(244, 38)
-            //                 },
-            //                 tipSkill: {
-            //                     position: cc.v2(-195, -175)
-            //                 },
-            //                 tipNormal1: {
-            //                     position: cc.v2(394, -68)
-            //                 },
-            //                 tipNormal2: {
-            //                     position: cc.v2(420, -155)
-            //                 }
-
-            //             }
-            //         }
-            //     }
-            // },
-            // tipEnd: {
-            //     position: cc.v2(-245, -240)
-            // }
+            game: {
+                position: cc.v2(0, -58.331),
+                children: {
+                    MainCamera: {
+                        position: cc.v2(-310, 25),
+                    },
+                }
+            },
+            UI: {
+                children: {
+                    notification: {},
+                    install: {
+                        position: cc.v2(-225.185, -221.739)
+                    },
+                    paypal: {
+                        position: cc.v2(-401.735, 4),
+                        width: 568,
+                        height: 557,
+                        children: {
+                            icon: {
+                                position: cc.v2(14.409, 86.81),
+                            },
+                            cash: {
+                                position: cc.v2(177.523, 112.744)
+                            },
+                            btn: {
+                                position: cc.v2(181.478, 52.828)
+                            }
+                        }
+                    },
+                    icon: {
+                        position: cc.v2(-385.84, -199.951)
+                    },
+                    congrat: {
+                        angle: 90,
+                    },
+                    congratBlur: {
+                        angle: 90,
+                    },
+                    audioBtn: {
+                        position: cc.v2(-423.28, 214.908)
+                    }
+                }
+            }
         }
         this.VerticalConfig = {
-            
+            game: {
+                position: cc.v2(0, -58.331),
+                children: {
+                    MainCamera: {
+                        position: cc.v2(0, 58.331),
+                    },
+                }
+            },
+            UI: {
+                children: {
+                    notification: {},
+                    install: {
+                        position: cc.v2(0, -440.152)
+                    },
+                    paypal: {
+                        position: cc.v2(0, 481),
+                        width: 568,
+                        height: 221,
+                        children: {
+                            icon: {
+                                position: cc.v2(-204, -52.026),
+                            },
+                            cash: {
+                                position: cc.v2(-95.07, -29.479)
+                            },
+                            btn: {
+                                position: cc.v2(-96.194, -82.622)
+                            }
+                        }
+                    },
+                    icon: {
+                        position: cc.v2(201.674, 424.811)
+                    },
+                    congrat: {
+                        angle: 0,
+                    },
+                    congratBlur: {
+                        angle: 0,
+                    },
+                    audioBtn: {
+                        position: cc.v2(0, 397.765)
+                    }
+                }
+            }
         }
 
         //guiding用来记录是否还需要继续进行拖动手势引导
@@ -148,6 +130,19 @@ export default class GameModel {
             // }
         ]
 
+    }
+
+    // 设置通知的位置,要让通知在屏幕顶部
+    setNotificationPos (screen) {
+        // this.HorizontalConfig.guide.children.notification1.position = cc.v2(0, _pos.y+moveY);
+        // this.HorizontalConfig.guide.children.notification2.position = cc.v2(0, _pos.y+moveY);
+        let long = screen.canvasHeight > screen.canvasWidth ? screen.canvasHeight : screen.canvasWidth;
+        let short = screen.canvasHeight > screen.canvasWidth ? screen.canvasWidth : screen.canvasHeight;
+        // let _screenH = screen.ratio >= 1.77 ? long*(540/short)/2 : 960/2;
+        // let y = this.guideScript.notification.height/2 + _screenH;
+        let halfHeight = this.guideScript.notification.height/2;
+        this.VerticalConfig.UI.children.notification.position = cc.v2(0, long/2 - halfHeight);
+        this.HorizontalConfig.UI.children.notification.position = cc.v2(0, short/2 - halfHeight);
     }
 
     //设置引导脚本

@@ -22,7 +22,7 @@ cc.Class({
     onCollisionEnter: function (other, self) {
         // console.log('on collision enter');
         // console.log('on collision enter, ', self.node._name);
-        this.gameController.gameView.receiveGrade(self.node._name);
+        this.gameController.gameView.receiveGrade(self.node);
     },
 
     // update (dt) {},

@@ -265,7 +265,7 @@
       "x": 0,
       "y": 0
     },
-    "_angularVelocity": 0,
+    "_angularVelocity": 50,
     "_fixedRotation": false,
     "enabledContactListener": false,
     "bullet": false,
