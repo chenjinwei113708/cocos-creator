@@ -6,3 +6,9 @@ export const GRADES = {
     grade : 0,
 }
 
+export const DIRECTION = {
+    LEFT : 'left',
+    RIGHT : 'right',
+    MIDDLE: 'middle',
+}
+
