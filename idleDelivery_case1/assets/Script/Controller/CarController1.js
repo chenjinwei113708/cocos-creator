@@ -13,12 +13,15 @@ cc.Class({
 
     properties: {
         riderDown2: cc.SpriteFrame,
+        riderDown: cc.SpriteFrame,
     },
 
     onLoad () {
-        let carAction = cc.sequence(cc.moveTo(3.5, 15.119, -167.441), cc.callFunc(()=>{
+        let carAction = cc.repeatForever(cc.sequence(cc.moveTo(3.5, 15.119, -167.441), cc.callFunc(()=>{
             this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown2;
-        }), cc.moveTo(3, 153.926, -328.528));
+        }), cc.moveTo(3, 153.926, -328.528), cc.callFunc(()=>{
+            this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown;
+        }), cc.moveTo(0, 343.647, -43.382)));
         this.node.runAction(carAction);
 
     },
