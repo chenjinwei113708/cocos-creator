@@ -36,6 +36,10 @@ cc.Class({
             type: cc.AudioClip,
             default: null
         },
+        slotTurn: {
+            type: cc.AudioClip,
+            default: null
+        },
         coinRelease: {
             type: cc.AudioClip,
             default: null

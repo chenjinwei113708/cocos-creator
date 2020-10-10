@@ -7,6 +7,9 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+import {
+    DIRECTION
+} from '../Model/ConstValue.js';
 
 cc.Class({
     extends: cc.Component,
@@ -21,6 +24,7 @@ cc.Class({
         gold: cc.Node, // 获得的金币
         ppcard50: cc.Node, // 50的现金卡
         ppcard100: cc.Node, // 100的现金卡
+        ppcard150: cc.Node, // 150的现金卡
         gameHand: cc.Node, // 游戏指引手
     },
 
@@ -51,16 +55,18 @@ cc.Class({
                 grade7: 7,
                 grade8: 3,
                 grade9: 2,
-            }
+            },
+            stopCoin: [] // 停住的金币
         };
         this.goldView = this.gold.getComponent('GoldView');
         // 金币结点池
         this.coinPool = new cc.NodePool();
-        let initCount = 5;
+        let initCount = 30;
         for (let i = 0; i < initCount; ++i) {
             let coin = cc.instantiate(this.coinPrefab); // 创建节点
             this.coinPool.put(coin); // 通过 put 接口放入对象池
         }
+        // console.log('初始化', initCount, ' 个金币');
 
         // 积分结点池
         this.gradePool = new cc.NodePool();
@@ -91,14 +97,14 @@ cc.Class({
     /**打开物理引擎 */
     startPhysicEngine () {
         // 开启物理系统
-        cc.director.getPhysicsManager().enabled = true;
-        // 绘制调试信息  | cc.PhysicsManager.DrawBits.e_aabbBit;
-        // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_shapeBit;
+        // cc.director.getPhysicsManager().enabled = true;
+        // // 绘制调试信息  | cc.PhysicsManager.DrawBits.e_aabbBit;
+        // // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_shapeBit;
 
-        // 关闭绘制
-        // cc.director.getPhysicsManager().debugDrawFlags = 0;
-        // 设置重力
-        cc.director.getPhysicsManager().gravity = cc.v2(0, -450);
+        // // 关闭绘制
+        // // cc.director.getPhysicsManager().debugDrawFlags = 0;
+        // // 设置重力
+        // cc.director.getPhysicsManager().gravity = cc.v2(0, -450);
 
         // 碰撞系统
         var manager = cc.director.getCollisionManager();
@@ -124,6 +130,8 @@ cc.Class({
         }
         this.gameInfo.isUserClick = true;
         this.gameInfo.shootDelay = 400;
+        this.sendCoin();
+        this.sendCoin();
         // this.allBricks.active = false;
     },
 
@@ -154,8 +162,61 @@ cc.Class({
         // console.log('++dropCoin', coin);
         coin.getChildByName('pic').position = cc.v2(0, 0);
         coin.getChildByName('shadow').position = cc.v2(0, 0);
-        coin.active = false;
+        // coin.active = false;
         this.coinPool.put(coin);
+    },
+
+    /**金币掉下
+     * @ param {cc.Node} coin 金币节点
+     * @ param {boolean} isHit 是不是撞到东西
+     * @ param {DIRECTION} direction 方向
+     * @ param {cc.v2} destPos 目标位置
+     */
+    fallDownCoin (coin, isHit = false, direction = undefined, destPos = undefined) {
+        // console.log('-- fallDownCoin isHit:', isHit);
+        coin.stopAllActions();
+        let isLeft = Math.random() < 0.5 ? true : false;
+        let turnAction = isHit ? cc.sequence(
+            cc.moveBy(0.08, cc.v2(5.596 * (isLeft?-1:1), -1.598)),
+            cc.moveBy(0.08, cc.v2(3.197 * (isLeft?-1:1), -1.865)),
+            cc.moveBy(0.08, cc.v2(3.46 * (isLeft?-1:1), -3.72)),
+            cc.moveBy(0.08, cc.v2(1.86 * (isLeft?-1:1), -3.463)),
+            cc.moveBy(0.08, cc.v2(1.065 * (isLeft?-1:1), -3.996)),
+            cc.moveBy(0.05, cc.v2(0.799 * (isLeft?-1:1), -3.197)),
+        ) : cc.callFunc();
+        if (direction && direction !== DIRECTION.MIDDLE) {
+            turnAction = cc.moveTo(0.2, destPos);
+        }
+        let fallAction = cc.moveBy(1, 0, -700).easing(cc.easeIn(3.0));
+        coin.runAction(cc.spawn(
+            turnAction,
+            fallAction
+        ));
+    },
+
+    /**把金币停在障碍物上面 */
+    stopCoinOnBrick (coin) {
+        this.gameInfo.stopCoin.push(coin);
+        coin.stopAllActions();
+        if (this.gameInfo.stopCoin.length >= 7) {
+            let rmCoin = this.gameInfo.stopCoin.splice(0, 1)[0];
+            rmCoin.runAction(cc.sequence(
+                cc.fadeOut(0.3),
+                cc.callFunc(() => {
+                    this.dropCoin(rmCoin);
+                })
+            ));
+        }
+    },
+
+    /**把停住的金币落下 */
+    releaseCoins () {
+        const delay = 50;
+        this.gameInfo.stopCoin.forEach((each,index) => {
+            setTimeout(() => {
+                this.fallDownCoin(each);
+            }, index*delay);
+        });
     },
 
     /**拿到一个积分 */
@@ -204,6 +265,7 @@ cc.Class({
         coin.position = cc.v2(coinX, this.gameInfo.coinY);
         coin.parent = this.coins;
         coin.active = true;
+        this.fallDownCoin(coin);
         this.gameController.getAudioUtils().playEffect('coinRelease', 0.3);
     },
 
@@ -230,24 +292,24 @@ cc.Class({
         }
         this.goldView.addCash(grade);
         const target1 = 50;
-        const target2 = 50;
-        const target3 = 100;
+        const target2 = 150;
+        // const target3 = 100;
         // console.log('receiveGrade', this.gameInfo.getCashTimes, ' t:',this.goldView.targetCash);
         if (this.gameInfo.getCashTimes === 2) {
             // console.log('pause 1', this.goldView.targetCash < target1, ' isShow,', this.gameInfo.isPPCardShow);
-            if (this.goldView.targetCash < target1 || this.gameInfo.isPPCardShow) return;
+            if (this.goldView.targetCash < 10+target1 || this.gameInfo.isPPCardShow) return;
             // console.log('pause 2', this.gameInfo.getCashTimes, ' t:',this.goldView.targetCash);
             this.pauseGame();
             this.showPPCard(target1);
         } else if (this.gameInfo.getCashTimes >= 3){
-            if (this.goldView.targetCash < target2+this.gameInfo.tmpGoldNum) return;
+            if (this.goldView.targetCash < 100+target2+this.gameInfo.tmpGoldNum) return;
             if (this.gameInfo.getCashTimes === 3) this.showPPCard(target2);
-            // this.pauseGame();
-            if (this.goldView.targetCash >= target2+target3+this.gameInfo.tmpGoldNum) {
-                this.gameHand.active = false;
-                this.showPPCard(target3);
-                this.pauseGame();
-            }
+            this.pauseGame();
+            // if (this.goldView.targetCash >= target2+target3+this.gameInfo.tmpGoldNum) {
+            //     this.gameHand.active = false;
+            //     this.showPPCard(target3);
+            //     this.pauseGame();
+            // }
             // this.showPPCard(target2);
             // setTimeout(() => {
             //     this.showPPCard(target3);
@@ -295,7 +357,7 @@ cc.Class({
     showPPCard (num) {
         this.gameInfo.isPPCardShow = true;
         num = Number(num);
-        let ppcard = num === 50 ? this.ppcard50 : this.ppcard100;
+        let ppcard = num === 50 ? this.ppcard50 : num === 100 ? this.ppcard100 : this.ppcard150;
         if (ppcard.active) return;
         ppcard.opacity = 0;
         ppcard.active = true;
@@ -312,7 +374,7 @@ cc.Class({
     clickPPCard (event, num) {
         this.gameInfo.isPPCardShow = false;
         num = Number(num);
-        let ppcard = num === 50 ? this.ppcard50 : this.ppcard100;
+        let ppcard = num === 50 ? this.ppcard50 : num === 100 ? this.ppcard100 : this.ppcard150;
         ppcard.active = false;
         this.gameController.getAudioUtils().playEffect('income', 0.4);
         // this.setClickListener();
@@ -323,6 +385,7 @@ cc.Class({
             this.gameInfo.tmpGoldNum = this.goldView.targetCash;
             if (this.gameInfo.getCashTimes === 2) {
                 this.showSevens();
+                this.gameHand.active = false;
             }
         }
         this.gameController.addCash(num);
@@ -364,6 +427,7 @@ cc.Class({
         this.allBricks.runAction(cc.sequence(
             cc.fadeOut(0.3),
             cc.callFunc(() => {
+                this.releaseCoins();
                 this.continueGame();
                 this.allBricks.active = false;
             })

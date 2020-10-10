@@ -18,6 +18,7 @@ cc.Class({
         seven1: cc.Node,
         seven2: cc.Node,
         seven3: cc.Node,
+        topSprites: [cc.SpriteFrame], //
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -28,13 +29,91 @@ cc.Class({
         this.gameController = cc.find('Canvas').getComponent('GameController');
     },
 
+
+
     showSeven () {
-        const delay = 500;
-        for (let i = 1; i <= 3; i++){
-            setTimeout(() => {
-                this.sevenUp(i);
-            }, (i-1)*delay);
+        let audioUtils = this.gameController.getAudioUtils();
+        const delayTurn = 300;
+        for (let j = 1; j <= 3; j++){
+            this.changePic(j);
         }
+        for (let k = 1; k <= 6; k++){
+            setTimeout(() => {
+                audioUtils.playEffect('slotTurn', 0.1);
+            }, (k-1)*delayTurn);
+        }
+        const delay = 300;
+        setTimeout(() => {
+            for (let i = 1; i <= 3; i++){
+                setTimeout(() => {
+                    this.sevenUp(i);
+                }, (i-1)*delay);
+            }
+        }, 900);
+        
+    },
+
+    changePic (index) {
+        let light = this[`light${index}`];
+        let i = index;
+        light.runAction(cc.sequence(
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+            cc.callFunc(() => {
+                light.getComponent(cc.Sprite).spriteFrame = this.topSprites[i++ % this.topSprites.length];
+            }),
+            cc.delayTime(0.1),
+        ));
     },
 
     sevenUp (index) {
@@ -45,6 +124,7 @@ cc.Class({
 
         let lightMove = cc.moveTo(time, cc.v2(light.position.x, light.position.y+moveY));
         lightMove.easing(cc.easeOut(3.0));
+        light.stopAllActions();
         light.runAction(cc.sequence(
             lightMove,
             cc.callFunc(() => {
