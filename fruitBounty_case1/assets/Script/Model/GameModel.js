@@ -57,11 +57,19 @@ export default class GameModel {
                         }
                     },
                     congrat: {
-                        angle: 90
+                        // angle: 90,
+                        // opacity: 255,
+                        width: 277.38,
+                        height: 540,
+                        opacity: 190
                     },
                     congratBlur: {
-                        angle: 90
-                    }
+                        // angle: 90,
+                        // opacity: 255,
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    },
                 }
             }
         }
@@ -113,11 +121,19 @@ export default class GameModel {
                         }
                     },
                     congrat: {
-                        angle: 0
+                        // angle: 0,
+                        // opacity: 255,
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
                     },
                     congratBlur: {
-                        angle: 0
-                    }
+                        // angle: 0,
+                        // opacity: 255,
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
+                    },
                 }
             }
         }
@@ -172,8 +188,10 @@ export default class GameModel {
 
     //初始化游戏模型
     gameInit() {
-        
+    }
 
-
+    /**获得坐标config */
+    getPositionConfig () {
+        return this.isLandscape ? this.HorizontalConfig : this.VerticalConfig;
     }
 }

@@ -149,11 +149,8 @@ cc.Class({
                 this.congrat.scale = 0.75;
                 this.congrat.active = true;
                 let opacityAction = null;
-                if (this.gameController.gameModel.isLandscape) {
-                    opacityAction = cc.fadeIn(0.2);
-                } else {
-                    opacityAction = cc.fadeIn(0.2);
-                }
+                let posConfig = this.gameController.gameModel.getPositionConfig();
+                opacityAction = cc.fadeTo(0.2, posConfig.UI.children.congrat.opacity);
                 this.congrat.runAction(cc.spawn(
                     opacityAction,
                     cc.moveBy(0.35, -this.congrat.width, 0),
