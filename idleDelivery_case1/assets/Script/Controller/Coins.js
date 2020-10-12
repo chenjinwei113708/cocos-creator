@@ -11,22 +11,20 @@
 cc.Class({
     extends: cc.Component,
 
-    extends: cc.Component,
-
     properties: {
-        riderDown2: cc.SpriteFrame,
-        riderDown3: cc.SpriteFrame,
+        goldPrefab: cc.Prefab
     },
 
-    onLoad () {
-        let carAction = cc.repeatForever(cc.sequence(cc.moveTo(5, -230.225, 24.951), cc.callFunc(()=>{
-            this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown3;
-        }), cc.moveTo(4.5, 311.307, 228.961), cc.callFunc(()=>{
-            this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown2;
-        }), cc.moveTo(0, 148.947, -303.065)));
-        this.node.runAction(carAction);
 
+    goldCoinInit(){
+        let coins = cc.find('Canvas/center/game/coins');
+        for(let i = 0; i < 50; i++){
+            let newCoin = cc.instantiate(this.goldPrefab);
+            coins.addChild(newCoin);
+        }
     },
+
+    //onLoad () {},
 
     start () {
 

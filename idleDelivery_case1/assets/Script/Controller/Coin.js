@@ -12,19 +12,20 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        riderDown2: cc.SpriteFrame,
-        riderDown: cc.SpriteFrame,
+
     },
 
     onLoad () {
-        let carAction = cc.repeatForever(cc.sequence(cc.moveTo(3.5, 15.119, -167.441), cc.callFunc(()=>{
-            this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown2;
-        }), cc.moveTo(3, 153.926, -328.528), cc.callFunc(()=>{
-            this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown;
-        }), cc.moveTo(0, 343.647, -43.382)));
-        this.node.runAction(carAction);
+        this.node.scale = 0.8;
+        this.node.position = cc.v2(0, 0);
+        let x = Math.random() * (430+1-100)-150;
+        let y = Math.random() * (600+1-320)-150;
+        let d = Math.random() * 1.5;
+        let coinAction = cc.sequence(cc.moveTo(0.3, x, y), cc.moveTo(0.5, x, y-10), cc.moveTo(d, 33.642, 677.79));
+        this.node.runAction(coinAction);
 
     },
+
     start () {
 
     },

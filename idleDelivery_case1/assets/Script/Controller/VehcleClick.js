@@ -16,28 +16,53 @@ cc.Class({
         hand: cc.Node,
         riderDown5: cc.Node,
         riderDown6: cc.Node,
+        riderDown: cc.Node,
 
         riderDown5_2: cc.SpriteFrame,
         riderDown5_repeat: cc.SpriteFrame,
 
         riderDown6_2: cc.SpriteFrame,
         riderDown6_repeat: cc.SpriteFrame,
+
+        riderDown_2: cc.SpriteFrame,
+        riderDown_repeat: cc.SpriteFrame,
+
+        goldPrefab: cc.Prefab
     },
 
 
     onLoad () {
-
+        
+        
+        
         this.gameControl = cc.find("Canvas").getComponent('GameController');
         let clickFlag = true;
         
         this.button.node.on('click', button => {
             if(clickFlag){
+                //初始化金币
+                
+
                 this.gameControl.gameModel.handShow = false;
                 let handAction = cc.sequence(cc.fadeOut(1), cc.moveTo(1, 31.686, -297.811));
                 this.hand.runAction(handAction);
 
 
                 //新增人物
+                let action = cc.repeatForever(
+                    cc.sequence(
+                        cc.moveTo(4, -57.087, -197.061), 
+                        // cc.moveTo(2, -18.553, 40.379),
+                        cc.callFunc(() => {
+                            this.riderDown.getComponent(cc.Sprite).spriteFrame = this.riderDown_repeat;
+                        }),
+                        cc.moveTo(2, 47.96, -321.561),
+                        cc.callFunc(() => {
+                            this.riderDown.getComponent(cc.Sprite).spriteFrame = this.riderDown_2;
+                        }),
+                        cc.moveTo(0, 343.647, -43.382),
+                ));
+
                 let action1 = cc.repeatForever(
                     cc.sequence(
                         cc.moveTo(3.5, -18.553, 40.379), 
@@ -64,10 +89,19 @@ cc.Class({
                         }),
                         cc.moveTo(0, 343.212, -117.314)
                 ));
+                // this.riderDown.runAction(action);
+                this.riderDown.runAction(action);
                 this.riderDown5.runAction(action1);
                 this.riderDown6.runAction(action2);
                 
+
+                
                 clickFlag = false;
+
+                setTimeout(()=>{
+                    cc.find('Canvas/center/game/coins').getComponent('Coins').goldCoinInit();
+                }, 2000)
+                
             }  
         }, this);
         
