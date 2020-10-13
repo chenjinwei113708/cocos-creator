@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "0bf7cec2-1eaa-4b42-8108-56eb2bc99b03",
+  "uuid": "fc84593d-259f-45cc-904b-f8c5236c88fa",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "paypalCard": {
+    "shine": {
       "ver": "1.0.4",
-      "uuid": "7d19d771-0898-4e4a-91d9-12007fd744b3",
-      "rawTextureUuid": "0bf7cec2-1eaa-4b42-8108-56eb2bc99b03",
+      "uuid": "f8a0b2a8-70fa-4e40-8378-3e394957a2b2",
+      "rawTextureUuid": "fc84593d-259f-45cc-904b-f8c5236c88fa",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 275,
-      "height": 375,
-      "rawWidth": 275,
-      "rawHeight": 375,
+      "width": 644,
+      "height": 629,
+      "rawWidth": 644,
+      "rawHeight": 629,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,
