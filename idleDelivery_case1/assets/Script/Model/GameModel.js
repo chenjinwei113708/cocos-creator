@@ -124,6 +124,9 @@ export default class GameModel {
         this.guiding = true;
         this.isSkillGuided = false;
         this.skillGuiding = false;
+
+        //标志手指提示的显示与隐藏
+        this.handShow = true;
         
 
         this.guideScript = null;
