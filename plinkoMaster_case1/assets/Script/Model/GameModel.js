@@ -44,18 +44,18 @@ export default class GameModel {
                         position: cc.v2(-385.84, -199.951)
                     },
                     congrat: {
-                        angle: 90,
-                        opacity: 255,
-                        // width: 277.38,
-                        // height: 540,
-                        // opacity: 190
+                        // angle: 90,
+                        // opacity: 255,
+                        width: 277.38,
+                        height: 540,
+                        opacity: 190
                     },
                     congratBlur: {
-                        angle: 90,
-                        opacity: 255,
-                        // width: 277.38, // applovin
-                        // height: 540,
-                        // opacity: 190
+                        // angle: 90,
+                        // opacity: 255,
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
                     },
                     audioBtn: {
                         position: cc.v2(-423.28, 214.908)
@@ -98,18 +98,18 @@ export default class GameModel {
                         position: cc.v2(201.674, 424.811)
                     },
                     congrat: {
-                        angle: 0,
-                        opacity: 255,
-                        // width: 603, // applovin
-                        // height: 1170,
-                        // opacity: 255
+                        // angle: 0,
+                        // opacity: 255,
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
                     },
                     congratBlur: {
-                        angle: 0,
-                        opacity: 255,
-                        // width: 603, // applovin
-                        // height: 1170,
-                        // opacity: 255
+                        // angle: 0,
+                        // opacity: 255,
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
                     },
                     audioBtn: {
                         position: cc.v2(0, 397.765)
