@@ -36,10 +36,9 @@ cc.Class({
         
         
         this.gameControl = cc.find("Canvas").getComponent('GameController');
-        let clickFlag = true;
         
         this.button.node.on('click', button => {
-            if(clickFlag){
+            if(!this.gameControl.gameModel.Vehcle){
                 //初始化金币
                 
 
@@ -89,18 +88,21 @@ cc.Class({
                         }),
                         cc.moveTo(0, 343.212, -117.314)
                 ));
-                // this.riderDown.runAction(action);
+                
                 this.riderDown.runAction(action);
                 this.riderDown5.runAction(action1);
                 this.riderDown6.runAction(action2);
                 
 
                 
-                clickFlag = false;
+                this.gameControl.gameModel.Vehcle = true;
 
                 setTimeout(()=>{
                     cc.find('Canvas/center/game/coins').getComponent('Coins').goldCoinInit();
                 }, 2000)
+                setTimeout(()=>{
+                    cc.find('Canvas/center/game/paypalcard').getComponent('PayPalView').payPalAction();
+                }, 4000)
                 
             }  
         }, this);

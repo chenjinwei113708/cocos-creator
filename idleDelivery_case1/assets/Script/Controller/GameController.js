@@ -10,7 +10,9 @@ cc.Class({
         //与游戏顺序和游戏引导相关的结点
         guide: cc.Node,
         //整个游戏场景结点
-        center:cc.Node
+        center:cc.Node,
+
+        cash: cc.Node
 
     },
 
@@ -64,6 +66,9 @@ cc.Class({
         PlayformSDK.gameReady();
 
         this.gotoNextStep();
+
+        //加钱
+        this.cashView = this.cash.getComponent("CashView");
     },
 
     /**执行任务队列 */
@@ -118,6 +123,11 @@ cc.Class({
 
 
 
-    }
+    },
+
+    //加钱
+    addCash (num) {
+        this.cashView.addCash(num);
+    },
 
 });
