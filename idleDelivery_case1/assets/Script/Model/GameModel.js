@@ -127,6 +127,11 @@ export default class GameModel {
 
         //标志手指提示的显示与隐藏
         this.handShow = true;
+
+        //标志第几个按钮是否按下
+        this.Vehicle = false;
+        this.Speed = false;
+        this.PayPal = false;
         
 
         this.guideScript = null;
