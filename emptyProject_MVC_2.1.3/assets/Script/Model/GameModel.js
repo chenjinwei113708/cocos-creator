@@ -156,9 +156,10 @@ export default class GameModel {
     }
 
     //初始化游戏模型
-    gameInit() {
-        
-
-
+    gameInit() {}
+    
+    /**获得坐标config */
+    getPositionConfig () {
+        return this.isLandscape ? this.HorizontalConfig : this.VerticalConfig;
     }
 }

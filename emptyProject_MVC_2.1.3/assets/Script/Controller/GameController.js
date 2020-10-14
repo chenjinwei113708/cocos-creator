@@ -95,10 +95,10 @@ cc.Class({
     },
 
     // 调用View显示操作方法
-    showEndPage() {
-        this.AudioUtils.getComponent('AudioUtils').playEffect('endMusic', 0.6);
+    endGame() {
+        // this.AudioUtils.getComponent('AudioUtils').playEffect('endMusic', 0.6);
         PlayformSDK.gameFinish();
-        this.GuideView.showEndPage();
+        // this.GuideView.showEndPage();
     },
 
     // 调用Model数据操作方法
