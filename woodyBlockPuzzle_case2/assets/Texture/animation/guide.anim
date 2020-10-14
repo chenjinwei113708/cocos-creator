@@ -1,0 +1,169 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "guide",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 2.1,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "props": {
+      "scale": [
+        {
+          "frame": 0,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.2,
+            "y": 1.2
+          }
+        },
+        {
+          "frame": 0.3,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 1.4,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 1.6,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.2,
+            "y": 1.2
+          }
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.3,
+          "value": 255
+        },
+        {
+          "frame": 1.4,
+          "value": 255
+        },
+        {
+          "frame": 1.7,
+          "value": 0
+        },
+        {
+          "frame": 2.1,
+          "value": 0
+        }
+      ],
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -37,
+            -335,
+            0
+          ]
+        },
+        {
+          "frame": 0.3,
+          "value": [
+            -37,
+            -335,
+            0
+          ]
+        },
+        {
+          "frame": 0.9,
+          "value": [
+            14.398999999999994,
+            -217.925,
+            0
+          ]
+        },
+        {
+          "frame": 1.4,
+          "value": [
+            48.665,
+            -139.875,
+            0
+          ]
+        }
+      ]
+    },
+    "paths": {
+      "four1": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.2,
+              "value": 0
+            },
+            {
+              "frame": 0.3,
+              "value": 150
+            },
+            {
+              "frame": 1.4,
+              "value": 150
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ],
+          "scale": [
+            {
+              "frame": 0.2,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 1,
+                "y": 1
+              }
+            },
+            {
+              "frame": 0.3,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 2.2,
+                "y": 2.2
+              }
+            },
+            {
+              "frame": 1.4,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 2.2,
+                "y": 2.2
+              }
+            },
+            {
+              "frame": 1.5,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 1,
+                "y": 1
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": [
+    {
+      "frame": 1.4,
+      "func": "abcShowTip",
+      "params": []
+    }
+  ]
+}
