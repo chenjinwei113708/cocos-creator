@@ -156,7 +156,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 486.91368016986314
+      "z": 496.22257743194115
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -13176,7 +13176,7 @@
       "__id__": 9
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_level": 2,
     "_components": [
       {

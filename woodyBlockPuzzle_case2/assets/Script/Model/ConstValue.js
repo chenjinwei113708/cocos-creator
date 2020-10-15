@@ -11,3 +11,16 @@ export const CELL_STATUS = {
     DONE_MOVE: 2,
     LOST_GAME: 3,
 };
+
+export const BRICK_TYPE = {
+    FOUR1: 'four1'
+};
+
+export const BRICK_VALUE = {
+    [BRICK_TYPE.FOUR1]: [
+        {x: 0, y: 0},
+        {x: 0, y: -1},
+        {x: 0, y: -2},
+        {x: 0, y: -3},
+    ]
+};
