@@ -2,8 +2,16 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport"
+  content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width, viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="format-detection" content="email=no">
+  <meta name="format-detection" content="address=no;">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="wap-font-scale" content="no">
+  <!-- <meta name="ad.size" content="width=320,height=480"> -->
   <title>pops connect</title>
   <style>
     * {
@@ -37,6 +45,7 @@
   // 下载地址，需要手动修改成正确的下载地址
   var storeUrl = 'https://play.google.com/store/apps/details?id=com.tags.popsconnect';
   var iosStoreUrl = 'https://apps.apple.com/app/id1533597229';
+  
   var playableStart = false; // 广告启动
   var hidden, visibilityChange;
   if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and later support 
@@ -271,11 +280,11 @@
         } else {
           // ===================== 无平台接入时 ===================== 
           console.log(url);
-          window.location.href = url;
+          window.location = url;
         }
       } catch (err) {
         console.error(err)
-        window.location.href = url;
+        window.location = url;
       }
     }
   }
@@ -313,8 +322,8 @@
   this.platformSDK.gameReady && this.platformSDK.gameReady();
 
   /**游戏点击全屏 进入下载*/
-  window.onclick = function () {
-    this.platformSDK.download(); // 调用下载方法
+  div.onclick = function () {
+    window.platformSDK.download(); // 调用下载方法
   }
 </script>
 
