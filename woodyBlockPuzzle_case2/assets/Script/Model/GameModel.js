@@ -221,6 +221,7 @@ export default class GameModel {
      * @param {cc.v2} startPos {x: 行, y: 列}  方块起点(右下角)放在哪个位置
      * @param {BRICK_VALUE} brickValue 方块类型所代表的数据
      * @return {object} 可以消除的行和列 格式：{row: [1], column: [1], bricks: [{x,y}]} （例：第一行和第一列）
+     *  如果没有可以消除的方块，则返回null
      */
     findBomb (startPos, brickValue) {
         let rows = []; // 需要检查的行
@@ -231,15 +232,61 @@ export default class GameModel {
                 rows.push(pos.x);
             }
             if (columns.indexOf(pos.y) === -1) {
-                rows.push(pos.y);
+                columns.push(pos.y);
             }
             this.brickModel[pos.x][pos.y];
         });
+        // console.log('findBomb rows', rows);
+        // console.log('findBomb columns', columns);
+        let newRows = []; // 需要返回的行
+        let newColumns = []; // 需要返回的列
+        let bricks = [];
+        // 查找每一行里面有没有空格子
         rows.forEach(row => {
             let empty = this.brickModel[row].findIndex(i => i === 0);
-            if (empty > -1) {
-                // 有空格子
+            if (empty === -1) {
+                // 没有找到空格子
+                newRows.push(row);
+                for (let i = 1; i <= this.brickModel.length - 1; i++) {
+                    bricks.push({x: row, y: i});
+                };
             }
+        });
+        // console.log('findBomb newRows', newRows);
+        // 查找每一列里面有没有空格子
+        columns.forEach(column => {
+            let empty = this.brickModel.findIndex((eachRow, index) => {
+                if (index === 0) return false;
+                return eachRow[column] === 0;
+            });
+            if (empty === -1) {
+                // 没有找到空格子
+                newColumns.push(column);
+                for (let i = 1; i <= this.brickModel.length - 1; i++) {
+                    if (newRows.indexOf(i) === -1) {
+                        bricks.push({x: i, y: column});
+                    }
+                };
+            }
+        });
+        // console.log('findBomb newColumns', newColumns);
+        if (bricks.length > 0) {
+            return {
+                row: newRows,
+                column: newColumns,
+                bricks: bricks
+            };
+        } else {
+            return null;
+        }
+    }
+
+    /**将爆炸的区域的格子置为空
+     * @param {[{x,y}]} bombBricks 爆炸方块的坐标数组
+     */
+    bomb (bombBricks) {
+        bombBricks.forEach(each => {
+            this.brickModel[each.x][each.y] = 0;
         });
     }
 }

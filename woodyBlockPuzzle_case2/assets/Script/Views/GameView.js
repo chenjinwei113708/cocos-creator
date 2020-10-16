@@ -8,7 +8,9 @@
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 import {
-    CELL_STATUS
+    CELL_STATUS,
+    BRICK_TYPE,
+    BRICK_VALUE
 } from '../Model/ConstValue.js';
 
 cc.Class({
@@ -28,14 +30,24 @@ cc.Class({
 
     onLoad () {
         // console.log(Date.now(), this.four1);
+        this.allBricks = cc.find('Canvas/center/game/bricks').children;
         this.gameInfo = {
             cellStatus: CELL_STATUS.CAN_MOVE, // 可选择
             direcDelay: 40, // 判断延时
             lastCheckTime: 0,  // 上次判断时间
             bigger: 2.2,
-            nowTouch: null, 
-            four1Pos: cc.v2(this.four1.position.x, this.four1.position.y), // 记录起点位置
+            nowTouch: null, // 触碰点
+            moveStartPos: cc.v2(this.four1.position.x, this.four1.position.y), // 记录起点位置
             progressInterval: null,
+            originPos: cc.v2(-251.143, 278.152), // 左上角格子的坐标
+            border: {leastX: -251.143, leastY: -225.76, mostX: 253.749, mostY: 278.152},
+            colunmWidth: 63.112, // 每一列宽度
+            rowHeight: 62.989, // 每一行高度
+            currentBrick: null, // 当前移动的方块
+            order: [BRICK_TYPE.FOUR1], // 出场顺序
+            moveTimes: 0, // 移动次数
+            rowNames: ['', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'],
+            tipBricks: [], // 当前提示的格子
         };
         this.setTouchListener();
     },
@@ -74,7 +86,9 @@ cc.Class({
                 touchPos.y <= this.touch1.position.y + this.touch1.height/2) {
                     this.gameInfo.nowTouch = this.touch1;
                     this.gameInfo.lastCheckTime = Date.now();
-                    this.four1.scale = this.gameInfo.bigger;
+                    let nowBrickType = this.gameInfo.order[this.gameInfo.moveTimes];
+                    this.gameInfo.currentBrick = this[nowBrickType];
+                    this.gameInfo.currentBrick.scale = this.gameInfo.bigger;
                     // this.gameInfo.nowTouchPos = touchPos;
                     this.setCellStatus(CELL_STATUS.IS_MOVE);
             }
@@ -85,29 +99,102 @@ cc.Class({
         if (this.gameInfo.cellStatus === CELL_STATUS.IS_MOVE &&
             Date.now() - this.gameInfo.lastCheckTime >= this.gameInfo.direcDelay) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
-            this.four1.position = touchPos;
-            this.checkInPos(touchPos, false);
+            let nowBrickType = this.gameInfo.order[this.gameInfo.moveTimes];
+            this.gameInfo.currentBrick.position = touchPos;
+            let brickPos = this.convert2BrickPos(touchPos); // 转换成格子坐标
+            // console.log('brickPos', brickPos, touchPos);
+            if (brickPos) {
+                let canPut = this.gameController.gameModel.placeInto(brickPos, BRICK_VALUE[nowBrickType], false);
+                // console.log('当前位置：', brickPos.x, ' ', brickPos.y, canPut);
+                this.showTipArea(brickPos, BRICK_VALUE[nowBrickType], canPut, false);
+                // this.checkInPos(touchPos, false);
+            };
         }
     },
     onTouchEnd (touch) {
         if (this.gameInfo.cellStatus === CELL_STATUS.IS_MOVE) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
-            let inDest = this.checkInPos(touchPos, true);
-            if (inDest) {
-                // 放对位置了
-                this.four1.scale = 1;
-                this.four1.position = this.gameInfo.four1Pos;
-                this.four1.active = false;
+            let nowBrickType = this.gameInfo.order[this.gameInfo.moveTimes];
+            let brickPos = this.convert2BrickPos(touchPos); // 转换成格子坐标
+            let canPut = this.gameController.gameModel.placeInto(brickPos, BRICK_VALUE[nowBrickType], true);
+            let currentBrick = this.gameInfo.currentBrick;
+            if (canPut) {
+                //放对位置了
+                this.showTipArea(brickPos, BRICK_VALUE[nowBrickType], canPut, true);
                 this.setCellStatus(CELL_STATUS.DONE_MOVE);
-                this.hand.getComponent(cc.Animation).stop();
-                this.hand.active = false;
-                setTimeout(() => {this.showBomb();}, 100);
+                currentBrick.scale = 1;
+                currentBrick.position = this.gameInfo.moveStartPos;
+                currentBrick.active = false;
+                let bombBricks = this.gameController.gameModel.findBomb(brickPos, BRICK_VALUE[nowBrickType]);
+                if (bombBricks) {
+                    setTimeout(() => {this.showBomb(bombBricks);}, 100);
+                } else {
+                    this.setCellStatus(CELL_STATUS.CAN_MOVE);
+                }
+                if (this.gameInfo.moveTimes === 0) {
+                    this.hand.getComponent(cc.Animation).stop();
+                    this.hand.active = false;
+                }
             } else {
-                this.four1.scale = 1;
-                this.four1.position = this.gameInfo.four1Pos;
+                currentBrick.scale = 1;
+                currentBrick.position = this.gameInfo.moveStartPos;
                 this.setCellStatus(CELL_STATUS.CAN_MOVE);
             }
+
+            // let inDest = this.checkInPos(touchPos, true);
+            // if (inDest) {
+            //     // 放对位置了
+            //     this.four1.scale = 1;
+            //     this.four1.position = this.gameInfo.moveStartPos;
+            //     this.four1.active = false;
+            //     this.setCellStatus(CELL_STATUS.DONE_MOVE);
+                
+            //     setTimeout(() => {this.showBomb();}, 100);
+            // } else {
+            //     this.four1.scale = 1;
+            //     this.four1.position = this.gameInfo.moveStartPos;
+            //     this.setCellStatus(CELL_STATUS.CAN_MOVE);
+            // }
         }
+    },
+
+    /**将坐标转换成格子坐标，第几行第几列cc.v2 */
+    convert2BrickPos (pos) {
+        if (pos.x < this.gameInfo.border.leastX || pos.x > this.gameInfo.border.mostX ||
+            pos.y < this.gameInfo.border.leastY || pos.y > this.gameInfo.border.mostY ) return null;
+        let y = parseInt((pos.x - this.gameInfo.originPos.x) / this.gameInfo.colunmWidth) + 1;
+        let x = parseInt((this.gameInfo.originPos.y - pos.y) / this.gameInfo.rowHeight) + 1;
+        return cc.v2(x, y);
+    },
+
+    /**展示提示区域 */
+    showTipArea (startPos, brickValue, canPut, isPutDown = false) {
+        if (this.gameInfo.tipBricks.length > 0) {
+            this.gameInfo.tipBricks.forEach(each => {
+                each.opacity = 0;
+                each.active = false;
+            });
+        }
+        if (canPut) {
+            let tipBricks = this.findTipBricks(startPos, brickValue);
+            this.gameInfo.tipBricks = tipBricks;
+            tipBricks.forEach(each => {
+                each.opacity = isPutDown ? 255 : 100;
+                each.active = true;
+                // console.log('checkInPos in, active ', each.active);
+            });
+        }
+    },
+
+    /**找到提示区域的格子，当方块悬浮在格子上方，出现影子提示 */
+    findTipBricks (startPos ,brickValue) {
+        let tipBricks = [];
+        brickValue.forEach(each => {
+            let pos = cc.v2(startPos.x+each.x, startPos.y+each.y);
+            let b = this.allBricks[pos.x-1].children[pos.y-1];
+            tipBricks.push(b);
+        });
+        return tipBricks;
     },
 
     /**检查是否放入目标位置
@@ -145,14 +232,12 @@ cc.Class({
      * @param {number} number 第几行，或第几列
      */
     getBombBricks (isLine = true, number) {
-        const bricks = cc.find('Canvas/center/game/bricks').children;
-        const lineNames = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
         if (number < 0 || number > 8) return null;
         if (isLine) {
-            let row = bricks[number-1].children;
+            let row = this.allBricks[number-1].children;
             return row;
         } else {
-            let column = bricks.map(each => {
+            let column = this.allBricks.map(each => {
                 return each.children[number-1];
             });
             return column;
@@ -164,7 +249,7 @@ cc.Class({
     },
 
     /**展示格子消除特效 */
-    showBomb () {
+    showBomb (bombBricks) {
         console.log('展示爆炸');
         const duration = {
             upLeast: 0.1,
@@ -182,11 +267,15 @@ cc.Class({
             downLeftMost: 350,
         };
         const delay = 500; // ms
-        let bricks = this.getBombBricks(false, 5); // 拿到第5列的格子
+        // let bricks = this.getBombBricks(false, 5); // 拿到第5列的格子
+        let bricks = bombBricks.bricks.map(eachPos => {
+            return this.allBricks[eachPos.x-1].children[eachPos.y-1];
+        });
         // 消失一列格子
         bricks.forEach(each => {
             each.active = false;
         });
+        this.gameController.gameModel.bomb(bombBricks.bricks); // 修改模型，爆炸的格子置为0
         this.setProgress(1);
         // 出现掉落特效
         this.bomb.children.forEach(fly => {
