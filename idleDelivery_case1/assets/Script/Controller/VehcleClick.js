@@ -27,7 +27,16 @@ cc.Class({
         riderDown_2: cc.SpriteFrame,
         riderDown_repeat: cc.SpriteFrame,
 
-        goldPrefab: cc.Prefab
+        goldPrefab: cc.Prefab,
+
+        a: 4,
+        b: 2,
+        c: 3.5,
+        d: 2,
+        e: 3.5,
+        f: 2.5,
+        g: 2,
+        h: 2.5
     },
 
 
@@ -50,12 +59,11 @@ cc.Class({
                 //新增人物
                 let action = cc.repeatForever(
                     cc.sequence(
-                        cc.moveTo(4, -57.087, -197.061), 
-                        // cc.moveTo(2, -18.553, 40.379),
+                        cc.moveTo(this.a, -57.087, -197.061), 
                         cc.callFunc(() => {
                             this.riderDown.getComponent(cc.Sprite).spriteFrame = this.riderDown_repeat;
                         }),
-                        cc.moveTo(2, 47.96, -321.561),
+                        cc.moveTo(this.b, 47.96, -321.561),
                         cc.callFunc(() => {
                             this.riderDown.getComponent(cc.Sprite).spriteFrame = this.riderDown_2;
                         }),
@@ -64,12 +72,12 @@ cc.Class({
 
                 let action1 = cc.repeatForever(
                     cc.sequence(
-                        cc.moveTo(3.5, -18.553, 40.379), 
-                        cc.moveTo(2, -18.553, 40.379),
+                        cc.moveTo(this.c, -18.553, 40.379), 
+                        cc.moveTo(this.d, -18.553, 40.379),
                         cc.callFunc(() => {
                             this.riderDown5.getComponent(cc.Sprite).spriteFrame = this.riderDown5_repeat;
                         }),
-                        cc.moveTo(3.5, 329.087, 177.201),
+                        cc.moveTo(this.e, 329.087, 177.201),
                         cc.callFunc(() => {
                             this.riderDown5.getComponent(cc.Sprite).spriteFrame = this.riderDown5_2;
                         })
@@ -77,12 +85,12 @@ cc.Class({
 
                 let action2 = cc.repeatForever(
                     cc.sequence(
-                        cc.moveTo(2.5, 164.064, 22.889), 
-                        cc.moveTo(2, 164.064, 22.889),
+                        cc.moveTo(this.f, 164.064, 22.889), 
+                        cc.moveTo(this.g, 164.064, 22.889),
                         cc.callFunc(() => {
                             this.riderDown6.getComponent(cc.Sprite).spriteFrame = this.riderDown6_repeat;
                         }),
-                        cc.moveTo(2.5, 296.478, 77.412),
+                        cc.moveTo(this.h, 296.478, 77.412),
                         cc.callFunc(() => {
                             this.riderDown6.getComponent(cc.Sprite).spriteFrame = this.riderDown6_2;
                         }),

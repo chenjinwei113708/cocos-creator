@@ -16,16 +16,30 @@ cc.Class({
     properties: {
         riderDown2: cc.SpriteFrame,
         riderDown3: cc.SpriteFrame,
+        
+        a: 5,
+        b: 4.5,
+
+
     },
 
     onLoad () {
-        let carAction = cc.repeatForever(cc.sequence(cc.moveTo(5, -230.225, 24.951), cc.callFunc(()=>{
+        let carAction = cc.repeatForever(cc.sequence(cc.moveTo(this.a, -230.225, 24.951), cc.callFunc(()=>{
             this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown3;
-        }), cc.moveTo(4.5, 311.307, 228.961), cc.callFunc(()=>{
+        }), cc.moveTo(this.b, 311.307, 228.961), cc.callFunc(()=>{
             this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown2;
         }), cc.moveTo(0, 148.947, -303.065)));
         this.node.runAction(carAction);
 
+    },
+
+    changeSpeed(a, b){
+        let carAction = cc.repeatForever(cc.sequence(cc.moveTo(a, -230.225, 24.951), cc.callFunc(()=>{
+            this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown3;
+        }), cc.moveTo(b, 311.307, 228.961), cc.callFunc(()=>{
+            this.node.getComponent(cc.Sprite).spriteFrame = this.riderDown2;
+        }), cc.moveTo(0, 148.947, -303.065)));
+        this.node.runAction(carAction);
     },
 
     start () {
