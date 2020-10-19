@@ -35,31 +35,36 @@ export default class GameModel {
                             }
                         }
                     },
-                    icon: {
-                        position: cc.v2(-356.685, -110.577),
+                    banner: {
+                        children: {
+                            icon: {
+                                position: cc.v2(-356.685, -110.577),
+                            },
+                            logo: {
+                                position: cc.v2(-359.301, -188.815),
+                            },
+                            btn: {
+                                position: cc.v2(-168.451, -192.761),
+                            },
+                        }
                     },
-                    logo: {
-                        position: cc.v2(-359.301, -188.815),
-                    },
-                    btn: {
-                        position: cc.v2(-168.451, -192.761),
-                    },
+                    notification: {},
                     audioBtn: {
                         position: cc.v2(-431.024, 222.084),
                     },
                     congrat: {
-                        // angle: 90,
-                        // opacity: 255,
-                        width: 277.38,
-                        height: 540,
-                        opacity: 190
+                        angle: 90,
+                        opacity: 255,
+                        // width: 277.38,
+                        // height: 540,
+                        // opacity: 190
                     },
                     congratBlur: {
-                        // angle: 90,
-                        // opacity: 255,
-                        width: 277.38, // applovin
-                        height: 540,
-                        opacity: 190
+                        angle: 90,
+                        opacity: 255,
+                        // width: 277.38, // applovin
+                        // height: 540,
+                        // opacity: 190
                     },
                 }
             }
@@ -90,31 +95,36 @@ export default class GameModel {
                             }
                         }
                     },
-                    icon: {
-                        position: cc.v2(-208.378, -435.595),
+                    banner: {
+                        children: {
+                            icon: {
+                                position: cc.v2(-208.378, -435.595),
+                            },
+                            logo: {
+                                position: cc.v2(-54.53, -438.431),
+                            },
+                            btn: {
+                                position: cc.v2(149.002, -440.538),
+                            },
+                        }
                     },
-                    logo: {
-                        position: cc.v2(-54.53, -438.431),
-                    },
-                    btn: {
-                        position: cc.v2(149.002, -440.538),
-                    },
+                    notification: {},
                     audioBtn: {
                         position: cc.v2(0, 450.422),
                     },
                     congrat: {
-                        // angle: 0,
-                        // opacity: 255,
-                        width: 603, // applovin
-                        height: 1170,
-                        opacity: 255
+                        angle: 0,
+                        opacity: 255,
+                        // width: 603, // applovin
+                        // height: 1170,
+                        // opacity: 255
                     },
                     congratBlur: {
-                        // angle: 0,
-                        // opacity: 255,
-                        width: 603, // applovin
-                        height: 1170,
-                        opacity: 255
+                        angle: 0,
+                        opacity: 255,
+                        // width: 603, // applovin
+                        // height: 1170,
+                        // opacity: 255
                     },
                 }
             }
@@ -138,7 +148,7 @@ export default class GameModel {
             [9, 1, 1, 0, 1, 1, 0, 0, 0],
             [9, 0, 1, 0, 0, 1, 0, 1, 1],
             [9, 1, 1, 1, 1, 1, 0, 1, 1],
-            [9, 0, 0, 1, 1, 1, 0, 1, 1],
+            [9, 0, 0, 1, 1, 1, 1, 1, 1],
             [9, 1, 1, 1, 1, 1, 0, 1, 0],
             [9, 1, 1, 1, 1, 1, 1, 1, 0],
             [9, 0, 0, 0, 0, 0, 1, 0, 0],
@@ -176,6 +186,19 @@ export default class GameModel {
     gameInit() {
     }
 
+    // 设置通知的位置,要让通知在屏幕顶部
+    setNotificationPos (screen) {
+        // this.HorizontalConfig.guide.children.notification1.position = cc.v2(0, _pos.y+moveY);
+        // this.HorizontalConfig.guide.children.notification2.position = cc.v2(0, _pos.y+moveY);
+        let long = screen.canvasHeight > screen.canvasWidth ? screen.canvasHeight : screen.canvasWidth;
+        let short = screen.canvasHeight > screen.canvasWidth ? screen.canvasWidth : screen.canvasHeight;
+        // let _screenH = screen.ratio >= 1.77 ? long*(540/short)/2 : 960/2;
+        // let y = this.guideScript.notification.height/2 + _screenH;
+        let halfHeight = this.guideScript.notification.height/2;
+        this.VerticalConfig.UI.children.notification.position = cc.v2(0, long/2 - halfHeight);
+        this.HorizontalConfig.UI.children.notification.position = cc.v2(0, short/2 - halfHeight);
+    }
+
     /**获得坐标config */
     getPositionConfig () {
         return this.isLandscape ? this.HorizontalConfig : this.VerticalConfig;
@@ -188,6 +211,7 @@ export default class GameModel {
      * @return {boolean} 是否放得下
      */
     placeInto (startPos ,brickValue, isPutDown  = false) {
+        if (!startPos) return false;
         if (this.brickModel[startPos.x][startPos.y] !== 0 ) {
             return false; // 格子模型这一格不为空，返回
         }

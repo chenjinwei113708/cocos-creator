@@ -19,11 +19,16 @@ cc.Class({
     properties: {
         modal:cc.Node,
         // hand: cc.Node,
+        notification: cc.Node,
+        notiHand: cc.Node,
         congrat: cc.Node,
         congratBlur: cc.Node,
     },
     // LIFE-CYCLE CALLBACKS:
-    onLoad () { 
+    onLoad () {
+        this.info = {
+            isCashout: false, // 是否提现了
+        };
     },
 
     setGameController (gameController) {
@@ -64,6 +69,72 @@ cc.Class({
     //     ));
     // },
 
+    /**点击提现 */
+    clickCashout () {
+        if (!this.info.isCashout){
+            this.info.isCashout = true;
+            // this.cashoutHand.active = false;
+            this.gameController.gameView.hideRedeem();
+            this.showNotification();
+            // this.gameController.cashView.addCash(-300);
+        }
+    },
+
+    showNotiHand () {
+        const notiHand = this.notification.getChildByName('hand');
+        this.showNotiHandTimeout = setTimeout(() => {
+            notiHand.opacity = 0;
+            notiHand.active = true;
+            notiHand.runAction(cc.fadeIn(0.3));
+            notiHand.getComponent(cc.Animation).play();
+        }, 1500);
+        
+    },
+    hideNotiHand () {
+        this.showNotiHandTimeout && clearTimeout(this.showNotiHandTimeout);
+    },
+
+    /**展示推送 */
+    showNotification () {
+        const inMoveTime = 0.3;
+        const inFadeTime = 0.2;
+        const moveY = -118; // 移动距离
+        this.notification.opacity = 0;
+        this.notification.active = true;
+        this.notification.position = cc.v2(this.notification.position.x, this.notification.position.y-moveY);
+        this.notification.runAction(
+            cc.spawn(
+                cc.callFunc(()=>{
+                    this.showNotiHand();
+                    this.gameController.getAudioUtils().playEffect('notification', 0.4);
+                }),
+                cc.moveBy(inMoveTime, 0, moveY),
+                cc.fadeIn(inFadeTime)
+            )
+        );
+    },
+
+    hideNotification () {
+        this.notification.runAction(cc.sequence(
+            cc.fadeOut(0.2),
+            cc.callFunc(() => {
+                this.notification.active = false;
+            })
+        ));
+        this.hideNotiHand();
+    },
+
+    // 点击推送
+    onCheckMessage () {
+        if (!this.info.isCheckMessage) {
+            this.info.isCheckMessage = true;
+            // this.hideHand();
+            this.hideNotification();
+            this.showEndPage();
+            // console.log('onCheckMessage');
+        }
+    },
+
     /**展示结束页面，并引导下载 */
     showEndPage(){
         //播放结束音乐
@@ -82,7 +153,7 @@ cc.Class({
                     cc.moveBy(0.3, -this.congrat.width, 0),
                     cc.scaleTo(0.2, 1)
                 ));
-                // this.gameController.getAudioUtils().playEffect('moneyCard', 0.3);
+                this.gameController.getAudioUtils().playEffect('moneyCard', 0.3);
             }),
             cc.delayTime(1.2),
             cc.spawn(

@@ -1,0 +1,73 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "earthquake",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.24,
+  "sample": 50,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            91.654,
+            8.374,
+            0
+          ]
+        },
+        {
+          "frame": 0.04,
+          "value": [
+            92.982,
+            9.702,
+            0
+          ]
+        },
+        {
+          "frame": 0.08,
+          "value": [
+            87.671,
+            7.71,
+            0
+          ]
+        },
+        {
+          "frame": 0.12,
+          "value": [
+            93.646,
+            3.727,
+            0
+          ]
+        },
+        {
+          "frame": 0.16,
+          "value": [
+            95.969,
+            8.706,
+            0
+          ]
+        },
+        {
+          "frame": 0.2,
+          "value": [
+            91.156,
+            11.196,
+            0
+          ]
+        },
+        {
+          "frame": 0.24,
+          "value": [
+            91.654,
+            8.374,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}
