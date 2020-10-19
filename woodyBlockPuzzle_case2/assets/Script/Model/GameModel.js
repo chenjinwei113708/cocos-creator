@@ -53,18 +53,18 @@ export default class GameModel {
                         position: cc.v2(-431.024, 222.084),
                     },
                     congrat: {
-                        angle: 90,
-                        opacity: 255,
-                        // width: 277.38,
-                        // height: 540,
-                        // opacity: 190
+                        // angle: 90,
+                        // opacity: 255,
+                        width: 277.38,
+                        height: 540,
+                        opacity: 190
                     },
                     congratBlur: {
-                        angle: 90,
-                        opacity: 255,
-                        // width: 277.38, // applovin
-                        // height: 540,
-                        // opacity: 190
+                        // angle: 90,
+                        // opacity: 255,
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
                     },
                 }
             }
@@ -113,18 +113,18 @@ export default class GameModel {
                         position: cc.v2(0, 450.422),
                     },
                     congrat: {
-                        angle: 0,
-                        opacity: 255,
-                        // width: 603, // applovin
-                        // height: 1170,
-                        // opacity: 255
+                        // angle: 0,
+                        // opacity: 255,
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
                     },
                     congratBlur: {
-                        angle: 0,
-                        opacity: 255,
-                        // width: 603, // applovin
-                        // height: 1170,
-                        // opacity: 255
+                        // angle: 0,
+                        // opacity: 255,
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
                     },
                 }
             }

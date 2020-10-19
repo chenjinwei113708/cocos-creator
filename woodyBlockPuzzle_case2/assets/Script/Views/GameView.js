@@ -115,6 +115,7 @@ cc.Class({
         if (this.gameInfo.cellStatus === CELL_STATUS.IS_MOVE &&
             Date.now() - this.gameInfo.lastCheckTime >= this.gameInfo.direcDelay) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
+            touchPos = cc.v2(touchPos.x, touchPos.y+50);
             let nowBrickType = this.gameInfo.currentBrickType;
             this.gameInfo.currentBrick.position = touchPos;
             let brickPos = this.convert2BrickPos(touchPos); // 转换成格子坐标
@@ -132,6 +133,7 @@ cc.Class({
     onTouchEnd (touch) {
         if (this.gameInfo.cellStatus === CELL_STATUS.IS_MOVE) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
+            touchPos = cc.v2(touchPos.x, touchPos.y+50);
             let nowBrickType = this.gameInfo.currentBrickType;
             let brickPos = this.convert2BrickPos(touchPos); // 转换成格子坐标
             let currentBrick = this.gameInfo.currentBrick;
@@ -157,7 +159,7 @@ cc.Class({
                     this.hand.getComponent(cc.Animation).stop();
                     this.hand.active = false;
                 }
-                this.gameController.getAudioUtils().playEffect('put', 0.5);
+                this.gameController.getAudioUtils().playEffect('put', 0.7);
                 this.showTipArea(brickPos, BRICK_VALUE[nowBrickType], canPut, true);
                 this.setCellStatus(CELL_STATUS.DONE_MOVE);
                 currentBrick.scale = 1;
