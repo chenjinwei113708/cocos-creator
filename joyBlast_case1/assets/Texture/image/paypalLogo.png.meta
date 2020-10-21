@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "1a563006-d1bb-4a1e-b66f-0eb0ace149db",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "paypalLogo": {
+      "ver": "1.0.4",
+      "uuid": "7cf95d8a-c1c3-474f-843c-ef6a5f09d783",
+      "rawTextureUuid": "1a563006-d1bb-4a1e-b66f-0eb0ace149db",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 150,
+      "height": 160,
+      "rawWidth": 150,
+      "rawHeight": 160,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
