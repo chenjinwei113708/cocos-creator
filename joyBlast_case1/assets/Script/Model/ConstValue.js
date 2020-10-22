@@ -21,4 +21,10 @@ export const CELL_STATUS = {
 export const ACTION_TYPE = {
     COMBINE: 'combine',
     DOWN: 'down',
+    BOMB: 'bomb',
+};
+
+export const GAME_LEVEL = {
+    LEVEL1: 'level1',
+    LEVEL2: 'level2',
 };

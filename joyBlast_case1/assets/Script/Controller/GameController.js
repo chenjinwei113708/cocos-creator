@@ -52,6 +52,8 @@ cc.Class({
         //用centerView脚本来布置整个画面，包括横竖屏的响应方法。
         this.centerScript = this.center.getComponent("CenterView");
         this.centerScript.setGameController(this);
+        //设置顶部推送的位置
+        this.gameModel.setNotificationPos(this.centerScript.getScreenPixel());
 
         // 根据model渲染各个元素状态 大小 位置等
         this.centerScript.initWithModel(this.gameModel);

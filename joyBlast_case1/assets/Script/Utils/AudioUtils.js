@@ -15,27 +15,37 @@ cc.Class({
             type: cc.SpriteFrame,
             default: null
         },
-        // Music
-        bgMusic: {
-            type: cc.AudioClip,
-            default: null
-        },
 
         // Effect
-        bgClick: {
+        notification: {
             type: cc.AudioClip,
             default: null
         },
 
-        startMusic: {
+        moneyCard: {
             type: cc.AudioClip,
             default: null
         },
 
-        endMusic: {
+        combine: {
             type: cc.AudioClip,
             default: null
-        }
+        },
+
+        bomb: {
+            type: cc.AudioClip,
+            default: null
+        },
+
+        coin: {
+            type: cc.AudioClip,
+            default: null
+        },
+
+        cheer: {
+            type: cc.AudioClip,
+            default: null
+        },
 
     },
 

@@ -7,7 +7,7 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-import { CELL_WIDTH, CELL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT } from '../Model/ConstValue';
+// import { CELL_WIDTH, CELL_HEIGHT, GRID_PIXEL_WIDTH, GRID_PIXEL_HEIGHT } from '../Model/ConstValue';
 
 /**
  * 这个脚本是用来播放引导动作的
@@ -32,8 +32,8 @@ cc.Class({
         };
     },
 
-    setGameController (gamecontroller) {
-        this.gamecontroller = gamecontroller;
+    setGameController (gameController) {
+        this.gameController = gameController;
     },
 
     /**展示提示手 */
@@ -67,7 +67,7 @@ cc.Class({
             notiHand.opacity = 0;
             notiHand.active = true;
             notiHand.runAction(cc.fadeIn(0.3));
-            notiHand.getComponent(cc.Animation).play('guideHand');
+            notiHand.getComponent(cc.Animation).play();
         }, 1500);
         
     },

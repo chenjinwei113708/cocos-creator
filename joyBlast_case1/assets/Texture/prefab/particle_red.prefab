@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "particle_blue",
+    "_name": "particle_red",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -86,7 +86,7 @@
     "_dstBlendFactor": 771,
     "_custom": false,
     "_file": {
-      "__uuid__": "b7f8fb54-4361-46dd-a6ff-7f487774906d"
+      "__uuid__": "58b03520-0b5f-4715-9dde-879783247c5b"
     },
     "_spriteFrame": null,
     "_texture": null,
@@ -100,9 +100,9 @@
     "lifeVar": 0.2,
     "_startColor": {
       "__type__": "cc.Color",
-      "r": 63,
-      "g": 153,
-      "b": 226,
+      "r": 239,
+      "g": 25,
+      "b": 25,
       "a": 255
     },
     "_startColorVar": {
@@ -114,9 +114,9 @@
     },
     "_endColor": {
       "__type__": "cc.Color",
-      "r": 63,
-      "g": 140,
-      "b": 226,
+      "r": 239,
+      "g": 25,
+      "b": 25,
       "a": 0
     },
     "_endColorVar": {
@@ -178,7 +178,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "81g6RJJ8pPq5iJbZVCqJCO",
+    "fileId": "4fJ5KQNMNA0ZMnCqDL6usj",
     "sync": false
   }
 ]
