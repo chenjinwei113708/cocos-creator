@@ -32,8 +32,8 @@ cc.Class({
         };
     },
 
-    setGameController (gamecontroller) {
-        this.gamecontroller = gamecontroller;
+    setGameController (gameController) {
+        this.gameController = gameController;
     },
 
     /**展示提示手 */
@@ -53,11 +53,12 @@ cc.Class({
 
     /**点击提现 */
     clickCashout () {
-        if (this.gameController.cashView.cash>=300 && !this.info.isCashout){
+        let cashnum = this.gameController.cashView.cash;
+        if (this.gameController.cashView.cash>=200 && !this.info.isCashout){
             this.info.isCashout = true;
             this.cashoutHand.active = false;
             this.showNotification();
-            this.gameController.cashView.addCash(-300);
+            this.gameController.cashView.addCash(-cashnum);
         }
     },
 

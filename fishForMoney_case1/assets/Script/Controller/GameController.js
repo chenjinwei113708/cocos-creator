@@ -10,7 +10,9 @@ cc.Class({
         //与游戏顺序和游戏引导相关的结点
         guide: cc.Node,
         //整个游戏场景结点
-        center:cc.Node
+        center:cc.Node,
+        game: cc.Node,
+        cash: cc.Node,
 
     },
 
@@ -35,16 +37,23 @@ cc.Class({
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
+        this.gameView = this.game.getComponent('GameView');
+        this.gameView.setGameController(this);
+
+        this.cashView = this.cash.getComponent('CashView');
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
         this.guideView.setGameController(this);
         this.gameModel.setGuideView(this.guideView);
+        
 
 
         //用centerView脚本来布置整个画面，包括横竖屏的响应方法。
         this.centerScript = this.center.getComponent("CenterView");
         this.centerScript.setGameController(this);
+
+        this.gameModel.setNotificationPos(this.centerScript.getScreenPixel());
 
         // 根据model渲染各个元素状态 大小 位置等
         this.centerScript.initWithModel(this.gameModel);
@@ -108,6 +117,11 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_START, function (touchEvent) {
             this.AudioUtils.getComponent('AudioUtils').playEffect('bgClick', 2)
         }, this)
+    },
+
+    addCash (num) {
+        // this.getAudioUtils().playEffect('income', 0.4);
+        this.cashView.addCash(num);
     },
 
 });

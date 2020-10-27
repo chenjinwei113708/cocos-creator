@@ -118,7 +118,7 @@
     var videoBlob = dataURItoBlob(videoBase64);
     
 
-    var screenDirection = window.matchMedia("(orientation: portrait)");
+    // var screenDirection = window.matchMedia("(orientation: portrait)");
     var handleOrientationChange = function (screenDirection, isLoad) {
       var isPortrait = false;
       // 拿到屏幕宽和高
@@ -152,8 +152,11 @@
         // button.style.right = "25px";
       }
     }
-    handleOrientationChange(undefined, false);
-    window.onresize = handleOrientationChange(undefined, true);
+    window.onresize = function () {
+      setTimeout(function () {
+        handleOrientationChange(undefined, true);
+      }, 50);
+    };
     // screenDirection.addListener(handleOrientationChange);
 
     function playVideo () {
@@ -196,7 +199,7 @@
       video.load();
       video.currentTime = 6.9; // 在部分浏览器会导致卡死
       // video.autoplay = true;
-      handleOrientationChange(screenDirection, true);
+      handleOrientationChange(undefined, false);
       // 视频播放完就关掉它
       video.addEventListener('ended', onVideoEnded);
     });

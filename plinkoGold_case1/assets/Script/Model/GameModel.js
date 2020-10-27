@@ -46,7 +46,7 @@ export default class GameModel {
                     congrat: {
                         // angle: 90,
                         // opacity: 255,
-                        width: 277.38,
+                        width: 277.38,  // applovin
                         height: 540,
                         opacity: 190
                     },

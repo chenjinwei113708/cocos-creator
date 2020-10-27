@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "878fe050-a052-4782-ac6e-558620b657af",
+  "uuid": "8cd485a7-deaf-455f-aba9-4ebe14da042e",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "banner": {
+    "congrat": {
       "ver": "1.0.4",
-      "uuid": "7863e190-6f9f-4743-be88-60047909596a",
-      "rawTextureUuid": "878fe050-a052-4782-ac6e-558620b657af",
+      "uuid": "77cbd640-57ce-47f9-90e4-6a80dd52fd00",
+      "rawTextureUuid": "8cd485a7-deaf-455f-aba9-4ebe14da042e",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 586,
-      "height": 228,
-      "rawWidth": 586,
-      "rawHeight": 228,
+      "width": 603,
+      "height": 1170,
+      "rawWidth": 603,
+      "rawHeight": 1170,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,
