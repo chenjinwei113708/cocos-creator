@@ -74,7 +74,8 @@ cc.Class({
     },
 
     update (dt) {
-        const icon = '$';
+        // const icon = '$';
+        const icon = '';
         this.timer += dt;
         let isPlus = this.targetCash>this.cash ? true : false;
         let delta = Math.abs(this.targetCash - this.cash);

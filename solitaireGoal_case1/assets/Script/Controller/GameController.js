@@ -9,8 +9,12 @@ cc.Class({
         AudioUtils: cc.Node,
         //与游戏顺序和游戏引导相关的结点
         guide: cc.Node,
-        //整个游戏场景结点
-        center:cc.Node
+        //整个场景结点
+        center:cc.Node,
+        // 游戏节点
+        game: cc.Node,
+        // 现金节点
+        cash: cc.Node
 
     },
 
@@ -35,6 +39,10 @@ cc.Class({
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
+        this.gameView = this.game.getComponent('GameView');
+        this.gameView.setGameController(this);
+
+        this.cashView = this.cash.getComponent('CashView');
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
@@ -109,5 +117,10 @@ cc.Class({
             this.AudioUtils.getComponent('AudioUtils').playEffect('bgClick', 2)
         }, this)
     },
+
+    /**加现金 */
+    addCash (num) {
+        this.cashView.addCash(num);
+    }
 
 });
