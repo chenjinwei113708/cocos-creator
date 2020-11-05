@@ -16,25 +16,38 @@ cc.Class({
 
     properties: {
         cardGet: cc.Node, // 卡 翻牌 拿牌
-        cardBai: cc.SpriteFrame,
+        cardBai: cc.SpriteFrame, // 卡正面 空白
+        cardBack: cc.SpriteFrame, // 卡背面 花纹
         cardGet8: cc.Node, // 卡 取卡处的8
         cardMove8: cc.Node, // 卡 移动的8
         cardMove10: cc.Node, // 卡 移动的10 9 8
         cardEnd8: cc.Node, // 卡 8的目标位置
+        cardEnd7: cc.Node, // 卡 7的目标位置
+        cardEnd6: cc.Node, // 卡 6的目标位置
         ppcard: cc.Node, // 现金卡
         guideHand: cc.Node, // 指引手
+        add10: cc.Prefab, // 金币奖励
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         // 触碰点
-        this.touch1 = cc.find('Canvas/center/game/touch/touch1');
-        this.touch2 = cc.find('Canvas/center/game/touch/touch2');
-        this.touch3 = cc.find('Canvas/center/game/touch/touch3');
-        this.touch4 = cc.find('Canvas/center/game/touch/touch4');
-        this.touch5 = cc.find('Canvas/center/game/touch/touch5');
+        this.touch1 = cc.find('Canvas/center/game/touch/touch1'); // 拿牌
+        this.touch2 = cc.find('Canvas/center/game/touch/touch2'); // 移动牌
+        this.touch3 = cc.find('Canvas/center/game/touch/touch3'); // 梅花8
+        this.touch4 = cc.find('Canvas/center/game/touch/touch4'); // 梅花10
+        this.touch5 = cc.find('Canvas/center/game/touch/touch5'); // 梅花10 放置的地方
+        this.touch6 = cc.find('Canvas/center/game/touch/touch6'); // 黑桃7
+        this.touch7 = cc.find('Canvas/center/game/touch/touch7'); // 红心6
         this.ten2eight = cc.find('Canvas/center/game/put/zu3').children.filter((item, index) => index>0);
+         // 特效
+        this.effect = {
+            gold1: cc.find('Canvas/center/UI/effect/gold1'),
+            gold2: cc.find('Canvas/center/UI/effect/gold2'),
+            gold3: cc.find('Canvas/center/UI/effect/gold3'),
+            gold4: cc.find('Canvas/center/UI/effect/gold4'),
+        };
 
         this.gameInfo = {
             step: 0, // 游戏进行到第几步
@@ -48,11 +61,37 @@ cc.Class({
             isGameStarted: false, // 游戏开始没
             guideTimeout: null, // 定时器
         };
+
+        // 奖励节点池
+        this.addPool = new cc.NodePool();
+        for (let i = 0; i < 10; ++i) {
+            let add = cc.instantiate(this.add10); // 创建节点
+            this.addPool.put(add); // 通过 put 接口放入对象池
+        }
+
         this.showPPCard();
     },
 
+    start () {},
+
     setGameController (gameController) {
         this.gameController = gameController;
+    },
+
+    /**拿到奖励节点 */
+    getAdd () {
+        let add = null;
+        if (this.addPool.size() > 0) { // 通过 size 接口判断对象池中是否有空闲的对象
+            add = this.addPool.get();
+        } else { // 如果没有空闲对象，也就是对象池中备用对象不够时，我们就用 cc.instantiate 重新创建
+            add = cc.instantiate(this.add10);
+        }
+        return add;
+    },
+
+     /**奖励节点放进pool */
+    killAdd (add) {
+        this.addPool.put(add)
     },
 
     setTouchListener () {
@@ -76,12 +115,28 @@ cc.Class({
                     this.gameInfo.lastCheckTime = Date.now();
                     if (this.gameInfo.step === 0) {
                         this.hideGuide();
-                        this.setCardRotate(this.cardGet, true, () => {
+                        this.gameController.getAudioUtils().playEffect('card', 0.6);
+                        // 把牌换数字，翻成背面
+                        this.cardGet8.getChildByName('num').getComponent(cc.Sprite).spriteFrame = this.cardEnd7.getChildByName('num').getComponent(cc.Sprite).spriteFrame;
+                        this.cardGet8.getChildByName('num').color = new cc.Color(0, 0, 0);
+                        this.cardGet8.getChildByName('num').active = false;
+                        this.cardGet8.getChildByName('icon').getComponent(cc.Sprite).spriteFrame = this.cardEnd7.getChildByName('icon').getComponent(cc.Sprite).spriteFrame;
+                        this.cardGet8.getChildByName('icon').active = false;
+                        this.cardGet8.getChildByName('pic').getComponent(cc.Sprite).spriteFrame = this.cardEnd7.getChildByName('pic').getComponent(cc.Sprite).spriteFrame;
+                        this.cardGet8.getChildByName('pic').active = false;
+                        this.cardGet8.getComponent(cc.Sprite).spriteFrame = this.cardBack;
+                        this.cardGet8.position = cc.v2(this.cardGet.position.x, this.cardGet.position.y);
+                        this.cardGet8.active = true;
+                        // 旋转卡
+                        this.setCardRotate(this.cardGet8, true, () => {
                             this.gameInfo.step++;
                             this.setTouchNode(this.gameInfo.step);
+                            // 把移动的卡换数字
+                            this.cardMove8.getChildByName('num').getComponent(cc.Sprite).spriteFrame = this.cardEnd7.getChildByName('num').getComponent(cc.Sprite).spriteFrame;
+                            this.cardMove8.getChildByName('num').color = new cc.Color(0, 0, 0);
+                            this.cardMove8.getChildByName('icon').getComponent(cc.Sprite).spriteFrame = this.cardEnd7.getChildByName('icon').getComponent(cc.Sprite).spriteFrame;
+                            this.cardMove8.getChildByName('pic').getComponent(cc.Sprite).spriteFrame = this.cardEnd7.getChildByName('pic').getComponent(cc.Sprite).spriteFrame;
                             this.setCardStatus(CARD_STATUS.CAN_MOVE);
-                            this.cardGet8.active = true;
-                            this.cardGet.active = false;
                             this.showGuide(this.gameInfo.step);
                         });
                         this.setCardStatus(CARD_STATUS.DONE_MOVE);
@@ -91,6 +146,78 @@ cc.Class({
                         this.cardGet8.active = false;
                         this.gameInfo.nowMoveNode = this.cardMove8;
                     } else if (this.gameInfo.step === 2) {
+                        this.hideGuide();
+                        this.gameController.getAudioUtils().playEffect('card', 0.6);
+                        // 把牌换数字，翻成背面
+                        this.cardGet8.getChildByName('num').getComponent(cc.Sprite).spriteFrame = this.cardEnd6.getChildByName('num').getComponent(cc.Sprite).spriteFrame;
+                        this.cardGet8.getChildByName('num').color = new cc.Color(255, 0, 0);
+                        this.cardGet8.getChildByName('num').active = false;
+                        this.cardGet8.getChildByName('icon').getComponent(cc.Sprite).spriteFrame = this.cardEnd6.getChildByName('icon').getComponent(cc.Sprite).spriteFrame;
+                        this.cardGet8.getChildByName('icon').active = false;
+                        this.cardGet8.getChildByName('pic').getComponent(cc.Sprite).spriteFrame = this.cardEnd6.getChildByName('pic').getComponent(cc.Sprite).spriteFrame;
+                        this.cardGet8.getChildByName('pic').active = false;
+                        this.cardGet8.getComponent(cc.Sprite).spriteFrame = this.cardBack;
+                        this.cardGet8.position = cc.v2(this.cardGet.position.x, this.cardGet.position.y);
+                        this.cardGet8.active = true;
+                        // 旋转卡
+                        this.setCardRotate(this.cardGet8, true, () => {
+                            this.gameInfo.step++;
+                            this.setTouchNode(this.gameInfo.step);
+                            // 把移动的卡换数字
+                            this.cardMove8.getChildByName('num').getComponent(cc.Sprite).spriteFrame = this.cardEnd6.getChildByName('num').getComponent(cc.Sprite).spriteFrame;
+                            this.cardMove8.getChildByName('num').color = new cc.Color(255, 0, 0);
+                            this.cardMove8.getChildByName('icon').getComponent(cc.Sprite).spriteFrame = this.cardEnd6.getChildByName('icon').getComponent(cc.Sprite).spriteFrame;
+                            this.cardMove8.getChildByName('pic').getComponent(cc.Sprite).spriteFrame = this.cardEnd6.getChildByName('pic').getComponent(cc.Sprite).spriteFrame;
+                            this.setCardStatus(CARD_STATUS.CAN_MOVE);
+                            this.showGuide(this.gameInfo.step);
+                        });
+                        this.setCardStatus(CARD_STATUS.DONE_MOVE);
+                        return;
+                    } else if (this.gameInfo.step === 3) {
+                        this.cardMove8.active = true;
+                        this.cardGet8.active = false;
+                        this.gameInfo.nowMoveNode = this.cardMove8;
+                        // this.cardMove10.active = true;
+                        // this.ten2eight.forEach(each => {each.active = false;});
+                        // this.gameInfo.nowMoveNode = this.cardMove10;
+                    } else if (this.gameInfo.step === 4) {
+                        this.hideGuide();
+                        this.gameController.getAudioUtils().playEffect('card', 0.6);
+                        // 把牌换数字，翻成背面
+                        this.cardGet8.getChildByName('num').getComponent(cc.Sprite).spriteFrame = this.cardEnd8.getChildByName('num').getComponent(cc.Sprite).spriteFrame;
+                        this.cardGet8.getChildByName('num').color = new cc.Color(0, 0, 0);
+                        // this.cardGet8.getChildByName('num').active = false;
+                        this.cardGet8.getChildByName('icon').getComponent(cc.Sprite).spriteFrame = this.cardEnd8.getChildByName('icon').getComponent(cc.Sprite).spriteFrame;
+                        // this.cardGet8.getChildByName('icon').active = false;
+                        this.cardGet8.getChildByName('pic').getComponent(cc.Sprite).spriteFrame = this.cardEnd8.getChildByName('pic').getComponent(cc.Sprite).spriteFrame;
+                        // this.cardGet8.getChildByName('pic').active = false;
+                        // this.cardGet8.position = cc.v2(this.cardGet.position.x, this.cardGet.position.y);
+                        this.cardGet8.active = false;
+                        // 旋转卡
+                        this.setCardRotate(this.cardGet, true, () => {
+                            this.gameInfo.step++;
+                            this.setTouchNode(this.gameInfo.step);
+                            // 把移动的卡换数字
+                            this.cardMove8.getChildByName('num').getComponent(cc.Sprite).spriteFrame = this.cardEnd8.getChildByName('num').getComponent(cc.Sprite).spriteFrame;
+                            this.cardMove8.getChildByName('num').color = new cc.Color(0, 0, 0);
+                            this.cardMove8.getChildByName('icon').getComponent(cc.Sprite).spriteFrame = this.cardEnd8.getChildByName('icon').getComponent(cc.Sprite).spriteFrame;
+                            this.cardMove8.getChildByName('pic').getComponent(cc.Sprite).spriteFrame = this.cardEnd8.getChildByName('pic').getComponent(cc.Sprite).spriteFrame;
+                            // 隐藏被翻的卡
+                            this.cardGet8.active = true;
+                            this.cardGet.active = false;
+                            this.setCardStatus(CARD_STATUS.CAN_MOVE);
+                            this.showGuide(this.gameInfo.step);
+                        });
+                        this.setCardStatus(CARD_STATUS.DONE_MOVE);
+                        return;
+                    } else if (this.gameInfo.step === 5) {
+                        this.cardMove8.active = true;
+                        this.cardGet8.active = false;
+                        this.gameInfo.nowMoveNode = this.cardMove8;
+                        // this.cardMove10.active = true;
+                        // this.ten2eight.forEach(each => {each.active = false;});
+                        // this.gameInfo.nowMoveNode = this.cardMove10;
+                    } else if (this.gameInfo.step === 6) {
                         this.cardMove10.active = true;
                         this.ten2eight.forEach(each => {each.active = false;});
                         this.gameInfo.nowMoveNode = this.cardMove10;
@@ -135,17 +262,45 @@ cc.Class({
                 
                 // 放在结束点内
                 if (this.gameInfo.step === 1) {
+                    this.gameController.getAudioUtils().playEffect('card', 0.6);
                     this.gameInfo.nowMoveNode.active = false;
+                    this.gameInfo.nowMoveNode.position = cc.v2(this.cardGet8.position.x, this.cardGet8.position.y);
+                    this.cardEnd7.active = true;
+                    this.cardGet8.active = false;
+                    this.gameInfo.step++;
+                    this.setTouchNode(this.gameInfo.step);
+                    this.setCardStatus(CARD_STATUS.CAN_MOVE);
+                    this.hideGuide();
+                    this.showGuide(this.gameInfo.step);
+
+                } else if (this.gameInfo.step === 3) {
+                    this.gameController.getAudioUtils().playEffect('card', 0.6);
+                    this.gameInfo.nowMoveNode.active = false;
+                    this.gameInfo.nowMoveNode.position = cc.v2(this.cardGet8.position.x, this.cardGet8.position.y);
+                    this.cardEnd6.active = true;
+                    this.cardGet8.active = false;
+                    this.gameInfo.step++;
+                    this.setTouchNode(this.gameInfo.step);
+                    this.setCardStatus(CARD_STATUS.CAN_MOVE);
+                    this.hideGuide();
+                    this.showGuide(this.gameInfo.step);
+
+                } else if (this.gameInfo.step === 5) {
+                    this.gameController.getAudioUtils().playEffect('card', 0.6);
+                    this.gameInfo.nowMoveNode.active = false;
+                    this.gameInfo.nowMoveNode.position = cc.v2(this.cardGet8.position.x, this.cardGet8.position.y);
                     this.cardEnd8.active = true;
                     this.cardGet8.active = false;
                     this.gameInfo.step++;
                     this.setTouchNode(this.gameInfo.step);
                     this.setCardStatus(CARD_STATUS.CAN_MOVE);
                     this.hideGuide();
-                    this.gameInfo.guideTimeout = setTimeout(() => {
-                        this.showGuide(this.gameInfo.step);
-                    }, 1000);
-                } else if (this.gameInfo.step === 2) {
+                    this.showGuide(this.gameInfo.step);
+                    // this.gameInfo.guideTimeout = setTimeout(() => {
+                    //     this.showGuide(this.gameInfo.step);
+                    // }, 1000);
+                } else if (this.gameInfo.step === 6) {
+                    this.gameController.getAudioUtils().playEffect('card', 0.6);
                     const zu7 = cc.find('Canvas/center/game/put/zu7');
                     const fanCard = cc.find('Canvas/center/game/put/zu3').children[0];
                     this.gameInfo.nowMoveNode.active = false;
@@ -155,6 +310,7 @@ cc.Class({
                         each.active = true;
                     });
                     this.setCardRotate(fanCard, false, () => {
+                        this.gameController.getAudioUtils().playEffect('win', 0.6);
                         this.flyAllCards();
                     });
                     // this.cardEnd8.active = true;
@@ -167,11 +323,11 @@ cc.Class({
                 return;
             }
             // 没放到指定位置
-            if (this.gameInfo.step === 1) {
+            if (this.gameInfo.step === 1 || this.gameInfo.step === 3 || this.gameInfo.step === 5) {
                 this.gameInfo.nowMoveNode.active = false;
                 this.gameInfo.nowMoveNode.position = cc.v2(this.cardGet8.position.x, this.cardGet8.position.y);
                 this.cardGet8.active = true;
-            } else if (this.gameInfo.step === 2) {
+            } else if (this.gameInfo.step === 6) {
                 this.gameInfo.nowMoveNode.active = false;
                 this.gameInfo.nowMoveNode.position = cc.v2(-76.576, -154.53);
                 this.ten2eight.forEach(each => {each.active = true;});
@@ -189,8 +345,20 @@ cc.Class({
             this.gameInfo.endTouch = null;
         } else if (step === 1) {
             this.gameInfo.startTouch = this.touch2;
-            this.gameInfo.endTouch = this.touch3;
+            this.gameInfo.endTouch = this.touch6;
         } else if (step === 2) {
+            this.gameInfo.startTouch = this.touch1;
+            this.gameInfo.endTouch = null;
+        } else if (step === 3) {
+            this.gameInfo.startTouch = this.touch2;
+            this.gameInfo.endTouch = this.touch7;
+        } else if (step === 4) {
+            this.gameInfo.startTouch = this.touch1;
+            this.gameInfo.endTouch = null;
+        } else if (step === 5) {
+            this.gameInfo.startTouch = this.touch2;
+            this.gameInfo.endTouch = this.touch3;
+        } else if (step === 6) {
             this.gameInfo.startTouch = this.touch4;
             this.gameInfo.endTouch = this.touch5;
         }
@@ -213,7 +381,7 @@ cc.Class({
             cc.scaleTo(0.1, 0.9),
             cc.scaleTo(0.1, 1),
             cc.callFunc(() => {
-                // this.gameController.getAudioUtils().playEffect('moneyCard', 0.4);
+                this.gameController.getAudioUtils().playEffect('moneyCard', 0.4);
                 pphand.runAction(cc.sequence(
                     cc.fadeIn(0.6),
                     cc.callFunc(() => {
@@ -233,15 +401,15 @@ cc.Class({
         let ppcard = this.ppcard;
         ppcard.active = false;
         // this.gameInfo.isFishing = false;
-        // this.gameController.getAudioUtils().playEffect('income', 0.4);
+        this.gameController.getAudioUtils().playEffect('income', 0.4);
         
         this.gameController.addCash(100);
         // this.gameInfo.getCashTimes++;
         if (this.gameController.cashView.targetCash >= 200) {
-            // this.gameController.getAudioUtils().playEffect('cheer', 0.4);
+            console.log('提现');
             // this.offTouchListener();
             // this.enabled = false;
-            // this.gameController.guideView.showCashOutHand();
+            this.gameController.guideView.showCashOutHand();
             // let noticash = cc.find('Canvas/center/UI/tankuang/cash');
             // let congratcash = cc.find('Canvas/center/UI/congrat/cash');
             // noticash.getComponent(cc.Label).string = `$${this.gameController.cashView.targetCash}`;
@@ -278,6 +446,7 @@ cc.Class({
                 })
             ));
             this.guideHand.opacity = 0;
+            this.guideHand.scale = 1;
             this.guideHand.active = true;
             this.guideHand.runAction(cc.sequence(
                 cc.fadeIn(0.3),
@@ -289,8 +458,40 @@ cc.Class({
             this.guideHand.opacity = 0;
             this.guideHand.active = true;
             this.guideHand.position = cc.v2(144.253, -27.848);
-            this.guideHand.getComponent(cc.Animation).play('guide1');
+            this.guideHand.getComponent(cc.Animation).play('guide1a');
         } else if (step === 2) {
+            this.guideHand.position = cc.v2(212.648, -27.848);
+            this.guideHand.opacity = 0;
+            this.guideHand.scale = 1;
+            this.guideHand.active = true;
+            this.guideHand.runAction(cc.sequence(
+                cc.fadeIn(0.3),
+                cc.callFunc(() => {
+                    this.guideHand.getComponent(cc.Animation).play('shake');
+                })
+            ));
+        } else if (step === 3) {
+            this.guideHand.opacity = 0;
+            this.guideHand.active = true;
+            this.guideHand.position = cc.v2(144.253, -27.848);
+            this.guideHand.getComponent(cc.Animation).play('guide1b');
+        } else if (step === 4) {
+            this.guideHand.position = cc.v2(212.648, -27.848);
+            this.guideHand.opacity = 0;
+            this.guideHand.scale = 1;
+            this.guideHand.active = true;
+            this.guideHand.runAction(cc.sequence(
+                cc.fadeIn(0.3),
+                cc.callFunc(() => {
+                    this.guideHand.getComponent(cc.Animation).play('shake');
+                })
+            ));
+        } else if (step === 5) {
+            this.guideHand.opacity = 0;
+            this.guideHand.active = true;
+            this.guideHand.position = cc.v2(144.253, -27.848);
+            this.guideHand.getComponent(cc.Animation).play('guide1');
+        } else if (step === 6) {
             this.guideHand.opacity = 0;
             this.guideHand.active = true;
             this.guideHand.position = cc.v2(-79.92, -129.918);
@@ -357,6 +558,7 @@ cc.Class({
         const end3 = endzone[2];
         const end4 = endzone[3];
         const end = {end1, end2, end3, end4};
+        this.gameController.getAudioUtils().playEffect('cheer', 0.4);
         // 标志，用来控制最后一张收上去的牌是k
         let mark = {
             end1: false,
@@ -385,6 +587,19 @@ cc.Class({
                     cc.delayTime(0.1*index2 + index * 0.1),
                     cc.moveTo(0.2, destPos),
                     cc.callFunc(() => {
+                        // 播放奖励特效
+                        let add = this.getAdd();
+                        let addParent = this.effect[`gold${endindex}`];
+                        add.parent = addParent;
+                        add.position = cc.v2(0, 0);
+                        add.active = true;
+                        // add.getChildByName('star').getComponent(cc.ParticleSystem).resetSystem();
+                        add.runAction(cc.sequence(
+                            cc.spawn(cc.moveBy(0.7, 0, 100), cc.fadeOut(1.5)),
+                            cc.callFunc(() => {
+                                this.killAdd(add);
+                            })
+                        ));
                         if (!mark[`end${endindex}`]) {
                             // 如果k没归位，就替换成新牌的样式
                             endcard.getChildByName('num').getComponent(cc.Sprite).spriteFrame = nowcard.getChildByName('num').getComponent(cc.Sprite).spriteFrame;
@@ -399,14 +614,13 @@ cc.Class({
                         }
                         if (index === 6 && index2 === 5) {
                             // console.log('结束');
+                            this.showPPCard();
                         }
                     })
                 ));
             });
         });
     },
-
-    start () {},
 
     // update (dt) {},
 });

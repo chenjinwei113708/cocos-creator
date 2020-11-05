@@ -54,6 +54,8 @@ cc.Class({
         this.centerScript = this.center.getComponent("CenterView");
         this.centerScript.setGameController(this);
 
+        this.gameModel.setNotificationPos(this.centerScript.getScreenPixel());
+
         // 根据model渲染各个元素状态 大小 位置等
         this.centerScript.initWithModel(this.gameModel);
 
