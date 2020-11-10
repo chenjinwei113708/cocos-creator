@@ -111,25 +111,25 @@ cc.Class({
 
                     {start: cc.v2(0,1), end: cc.v2(4,1), newType: CELL_TYPE.C200},
                     {start: cc.v2(0,1), end: cc.v2(4,2), newType: CELL_TYPE.C100},
-                    {start: cc.v2(0,1), end: cc.v2(4,3), newType: CELL_TYPE.C50},
+                    {start: cc.v2(0,1), end: cc.v2(4,3), newType: CELL_TYPE.C200},
                     {start: cc.v2(0,1), end: cc.v2(4,4), newType: CELL_TYPE.C100},
                     {start: cc.v2(0,1), end: cc.v2(4,5), newType: CELL_TYPE.C200},
 
                     {start: cc.v2(0,1), end: cc.v2(3,1), newType: CELL_TYPE.C100},
                     {start: cc.v2(0,1), end: cc.v2(3,2), newType: CELL_TYPE.C10},
                     {start: cc.v2(0,1), end: cc.v2(3,3), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,1), end: cc.v2(3,4), newType: CELL_TYPE.C100},
+                    {start: cc.v2(0,1), end: cc.v2(3,4), newType: CELL_TYPE.C50},
                     {start: cc.v2(0,1), end: cc.v2(3,5), newType: CELL_TYPE.C10},
 
                     {start: cc.v2(0,1), end: cc.v2(2,1), newType: CELL_TYPE.C10},
-                    {start: cc.v2(0,1), end: cc.v2(2,2), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,1), end: cc.v2(2,3), newType: CELL_TYPE.C50},
+                    {start: cc.v2(0,1), end: cc.v2(2,2), newType: CELL_TYPE.C50},
+                    {start: cc.v2(0,1), end: cc.v2(2,3), newType: CELL_TYPE.C200},
                     {start: cc.v2(0,1), end: cc.v2(2,4), newType: CELL_TYPE.C200},
                     {start: cc.v2(0,1), end: cc.v2(2,5), newType: CELL_TYPE.C10},
 
                     {start: cc.v2(0,1), end: cc.v2(1,1), newType: CELL_TYPE.C10},
                     {start: cc.v2(0,1), end: cc.v2(1,2), newType: CELL_TYPE.C10},
-                    {start: cc.v2(0,1), end: cc.v2(1,3), newType: CELL_TYPE.C50},
+                    {start: cc.v2(0,1), end: cc.v2(1,3), newType: CELL_TYPE.C200},
                     {start: cc.v2(0,1), end: cc.v2(1,4), newType: CELL_TYPE.C50},
                     {start: cc.v2(0,1), end: cc.v2(1,5), newType: CELL_TYPE.C10},
                     ]
@@ -299,6 +299,7 @@ cc.Class({
                     }, 900);
                     break;
                 case ACTION_TYPE.BOMB:
+                    this.showBombAnim();
                     this.actBomb();
                     break;
                 case ACTION_TYPE.DOWN:
@@ -579,6 +580,19 @@ cc.Class({
             cc.spawn(cc.fadeOut(0.4), cc.scaleTo(0.3, 4)),
             cc.callFunc(() => {
                 cool.active = false;
+            })
+        ));
+    },
+
+    showBombAnim () {
+        let ba = cc.find('Canvas/center/game/anim');
+        ba.opacity = 0;
+        ba.scale = 0.3;
+        ba.active = true;
+        ba.runAction(cc.sequence(
+            cc.spawn(cc.fadeIn(0.2), cc.scaleTo(0.2, 4)),
+            cc.callFunc(() => {
+                ba.getComponent(cc.Animation).play();
             })
         ));
     },
