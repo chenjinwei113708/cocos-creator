@@ -147,7 +147,7 @@ cc.Class({
 
     changeToNextLevel () {
         if (this.actionLevel.length === 0){
-            // this.gameController.guideView.showCashoutHand();
+            this.gameController.guideView.showCashOutHand();
             this.offTouchListener();
             return;
         }
@@ -160,7 +160,7 @@ cc.Class({
     showPPcard () {
         this.ppcard.opacity = 0;
         this.ppcard.active = true;
-        // this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
+        this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
         this.ppcard.runAction(cc.sequence(
             cc.fadeIn(0.5),
             cc.callFunc(() => {
@@ -172,7 +172,7 @@ cc.Class({
 
     receivePPcard () {
         this.gameController.addCash(100);
-        // this.gameController.getAudioUtils().playEffect('coin', 0.5);
+        this.gameController.getAudioUtils().playEffect('coin', 0.5);
         this.ppcard.runAction(cc.sequence(
             cc.fadeOut(0.2),
             cc.callFunc(()=>{
@@ -199,6 +199,7 @@ cc.Class({
 
     onTouchStart (touch) {
         if (this.gameInfo.cellStatus === CELL_STATUS.CAN_MOVE) {
+            this.gameController.getAudioUtils().playEffect('click', 0.5);
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
             // console.log('onTouchStart, ', this.gameInfo.nowLevel);
             if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1 || this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
@@ -293,6 +294,7 @@ cc.Class({
                     }
                     break;
                 case ACTION_TYPE.CHANGE:
+                    this.gameController.getAudioUtils().playEffect('change', 0.5);
                     this.showCool();
                     setTimeout(() => {
                         this.actChange(action.center, action.newType);
@@ -364,11 +366,10 @@ cc.Class({
                     other.opacity = 0;
                     other.position = originPos[index];
                     if (index === otherNodes.length-1) {
-                        // this.gameController.getAudioUtils().playEffect('merge', 0.4);
+                        this.gameController.getAudioUtils().playEffect('merge', 0.4);
                         // this.gameController.guideView.showFlyCoin(centerPos);
                         this.showFlyCards(7);
                         setTimeout(() => {this.gameController.addCash(100);}, 300);
-                        // this.gameController.getAudioUtils().playEffect('coin', 0.4);
                         centerNode.runAction(cc.sequence(
                             cc.scaleTo(0.1, 1.15),
                             cc.scaleTo(0.1, 0.5),
@@ -489,33 +490,34 @@ cc.Class({
 
     /**开始引导 */
     startGuide (pos) {
-        // let mask = this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1 ? this.mask1 : this.mask2;
-        // let animName = this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1 ? 'swipeHand2' : 'swipeHand';
-        // let handPos = this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1 ? cc.v2(-29.8, -145.94) : cc.v2(98, -129.2);
-        // mask.opacity = 0;
-        // mask.active = true;
-        // mask.runAction(cc.fadeTo(0.4, 130));
-        // this.hand.position = handPos;
-        // this.hand.runAction(cc.sequence(
-        //     cc.delayTime(0.2),
-        //     cc.callFunc(() => {
-        //         this.hand.getComponent(cc.Animation).play(animName);
-        //     })
-        // ));
+        this.hand.scale = 1;
+        this.hand.opacity = 0;
+        this.hand.active = true;
+        this.hand.runAction(cc.sequence(
+            cc.fadeIn(0.4),
+            cc.callFunc(() => {
+                this.hand.getComponent(cc.Animation).play();
+            })
+        ));
     },
 
     /**隐藏引导 */
     hideGuide () {
-        // let mask = this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1 ? this.mask1 : this.mask2;
-        // if (mask.opacity !== 0) {
-        //     mask.runAction(cc.fadeOut(0.1));
-        //     this.hand.runAction(cc.sequence(
-        //         cc.fadeOut(0.1),
-        //         cc.callFunc(() => {
-        //             this.hand.getComponent(cc.Animation).stop();
-        //         })
-        //     ));
-        // }
+        this.hand.runAction(cc.sequence(
+            cc.fadeOut(0.4),
+            cc.callFunc(() => {
+                this.hand.getComponent(cc.Animation).stop();
+            })
+        ));
+        if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1) {
+            let text = cc.find('Canvas/center/game/text');
+            text.runAction(cc.sequence(
+                cc.fadeOut(0.6),
+                cc.callFunc(() => {
+                    text.active = false;
+                })
+            ));
+        }
     },
 
     /**展示喝彩 */
@@ -537,6 +539,7 @@ cc.Class({
 
     /**展示pp卡飞上去 */
     showFlyCards (num = 5) {
+        this.gameController.getAudioUtils().playEffect('coin', 0.4);
         let cards = this.flyCards.children;
         let destPos = this.flyCards.convertToNodeSpaceAR(
             this.paypal.convertToWorldSpaceAR(this.paypal.getChildByName('icon').position));

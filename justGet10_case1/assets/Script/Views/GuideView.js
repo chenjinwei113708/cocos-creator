@@ -38,6 +38,7 @@ cc.Class({
 
     /**展示提示手 */
     showCashOutHand () {
+        this.gameController.getAudioUtils().playEffect('cheer', 0.4);
         this.cashoutHand.opacity = 0;
         this.cashoutHand.active = true;
         this.cashoutHand.runAction(cc.sequence(
@@ -53,11 +54,13 @@ cc.Class({
 
     /**点击提现 */
     clickCashout () {
-        if (this.gameController.cashView.cash>=300 && !this.info.isCashout){
+        if (this.gameController.cashView.cash>=700 && !this.info.isCashout){
             this.info.isCashout = true;
             this.cashoutHand.active = false;
-            this.showNotification();
-            this.gameController.cashView.addCash(-300);
+            this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
+            // this.showNotification();
+            this.showEndPage();
+            this.gameController.cashView.addCash(-700);
         }
     },
 
@@ -88,7 +91,7 @@ cc.Class({
             cc.spawn(
                 cc.callFunc(()=>{
                     this.showNotiHand();
-                    this.gameController.getAudioUtils().playEffect('notification', 0.4);
+                    // this.gameController.getAudioUtils().playEffect('notification', 0.4);
                 }),
                 cc.moveBy(inMoveTime, 0, moveY),
                 cc.fadeIn(inFadeTime)
@@ -132,7 +135,7 @@ cc.Class({
                     cc.moveBy(0.35, -this.congrat.width, 0),
                     cc.scaleTo(0.2, 1)
                 ));
-                this.gameController.getAudioUtils().playEffect('moneyCard', 0.3);
+                // this.gameController.getAudioUtils().playEffect('moneyCard', 0.3);
             }),
             cc.delayTime(1.2),
             cc.spawn(

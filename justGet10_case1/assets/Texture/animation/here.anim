@@ -1,0 +1,88 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "here",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5882352941176471,
+  "sample": 17,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -167,
+            -506
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 0.11764705882352941,
+          "value": [
+            -104,
+            -362
+          ]
+        },
+        {
+          "frame": 0.29411764705882354,
+          "value": [
+            -55,
+            -239
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 0.5882352941176471,
+          "value": [
+            24,
+            -102
+          ],
+          "motionPath": []
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.17647058823529413,
+          "value": 200
+        },
+        {
+          "frame": 0.5882352941176471,
+          "value": 255
+        }
+      ],
+      "scale": [
+        {
+          "frame": 0.058823529411764705,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.7,
+            "y": 1.7
+          }
+        },
+        {
+          "frame": 0.29411764705882354,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.7,
+            "y": 1.7
+          }
+        },
+        {
+          "frame": 0.5882352941176471,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        }
+      ]
+    }
+  },
+  "events": []
+}
