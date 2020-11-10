@@ -9,26 +9,34 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
+        this.isApplovin = true; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(239.546, 79.659),
-                scale: 0.88
+                scale: 0.88,
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    }
+                }
             },
             UI: {
                 children: {
-                    congrat: {
-                        // opacity: 255,
-                        // angle: 90,
+                    congrat: this.isApplovin ? {
                         width: 277.38, // applovin
                         height: 540,
                         opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
                     },
-                    congratBlur: {
-                        // opacity: 255,
-                        // angle: 90,
+                    congratBlur: this.isApplovin ? {
                         width: 277.38, // applovin
                         height: 540,
                         opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
                     },
                     paypal: {
                         position: cc.v2(-283.1, 127.459),
@@ -72,23 +80,30 @@ export default class GameModel {
         this.VerticalConfig = {
             game: {
                 position: cc.v2(0, 0),
-                scale: 1
+                scale: 1,
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    }
+                }
             },
             UI: {
                 children: {
-                    congrat: {
-                        // opacity: 255,
-                        // angle: 0,
+                    congrat: this.isApplovin ? {
                         width: 603, // applovin
                         height: 1170,
                         opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
                     },
-                    congratBlur: {
-                        // opacity: 255,
-                        // angle: 0,
+                    congratBlur: this.isApplovin ? {
                         width: 603, // applovin
                         height: 1170,
                         opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
                     },
                     paypal: {
                         position: cc.v2(0, 396.319),
