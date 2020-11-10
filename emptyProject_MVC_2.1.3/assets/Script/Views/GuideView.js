@@ -32,8 +32,8 @@ cc.Class({
         };
     },
 
-    setGameController (gamecontroller) {
-        this.gamecontroller = gamecontroller;
+    setGameController (gameController) {
+        this.gameController = gameController;
     },
 
     /**展示提示手 */

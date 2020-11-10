@@ -9,8 +9,12 @@ cc.Class({
         AudioUtils: cc.Node,
         //与游戏顺序和游戏引导相关的结点
         guide: cc.Node,
-        //整个游戏场景结点
-        center:cc.Node
+        //整个场景结点
+        center:cc.Node,
+        // // 游戏相关
+        // game: cc.Node,
+        // // 金币相关
+        // cash: cc.Node,
 
     },
 
@@ -35,6 +39,9 @@ cc.Class({
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
+        // // 主游戏
+        // this.gameView = this.game.getComponent('GameView');
+        // this.gameView.setGameController(this);
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
@@ -45,6 +52,9 @@ cc.Class({
         //用centerView脚本来布置整个画面，包括横竖屏的响应方法。
         this.centerScript = this.center.getComponent("CenterView");
         this.centerScript.setGameController(this);
+
+        // // 动态调整推送到顶部的距离
+        // this.gameModel.setNotificationPos(this.centerScript.getScreenPixel());
 
         // 根据model渲染各个元素状态 大小 位置等
         this.centerScript.initWithModel(this.gameModel);
@@ -109,5 +119,10 @@ cc.Class({
             this.AudioUtils.getComponent('AudioUtils').playEffect('bgClick', 2)
         }, this)
     },
+
+    // /**加钱 */
+    // addCash (num) {
+    //     this.cashView.addCash(num);
+    // },
 
 });
