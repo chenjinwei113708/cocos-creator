@@ -11,10 +11,10 @@ cc.Class({
         guide: cc.Node,
         //整个场景结点
         center:cc.Node,
-        // // 游戏相关
-        // game: cc.Node,
-        // // 金币相关
-        // cash: cc.Node,
+        // 游戏相关
+        game: cc.Node,
+        // 金币相关
+        cash: cc.Node,
 
     },
 
@@ -39,9 +39,11 @@ cc.Class({
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
-        // // 主游戏
-        // this.gameView = this.game.getComponent('GameView');
-        // this.gameView.setGameController(this);
+        // 主游戏
+        this.gameView = this.game.getComponent('GameView');
+        this.gameView.setGameController(this);
+        // 金币相关脚本
+        this.cashView = this.cash.getComponent('CashView');
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
@@ -54,7 +56,7 @@ cc.Class({
         this.centerScript.setGameController(this);
 
         // // 动态调整推送到顶部的距离
-        // this.gameModel.setNotificationPos(this.centerScript.getScreenPixel());
+        this.gameModel.setNotificationPos(this.centerScript.getScreenPixel());
 
         // 根据model渲染各个元素状态 大小 位置等
         this.centerScript.initWithModel(this.gameModel);
@@ -120,9 +122,9 @@ cc.Class({
         }, this)
     },
 
-    // /**加钱 */
-    // addCash (num) {
-    //     this.cashView.addCash(num);
-    // },
+    /**加钱 */
+    addCash (num) {
+        this.cashView.addCash(num);
+    },
 
 });
