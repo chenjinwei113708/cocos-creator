@@ -67,7 +67,7 @@ cc.Class({
             notiHand.opacity = 0;
             notiHand.active = true;
             notiHand.runAction(cc.fadeIn(0.3));
-            notiHand.getComponent(cc.Animation).play('guideHand');
+            notiHand.getComponent(cc.Animation).play('shake');
         }, 1500);
         
     },

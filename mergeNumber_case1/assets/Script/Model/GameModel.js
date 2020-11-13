@@ -12,14 +12,19 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isApplovin = false; // 是不是applovin平台
+        this.isApplovin = true; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
-                position: cc.v2(239.546, 79.659),
-                scale: 0.88,
+                position: cc.v2(262.794, 29.295),
+                scale: 0.751,
                 children: {
                     adsonly: {
                         active: this.isApplovin ? true : false
+                    },
+                    bg1: {
+                        width: 1312,
+                        height: 1842,
+                        position: cc.v2(-357.119, 0)
                     }
                 }
             },
@@ -43,40 +48,37 @@ export default class GameModel {
                     },
                     notification: {},
                     paypal: {
-                        // position: cc.v2(-283.1, 127.459),
-                        // children: {
-                        //     laoren: {
-                        //         width: 160,
-                        //         height: 89,
-                        //         position: cc.v2(392.037, 117.86)
-                        //     },
-                        //     icon: {
-                        //         position: cc.v2(-67.054, -7.471)
-                        //     },
-                        //     btn: {
-                        //         position: cc.v2(137.034, -40.34)
-                        //     },
-                        //     cash: {
-                        //         position: cc.v2(135.994, 31.177)
-                        //     }
-                        // }
+                        position: cc.v2(-299.96, 146.172),
+                        width: 567,
+                        height: 326,
+                        children: {
+                            icon: {
+                                position: cc.v2(-66.79, -21.318)
+                            },
+                            btn: {
+                                position: cc.v2(140.738, 12.048)
+                            },
+                            cash: {
+                                position: cc.v2(140.121, -54.789)
+                            }
+                        }
                     },
                     banner: {
-                        // position: cc.v2(-261.323, -242.363),
-                        // children: {
-                        //     icon: {
-                        //         position: cc.v2(-70.997, 131.491)
-                        //     },
-                        //     logo: {
-                        //         position: cc.v2(76.109, 130.311)
-                        //     },
-                        //     btn: {
-                        //         position: cc.v2(17.395, 25.327)
-                        //     }
-                        // }
+                        position: cc.v2(0, 0),
+                        children: {
+                            icon: {
+                                position: cc.v2(-336.978, -100.908)
+                            },
+                            logo: {
+                                position: cc.v2(-184.367, -104.611)
+                            },
+                            btn: {
+                                position: cc.v2(-252.167, -205.686)
+                            }
+                        }
                     },
                     audioBtn: {
-                        position: cc.v2(-415.577, 212.604)
+                        position: cc.v2(-427.067, 213.629)
                     }
                 }
             }
@@ -88,6 +90,11 @@ export default class GameModel {
                 children: {
                     adsonly: {
                         active: this.isApplovin ? true : false
+                    },
+                    bg1: {
+                        width: 873,
+                        height: 1226,
+                        position: cc.v2(0, 0)
                     }
                 }
             },
@@ -111,37 +118,34 @@ export default class GameModel {
                     },
                     notification: {},
                     paypal: {
-                        // position: cc.v2(0, 396.319),
-                        // children: {
-                        //     laoren: {
-                        //         width: 319.4,
-                        //         height: 177.4,
-                        //         position: cc.v2(-0.75, -186.539)
-                        //     },
-                        //     icon: {
-                        //         position: cc.v2(-155.976, -7.471)
-                        //     },
-                        //     btn: {
-                        //         position: cc.v2(137.034, -40.34)
-                        //     },
-                        //     cash: {
-                        //         position: cc.v2(135.994, 31.177)
-                        //     }
-                        // }
+                        position: cc.v2(0, 481.313),
+                        width: 567,
+                        height: 326,
+                        children: {
+                            icon: {
+                                position: cc.v2(-150.112, -70.053)
+                            },
+                            btn: {
+                                position: cc.v2(140.738, -103.524)
+                            },
+                            cash: {
+                                position: cc.v2(140.121, -36.687)
+                            }
+                        }
                     },
                     banner: {
-                        // position: cc.v2(0, -458.318),
-                        // children: {
-                        //     icon: {
-                        //         position: cc.v2(-197, 27)
-                        //     },
-                        //     logo: {
-                        //         position: cc.v2(-49.894, 28.893)
-                        //     },
-                        //     btn: {
-                        //         position: cc.v2(148.009, 28.4)
-                        //     }
-                        // }
+                        position: cc.v2(0, 0),
+                        children: {
+                            icon: {
+                                position: cc.v2(-199.96, -438.17)
+                            },
+                            logo: {
+                                position: cc.v2(-60.135, -438.17)
+                            },
+                            btn: {
+                                position: cc.v2(141.632, -442.691)
+                            }
+                        }
                     },
                     audioBtn: {
                         position: cc.v2(-43.784, 376.57)

@@ -54,6 +54,7 @@ cc.Class({
             fallingCard: null, // 正在下落的牌
             sendCardTimes: 0,
             lightNum: 0, // 目前播放了几次粒子特效
+            isReceivingPPCard: false, // 正在收钱
         };
         // 所有动作列表 节点(3,5)代表第3列，从上往下第5个
         this.actionLevel = [
@@ -460,6 +461,8 @@ cc.Class({
     },
 
     receivePPcard () {
+        if (this.gameInfo.isReceivingPPCard) return;
+        this.gameInfo.isReceivingPPCard = true;
         this.gameController.addCash(100);
         this.gameController.getAudioUtils().playEffect('coin', 0.5);
         this.changeToNextLevel();
@@ -467,6 +470,7 @@ cc.Class({
         this.ppcard.runAction(cc.sequence(
             cc.fadeOut(0.2),
             cc.callFunc(()=>{
+                this.gameInfo.isReceivingPPCard = false;
                 this.ppcard.active = false;
             })
         ));
@@ -506,7 +510,7 @@ cc.Class({
         if (!centerNode) return;
         let centerPos = cc.v2(centerNode.position.x, centerNode.position.y);
         let otherNodes = others.map(other => {return this.getPosNode(other);});
-        const moveTime = 0.1;
+        const moveTime = 0.05;
         let originPos = [];
         otherNodes.forEach((other, index) => {
             originPos[index] = cc.v2(other.position.x, other.position.y);
@@ -521,18 +525,18 @@ cc.Class({
                         // this.showFlyCards(7);
                         // setTimeout(() => {this.gameController.addCash(100);}, 300);
                         centerNode.runAction(cc.sequence(
-                            cc.scaleTo(0.07, 1.1),
-                            cc.scaleTo(0.07, 0.9),
+                            // cc.scaleTo(0.05, 1.1),
+                            // cc.scaleTo(0.05, 0.9),
                             cc.callFunc(() => {
                                 this.showLightEffect(centerNode.position, newType);
                                 centerNode.getComponent(cc.Sprite).spriteFrame = this.cardSprites[CARD_VALUE.indexOf(newType)];
                                 // this.showCombo();
                             }),
-                            cc.scaleTo(0.07, 1),
+                            cc.scaleTo(0.05, 1),
                             cc.callFunc(() => {
                                 if (!isMulti) {
                                     // console.log('actCombine -> doActions');
-                                    setTimeout(() => {this.doActions();}, 80);
+                                    setTimeout(() => {this.doActions();}, 60);
                                 }
                                 // console.log('actCombine -> doActions before remove');
                                 this.removeToTrash(other);
@@ -564,7 +568,7 @@ cc.Class({
         let startNode = this[`kong${start.x}`].children[this[`kong${start.x}`].children.length-1];
         // let endNode = this.getPosNode(end);
         if (!startNode) return;
-        let moveTime = 0.04 * (start.y - end.y);
+        let moveTime = 0.02 * (start.y - end.y);
         let endPos = cc.v2(startNode.position.x, this.gameInfo.firstPosY-(end.y-1)*this.gameInfo.cardDistance);
         // console.log(' --->> end:: y1:', startNode.position.y, '  y2:', endPos.y);
         // if (newType) {
@@ -578,9 +582,9 @@ cc.Class({
         // console.log('actDown ---');
         startNode.opacity = 255;
         startNode.runAction(cc.sequence(
-            cc.spawn(cc.moveTo(moveTime, endPos), cc.scaleTo(moveTime, 0.9, 1)),
-            cc.scaleTo(0.05, 1),
-            cc.delayTime(0.05),
+            cc.spawn(cc.moveTo(moveTime, endPos), cc.scaleTo(moveTime, 0.8)),
+            cc.scaleTo(0.03, 1),
+            cc.delayTime(0.03),
             cc.callFunc(() => {
                 if (isAllDown) {
                     this.doActions();
