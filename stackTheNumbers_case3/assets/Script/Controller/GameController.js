@@ -44,7 +44,7 @@ cc.Class({
         // 游戏节点脚本
         let gameN = cc.find('Canvas/center/game');
         this.gameView = gameN.getComponent('GameView');
-        console.log('gameController, game Node: ', gameN, '\ngameView: ', this.gameView);
+        // console.log('gameController, game Node: ', gameN, '\ngameView: ', this.gameView);
         this.gameView.setGameController(this);
 
         // 现金脚本
@@ -81,7 +81,7 @@ cc.Class({
 
         this.gotoNextStep();
 
-        this.showPPcard();
+        // this.showPPcard();
     },
 
     /**执行任务队列 */

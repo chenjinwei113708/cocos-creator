@@ -45,12 +45,51 @@ cc.Class({
             isAutoFall: false, // 是不是自由落下
             fallingCard: null, // 正在下落的牌
             sendCardTimes: 0,
+            threeCards: [], // 同时下落的三张卡
         };
-        // this.sendCard();
+        
+        this.send3Cards();
+        setTimeout(() => {
+            this.sendCard();
+        }, 500);
+        
     },
 
     setGameController (gameController) {
         this.gameController = gameController;
+    },
+
+    /**同时落下3张卡片 */
+    send3Cards () {
+        let groupNames = [CARD_GROUP.KONG2, CARD_GROUP.KONG3, CARD_GROUP.KONG4];
+        let cardValues = [128, 256, 512];
+        for (let i = 0; i < 3; i++) {
+            // 发卡，让卡片自动落下
+            let newCard = cc.instantiate(this.cardPrefab);
+            let groupName = groupNames[i];
+            let nowCardValue = cardValues[i];
+            let groupLeftBox = this.gameController.gameModel.getLeftDistance(groupName);
+            this.gameInfo.threeCards.push(newCard); // 放进数组存起来
+            newCard.parent = this[groupName];
+            newCard._name = nowCardValue;
+            newCard.getComponent(cc.Sprite).spriteFrame = this.cardSprites[CARD_VALUE.indexOf(nowCardValue)];
+            newCard.position = cc.v2(0, this.gameInfo.startPosY);
+            newCard.active = true;
+            this.gameInfo.isAutoFall = true;
+            let fallAction = cc.sequence(
+                cc.moveTo(0.9, cc.v2(0, 460)),
+                cc.moveTo(0.3, cc.v2(0, 455)),
+                cc.callFunc(() => {
+                    if (this.gameInfo.isAutoFall) {
+                        // this.gameInfo.isAutoFall = false;
+                        // this.setCardStatue(CARD_STATUS.DONE_MOVE);
+                        // // console.log('auto fall done, ', newCard);
+                        // this.addCardToGroup(groupName, newCard, false, this.completeCard.bind(this));
+                    }
+                }),
+            );
+            newCard.runAction(fallAction);
+        }
     },
 
     /**发牌 */
@@ -106,8 +145,12 @@ cc.Class({
         }
     },
 
-    /**点击切换分组 */
-    click2ChangeGroup (touchEvent, groupName) {
+    /**点击切换分组
+     * @param {} touchEvent
+     * @param {string} groupName
+     * @param {cc.Node} downCard 下落的卡
+     */
+    click2ChangeGroup (touchEvent, groupName, downCard) {
         if (this.gameInfo.cardStatus === CARD_STATUS.IS_MOVE && this.gameInfo.isAutoFall) {
             // console.log('click2ChangeGroup:: ,', groupName);
             if (this.gameInfo.isFirstCard) {
@@ -122,7 +165,7 @@ cc.Class({
             }
             this.gameInfo.isAutoFall = false;
             if (!this.gameInfo.fallingCard) return;
-            let card = this.gameInfo.fallingCard;
+            let card = downCard || this.gameInfo.fallingCard;
             let groupLeftBox = this.gameController.gameModel.getLeftDistance(groupName);
             let dropSpeed = 0.15;
             card.stopAllActions();

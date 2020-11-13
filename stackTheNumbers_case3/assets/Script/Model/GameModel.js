@@ -147,8 +147,8 @@ export default class GameModel {
 
         // 用户可以选择的卡牌
         this.userCard = {
-            nowCard: 2,
-            nextCard: 4
+            nowCard: 64,
+            nextCard: 128
         };
 
         //guiding用来记录是否还需要继续进行拖动手势引导
