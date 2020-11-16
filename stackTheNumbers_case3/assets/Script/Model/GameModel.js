@@ -12,10 +12,16 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
+        this.isApplovin = true; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(201.527, 26.637),
-                scale: 0.8
+                scale: 0.8,
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    },
+                }
             },
             UI: {
                 children: {
@@ -55,11 +61,21 @@ export default class GameModel {
                         }
                     },
                     notification: {},
-                    congrat: {
-                        angle: 90
+                    congrat: this.isApplovin ? {
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
                     },
-                    congratBlur: {
-                        angle: 90
+                    congratBlur: this.isApplovin ? {
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
                     },
                     audioBtn: {
                         position: cc.v2(-400, 230.265)
@@ -70,7 +86,12 @@ export default class GameModel {
         this.VerticalConfig = {
             game: {
                 position: cc.v2(0, 0),
-                scale: 1
+                scale: 1,
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    },
+                }
             },
             UI: {
                 children: {
@@ -110,11 +131,21 @@ export default class GameModel {
                         }
                     },
                     notification: {},
-                    congrat: {
-                        angle: 0
+                    congrat: this.isApplovin ? {
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
                     },
-                    congratBlur: {
-                        angle: 0
+                    congratBlur: this.isApplovin ? {
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
                     },
                     audioBtn: {
                         position: cc.v2(0, 360.265)

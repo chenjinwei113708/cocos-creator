@@ -59,7 +59,7 @@ cc.Class({
         this.send3Cards();
         setTimeout(() => {
             this.sendCard();
-        }, 300);
+        }, 100);
         
     },
 
@@ -100,7 +100,7 @@ cc.Class({
             this.gameInfo.isAutoFall = true;
             let fallAction = cc.sequence(
                 cc.moveTo(0.9, cc.v2(0, 460)),
-                cc.moveTo(0.3, cc.v2(0, 455)),
+                cc.moveTo(0.9, cc.v2(0, 435)),
                 cc.callFunc(() => {
                     if (this.gameInfo.isAutoFall) {
                         // this.gameInfo.isAutoFall = false;
@@ -154,7 +154,7 @@ cc.Class({
                         newCard.stopAction(fallAction);
                         this.setGuideMask(1);
                     }
-                }, 1000);
+                }, 600);
             } else if (this.gameInfo.isSecondCard) {
                 setTimeout(() => {
                     if (this.gameInfo.isSecondCard) {
@@ -282,7 +282,7 @@ cc.Class({
             this.mask1.runAction(cc.fadeIn(0.6));
             this.hand.opacity = 0;
             this.hand.active = true;
-            this.hand.position = cc.v2(-176.2, 92.54);
+            this.hand.position = cc.v2(-162.885, 62);
             this.hand.runAction(cc.fadeIn(0.3));
             this.hand.getComponent(cc.Animation).play();
         } else if (level === 2 && this.gameInfo.isSecondCard) {
