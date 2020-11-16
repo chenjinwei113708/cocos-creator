@@ -26,6 +26,7 @@ cc.Class({
         mask1: cc.Node, // 指引遮罩
         mask2: cc.Node, // 指引遮罩
         hand: cc.Node, // 指引手
+        coinPre: cc.Prefab, // 金币
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -47,12 +48,33 @@ cc.Class({
             sendCardTimes: 0,
             threeCards: [], // 同时下落的三张卡
         };
+
+        this.coinParent = cc.find('Canvas/center/game/coins');
+        this.coins  = new cc.NodePool();
+        for (let i = 0; i < 5; i++) {
+            let coin = cc.instantiate(this.coinPre);
+            this.coins.put(coin);
+        }
         
         this.send3Cards();
         setTimeout(() => {
             this.sendCard();
-        }, 500);
+        }, 300);
         
+    },
+
+    getCoin () {
+        let coin = null;
+        if (this.coins.size() > 0) {
+            coin = this.coins.get();
+        } else {
+            coin = cc.instantiate(this.coinPre);
+        }
+        coin.parent = this.coinParent;
+        return coin;
+    },
+    killCoin (coin) {
+        this.coins.put(coin);
     },
 
     setGameController (gameController) {
@@ -156,14 +178,19 @@ cc.Class({
             if (this.gameInfo.isFirstCard) {
                 if (groupName !== CARD_GROUP.KONG1) return;
                 this.gameInfo.isFirstCard = false;
-                this.gameInfo.isSecondCard = true;
+                // this.gameInfo.isSecondCard = true;
+                for (let i = 0; i < this.gameInfo.threeCards.length; i++) {
+                    let nowCards = this.gameInfo.threeCards;
+                    this.click2ChangeGroup(undefined, nowCards[i].parent._name, nowCards[i]);
+                }
                 this.hideGuide();
             } else if (this.gameInfo.isSecondCard) {
                 if (groupName !== CARD_GROUP.KONG2) return;
                 this.gameInfo.isSecondCard = false;
                 this.hideGuide();
             }
-            this.gameInfo.isAutoFall = false;
+            
+            // this.gameInfo.isAutoFall = false;
             if (!this.gameInfo.fallingCard) return;
             let card = downCard || this.gameInfo.fallingCard;
             let groupLeftBox = this.gameController.gameModel.getLeftDistance(groupName);
@@ -171,7 +198,7 @@ cc.Class({
             card.stopAllActions();
             if (card.parent._name !== groupName) {
                 card.parent = this[groupName];
-                card.position = cc.v2(0, this.gameInfo.startPosY);
+                card.position = cc.v2(0, this.gameInfo.threeCards[0].position.y);
                 dropSpeed = groupLeftBox*this.gameInfo.speedFast;
             }
             card.runAction(cc.sequence(
@@ -179,7 +206,7 @@ cc.Class({
                 cc.callFunc(() => {
                     this.setCardStatue(CARD_STATUS.DONE_MOVE);
                     // console.log('click fall done, ', card);
-                    this.addCardToGroup(groupName, card, false, this.completeCard.bind(this));
+                    this.addCardToGroup(groupName, card, false, groupName === CARD_GROUP.KONG1 ? this.completeCard.bind(this) : undefined);
                 }),
             ));
         }
@@ -187,17 +214,22 @@ cc.Class({
 
     /**当前卡片摆放完成 */
     completeCard () {
-        this.gameInfo.fallingCard = null;
-        this.setCardStatue(CARD_STATUS.CAN_MOVE);
-        this.gameController.addCash(80);
-        this.gameController.guideView.showPaypalCardFly(() => {
-            if (this.gameInfo.sendCardTimes < 3) {
-                this.sendCard();
-            } else {
-                this.gameController.getAudioUtils().playEffect('cheer', 0.55);
-                this.gameController.guideView.showCashOutHand();
-            }
-        });
+        console.log('completeCard sendCardTimes', this.gameInfo.sendCardTimes);
+        setTimeout(() => {
+            this.becomeBigCard();
+        }, 100);
+        
+        // this.gameInfo.fallingCard = null;
+        // this.setCardStatue(CARD_STATUS.CAN_MOVE);
+        // this.gameController.addCash(410);
+        // this.gameController.guideView.showPaypalCardFly(() => {
+        //     if (this.gameInfo.sendCardTimes < 3) {
+        //         // this.sendCard();
+        //     } else {
+        //         this.gameController.getAudioUtils().playEffect('cheer', 0.55);
+        //         this.gameController.guideView.showCashOutHand();
+        //     }
+        // });
     },
 
     /**把牌最终加到某一组里面去 */
@@ -216,9 +248,15 @@ cc.Class({
             cardNode.destroy();
             
             this.gameController.getAudioUtils().playEffect('combine', 0.4);
+            let coin = this.getCoin();
+            let coinPos = this.node.convertToNodeSpaceAR(this[groupName].convertToWorldSpaceAR(lastCard.position));
+            coin.getComponent('CoinView').showDollar(coinPos, () => {
+                this.killCoin(coin);
+            });
             lastCard.runAction(cc.sequence(
-                cc.repeat(cc.sequence(cc.rotateTo(0.09, 11), cc.rotateTo(0.09, -11)), 3),
-                cc.spawn(cc.rotateTo(0.06, 0), cc.moveTo(0.12, destPos)),
+                cc.scaleTo(0.1, 0.95),
+                // cc.repeat(cc.sequence(cc.rotateTo(0.09, 11), cc.rotateTo(0.09, -11)), 3),
+                cc.spawn(cc.scaleTo(0.12, 1), cc.moveTo(0.12, destPos)),
                 cc.callFunc(() => {
                     this.addCardToGroup(groupName, lastCard, true, callback);
                 })
@@ -279,6 +317,41 @@ cc.Class({
     /**设置卡片状态 */
     setCardStatue (status) {
         this.gameInfo.cardStatus = status;
+    },
+
+    /**合成大的2048卡 */
+    becomeBigCard () {
+        let flycard = cc.find('Canvas/center/UI/flycard');
+        let paypal = cc.find('Canvas/center/UI/paypal');
+        let paypalIcon = cc.find('Canvas/center/UI/paypal/icon');
+        let ppPos = flycard.convertToNodeSpaceAR(paypal.convertToWorldSpaceAR(paypalIcon.position));
+        for (let i = 1; i <= 5; i++) {
+            let card = this[`kong${i}`].children[0];
+            let centerPos = this[`kong${i}`].convertToNodeSpaceAR(flycard.convertToWorldSpaceAR(cc.v2(0,0)));
+            card.runAction(cc.sequence(
+                cc.moveTo(0.4, centerPos),
+                cc.scaleTo(0.2, 0),
+                cc.callFunc(() => {
+                    card.opacity = 0;
+                    if (i !== 5) return;
+                    flycard.opacity = 0;
+                    flycard.scale = 0.2;
+                    flycard.active = true;
+                    flycard.runAction(cc.sequence(
+                        cc.spawn(cc.fadeIn(0.2), cc.scaleTo(0.3, 1.1)),
+                        cc.scaleTo(0.3, 1),
+                        cc.delayTime(0.5),
+                        cc.spawn(cc.moveTo(0.7, ppPos), cc.scaleTo(0.7, 0.85)),
+                        cc.spawn(cc.fadeOut(0.25), cc.scaleTo(0.2, 0.1)),
+                        cc.callFunc(() => {
+                            this.gameController.addCash(2048);
+                            this.gameController.getAudioUtils().playEffect('cheer', 0.55);
+                            this.gameController.guideView.showCashOutHand();
+                        })
+                    ));
+                })
+            ));
+        }
     },
 
     start () {

@@ -126,11 +126,11 @@ export default class GameModel {
 
         // 游戏卡牌组里面放了什么牌
         this.cards = {
-            [CARD_GROUP.KONG1]: [32, 16, 8, 4, 2],
-            [CARD_GROUP.KONG2]: [32, 16, 8, 4],
-            [CARD_GROUP.KONG3]: [256, 128, 64],
-            [CARD_GROUP.KONG4]: [128, 64],
-            [CARD_GROUP.KONG5]: [64],
+            [CARD_GROUP.KONG1]: [1024, 512, 256, 128, 64],
+            [CARD_GROUP.KONG2]: [1024, 512, 256, 128],
+            [CARD_GROUP.KONG3]: [1024, 512, 256],
+            [CARD_GROUP.KONG4]: [1024, 512],
+            [CARD_GROUP.KONG5]: [1024],
         };
 
         // 发牌库
