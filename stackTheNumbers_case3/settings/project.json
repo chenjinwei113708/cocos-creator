@@ -27,7 +27,6 @@
     "WebView",
     "Collider",
     "Physics",
-    "NodePool",
     "Geom Utils",
     "3D",
     "3D Primitive"
@@ -47,13 +46,12 @@
   "group-list": [
     "default"
   ],
-  "last-module-event-record-time": 1601196832284,
+  "last-module-event-record-time": 1605514870492,
   "simulator-orientation": false,
   "simulator-resolution": {
     "height": 640,
     "width": 960
   },
   "use-customize-simulator": true,
-  "use-project-simulator-setting": false,
-  "start-scene": "current"
+  "use-project-simulator-setting": false
 }
