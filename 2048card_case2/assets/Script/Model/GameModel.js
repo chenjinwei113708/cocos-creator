@@ -12,6 +12,7 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
+        this.isApplovin = true; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(239.06, 3.824),
@@ -20,6 +21,9 @@ export default class GameModel {
                     bg1: {
                         width: 1250,
                         height: 2248
+                    },
+                    adsonly: {
+                        active: this.isApplovin ? true : false
                     }
                 }
             },
@@ -33,16 +37,9 @@ export default class GameModel {
                         height: 412,
                         position: cc.v2(-369.11, 78.889),
                         children: {
-                            btn: {
-                                position: cc.v2(198.754, -56.29)
-                            },
-                            icon: {
-                                width: 225,
-                                height: 236,
-                                position: cc.v2(-8.778, -1.222)
-                            },
-                            cash: {
-                                position: cc.v2(192.375, 44.461)
+                            progress: {
+                                position: cc.v2(130, 0),
+                                scale: 0.9
                             },
                         }
                     },
@@ -63,12 +60,22 @@ export default class GameModel {
                     notification: {
                         position: cc.v2(0, 209.556)
                     },
-                    congrat: {
-                        angle: 90
+                    congrat: this.isApplovin ? {
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
                     },
-                    congratBlur: {
-                        angle: 90
-                    }
+                    congratBlur: this.isApplovin ? {
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
+                    },
                 }
             }
         }
@@ -80,29 +87,25 @@ export default class GameModel {
                     bg1: {
                         width: 1250,
                         height: 2248
+                    },
+                    adsonly: {
+                        active: this.isApplovin ? true : false
                     }
                 }
             },
             UI: {
                 children: {
                     audioBtn: {
-                        position: cc.v2(0, 444.386)
+                        position: cc.v2(-238.791, -403.322)
                     },
                     pp: {
                         width: 540,
                         height: 300,
                         position: cc.v2(0, 498.981),
                         children: {
-                            btn: {
-                                position: cc.v2(154.31, -114.957)
-                            },
-                            icon: {
-                                width: 138,
-                                height: 145,
-                                position: cc.v2(-139.413, -82.095)
-                            },
-                            cash: {
-                                position: cc.v2(149.708, -55.095)
+                            progress: {
+                                position: cc.v2(0, -84.892),
+                                scale: 1
                             },
                         }
                     },
@@ -123,12 +126,22 @@ export default class GameModel {
                     notification: {
                         position: cc.v2(0, 420.317)
                     },
-                    congrat: {
-                        angle: 0
+                    congrat: this.isApplovin ? {
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
                     },
-                    congratBlur: {
-                        angle: 0
-                    }
+                    congratBlur: this.isApplovin ? {
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
+                    },
                 }
             }
         }
@@ -148,7 +161,7 @@ export default class GameModel {
 
         // 发牌库
         this.waitCards = [
-            256, 256, 256, 256, 256, 256, 256, 256, 256, 256, 256
+            256, 64, 32, 32
         ];
 
         this.isGameLost = false; // 游戏输了没
@@ -272,7 +285,8 @@ export default class GameModel {
         if (this.waitCards.length > 0) {
             newCard = this.waitCards.splice(0, 1)[0];
         } else {
-            newCard = CARD_VALUE[7];
+            let index = Math.floor((Math.random() * 10));
+            newCard = CARD_VALUE[index];
         }
         this.userCard.nowCard = this.userCard.nextCard;
         this.userCard.nextCard = newCard;

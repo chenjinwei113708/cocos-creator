@@ -76,9 +76,9 @@ cc.Class({
         // 数据加载完毕
         PlayformSDK.gameReady();
 
-        this.guideView.showWelcomePage();
+        // this.guideView.showWelcomePage();
 
-        this.gotoNextStep();
+        // this.gotoNextStep();
     },
 
     /**执行任务队列 */
@@ -100,6 +100,7 @@ cc.Class({
 
 
     download() {
+        this.endGame();
         PlayformSDK.download();
     },
 
@@ -118,9 +119,11 @@ cc.Class({
     addCash (number) {
         let nowMoney = this.cashView.addCash(number);
         this.getAudioUtils().playEffect('money', 0.6);
-        // console.log('addCash nowMoney,', nowMoney);
-        if (nowMoney >= 300) {
+        // console.log('addCash progress,', this.gameView.gameInfo.progress);
+        if (this.gameView.gameInfo.progress >= 1) {
             this.gameView.stopGame();
+            this.gameView.textBling();
+            this.guideView.changeTextNum(this.cashView.targetCash);
             this.guideView.showCashOutHand();
         }
     },

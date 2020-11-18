@@ -29,6 +29,7 @@ cc.Class({
         hint: cc.Node, // 提示
         swipe: cc.Node, // 提示
         golds: cc.Node, // 金币
+        progressBar: cc.Node, // 进度条
         cardPrefab: cc.Prefab, // 卡牌预制资源
         cardSprites: [cc.SpriteFrame], // 卡牌图片
     },
@@ -41,7 +42,7 @@ cc.Class({
             groupDelay: 40, // 分组判断延时
             lastGroupTime: 0, // 上次分组时间
             lastGroup: null, // 上次选中的分组
-            cardDistance: -50, // 上次选中的分组
+            cardDistance: -50, // 卡片距离
             isGameStarted: false, // 用户有没有开始游戏
             isFirstCard: true, // 是不是第一张卡
             isSecondCard: false, // 是不是第一张卡
@@ -53,8 +54,11 @@ cc.Class({
                 cc.v2(this.kong3.position.x, this.kong3.position.y-100),
                 cc.v2(this.kong4.position.x, this.kong4.position.y-50),
             ],
+            progress: 0, // 进度条 范围0-1
+            progressInterval: null, // 进度条递加
         };
-        // this.setCardClickListener();
+        this.setCardClickListener();
+        this.showSwipeHint();
     },
 
     setGameController (gameController) {
@@ -122,27 +126,23 @@ cc.Class({
             } else { // 如果放到了卡牌组里面去
                 if (this.gameInfo.isFirstCard) {
                     // 如果是第一次放，只能放到第一组
-                    if (group !== CARD_GROUP.KONG1) {
-                        this.card2.active = true;
-                        this.setCardStatus(CARD_STATUS.CAN_MOVE);
-                        return;
-                    } else {
-                        this.gameInfo.isFirstCard = false;
-                        this.gameInfo.isSecondCard = true;
-                        this.changeSwipeHand();
-                    }
-                } else if (this.gameInfo.isSecondCard) {
-                    // 如果是第二次放，只能放到第二组
-                    if (group !== CARD_GROUP.KONG2) {
-                        this.card2.active = true;
-                        this.setCardStatus(CARD_STATUS.CAN_MOVE);
-                        return;
-                    } else {
-                        this.hideSwipeHand();
-                        this.gameInfo.isSecondCard = false;
-                        this.changeTimeout && clearTimeout(this.changeTimeout);
-                    }
-                }
+                    this.gameInfo.isFirstCard = false;
+                    this.gameInfo.isSecondCard = true;
+                    // this.changeSwipeHand();
+                    this.hideSwipeHand();
+                } 
+                // else if (this.gameInfo.isSecondCard) {
+                //     // 如果是第二次放，只能放到第二组
+                //     if (group !== CARD_GROUP.KONG2) {
+                //         this.card2.active = true;
+                //         this.setCardStatus(CARD_STATUS.CAN_MOVE);
+                //         return;
+                //     } else {
+                //         this.hideSwipeHand();
+                //         this.gameInfo.isSecondCard = false;
+                //         this.changeTimeout && clearTimeout(this.changeTimeout);
+                //     }
+                // }
                 this.setCardStatus(CARD_STATUS.DONE_MOVE);
                 let nowCard = this.gameController.gameModel.getNowCard();
                 this.putCardIntoGroup(group, nowCard);
@@ -383,12 +383,20 @@ cc.Class({
         this.golds.active = true;
         this.gameController.getAudioUtils().playEffect('money', 0.6);
         this.golds.getComponent(cc.Animation).play();
-        if (this.gameInfo.isSecondCard) this.gameController.addCash(100);
-        else { this.gameController.addCash(50); }
+        this.addProgress();
+        let money = parseInt(Math.random() * 100);
+        this.gameController.addCash(money);
+        // if (this.gameInfo.isSecondCard) this.gameController.addCash(100);
+        // else { this.gameController.addCash(50); }
     },
 
     /**输掉了游戏 */
     loseGame () {
+        cc.audioEngine.stopMusic();
+        this.gameController.getAudioUtils().playEffect('fail', 0.8);   
+        setTimeout(() => {
+            this.gameController.download();
+        }, 2200);
         console.log('lost game');
     },
 
@@ -397,9 +405,50 @@ cc.Class({
         this.offClickListener();
     },
 
+    /**让文字闪光 */
+    textBling () {
+        let text = cc.find('Canvas/center/UI/pp/progress/cash');
+        let time = 1;
+        let mostTime = 12;
+        const green = new cc.Color(22, 146, 16);
+        const red = new cc.Color(216, 0, 9);
+        
+        this.textInterval = setInterval(() => {
+            let col = (time % 2 === 0) ? green : red;
+            text.color = col;
+            // console.log('textbling col', col, text);
+            text.getComponent(cc.LabelOutline).color = col;
+            if (time >= mostTime) {
+                this.textInterval && clearInterval(this.textInterval);
+            }
+            time++;
+        }, 120);
+    },
+
+    /**增加进度条 */
+    addProgress () {
+        this.gameInfo.progress += 0.2;
+        this.enabled = true;
+
+    },
+
     start () {
 
     },
 
-    // update (dt) {},
+    update (dt) {
+        const unit = 0.03;
+        // this.gameInfo.progressInterval && clearInterval(this.gameInfo.progressInterval);
+        // this.gameInfo.progressInterval = setInterval(() => {
+            
+        // }, 500);
+        let nowp = this.progressBar.getComponent(cc.ProgressBar).progress;
+        if (this.gameInfo.progress - nowp > unit) {
+            this.progressBar.getComponent(cc.ProgressBar).progress += unit;
+        } else {
+            this.progressBar.getComponent(cc.ProgressBar).progress = this.gameInfo.progress;
+            this.enabled = false;
+            // this.gameInfo.progressInterval && clearInterval(this.gameInfo.progressInterval);
+        }
+    },
 });

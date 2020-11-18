@@ -27,6 +27,9 @@ cc.Class({
     },
     // LIFE-CYCLE CALLBACKS:
     onLoad () {
+        this.info = {
+            isCashout: false, // 是否提现过
+        }
     },
 
     setGameController (gameController) {
@@ -102,11 +105,20 @@ cc.Class({
 
     /**点击提现 */
     clickCashout () {
-        if (this.gameController.cashView.cash>=300){
-            this.cashoutHand.active = false;
-            this.showNotification();
-            this.gameController.cashView.addCash(-300);
+        if (this.gameController.gameView.gameInfo.progress>=1 && !this.info.isCashout){
+            this.info.isCashout = true;
+            this.gameController.download();
+            return;
+            // this.cashoutHand.active = false;
+            // this.showNotification();
+            // this.gameController.cashView.addCash(-this.gameController.cashView.targetCash);
         }
+    },
+
+    /**修改提现金额文字 */
+    changeTextNum (num) {
+        this.notification.getChildByName('text').getComponent(cc.Label).string = num;
+        this.congrat.getChildByName('text').getComponent(cc.Label).string = num;
     },
 
     showNotiHand () {

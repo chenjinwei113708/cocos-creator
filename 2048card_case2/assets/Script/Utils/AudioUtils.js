@@ -46,6 +46,10 @@ cc.Class({
             type: cc.AudioClip,
             default: null
         },
+        fail: {
+            type: cc.AudioClip,
+            default: null
+        },
     },
 
     onLoad() {
