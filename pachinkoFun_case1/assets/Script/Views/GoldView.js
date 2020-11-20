@@ -12,13 +12,13 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        cash: 0
+        cash: 300
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.targetCash = 0; // 目标分数
+        this.targetCash = 300; // 目标分数
         // this.updateDelay = 0.05; // 更新时间间隔 s
         this.timer = 0; // 计时器
         this.label = this.node.getComponent(cc.Label);

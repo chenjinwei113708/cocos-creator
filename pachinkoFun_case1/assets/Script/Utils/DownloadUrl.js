@@ -1,6 +1,6 @@
 export const DownloadUrl = {
-    iosUrl: 'https://play.google.com/store/apps/details?id=com.plinkogame.pachinko',
-    androidUrl: 'https://play.google.com/store/apps/details?id=com.plinkogame.pachinko',
+    iosUrl: 'https://apps.apple.com/app/id1538553120 ',
+    androidUrl: 'https://apps.apple.com/app/id1538553120 ',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;

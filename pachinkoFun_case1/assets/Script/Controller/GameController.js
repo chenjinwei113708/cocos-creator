@@ -93,6 +93,7 @@ cc.Class({
 
 
     download() {
+        this.endGame();
         PlayformSDK.download();
     },
 

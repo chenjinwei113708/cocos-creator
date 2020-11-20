@@ -33,7 +33,7 @@ cc.Class({
 
     onLoad () {
         this.gameInfo = {
-            shootDelay: 750, // 发射间隔 ms
+            shootDelay: 500, // 发射间隔 ms
             lastShootTime: 0, // 上次发射的时间 时间戳 ms
             coinY: 232,  // 金币位置 y
             coinMinX: -173.9, // 金币位置 x1
@@ -46,6 +46,8 @@ cc.Class({
             isSeven: false, // 是不是出现了777
             tmpGoldNum: 0, // 第二次点击完pp卡还有多少金币
             isGameStarted: false, // 游戏开始没
+            userStartClick: false, // 用户是否开始点击掉落金币
+            canCashout: false, // 是否达到提现条件
             GRADE: { // 每一格各获得多少金币
                 grade1: 1,
                 grade2: 3,
@@ -129,6 +131,12 @@ cc.Class({
         if (!this.gameInfo.isGameStarted) {
             this.gameInfo.isGameStarted = true;
             this.enabled = true;
+        }
+        if (!this.gameInfo.userStartClick) {
+            this.gameInfo.userStartClick = true;
+            setTimeout(() => {
+                this.receiveMoney(50);
+            }, 3000);
         }
         this.gameInfo.isUserClick = true;
         this.gameInfo.shootDelay = 400;
@@ -270,7 +278,7 @@ cc.Class({
         coin.parent = this.coins;
         coin.active = true;
         this.fallDownCoin(coin);
-        this.gameController.getAudioUtils().playEffect('coinRelease', 0.3);
+        this.gameController.getAudioUtils().playEffect('coinRelease', 0.2);
     },
 
     /**暂停掉金币 */
@@ -292,9 +300,10 @@ cc.Class({
         let grade = this.gameInfo.GRADE[gradeName];
         this.showFlyGrade(calcuNode.position, grade);
         if (!this.gameInfo.isPaused) {
-            this.gameController.getAudioUtils().playEffect('gold', 0.35);
+            this.gameController.getAudioUtils().playEffect('gold', 0.2);
         }
         this.goldView.addCash(grade);
+        return;
         const target1 = 50;
         const target2 = 100;
         const target3 = 100;
@@ -304,14 +313,17 @@ cc.Class({
             if (this.goldView.targetCash < target1 || this.gameInfo.isPPCardShow) return;
             // console.log('pause 2', this.gameInfo.getCashTimes, ' t:',this.goldView.targetCash);
             this.pauseGame();
-            this.showPPCard(target1);
+            this.receiveMoney(target1);
+            // this.showPPCard(target1);
         } else if (this.gameInfo.getCashTimes === 3){
             if (this.goldView.targetCash < target2) return;
-            this.showPPCard(target2);
+            this.receiveMoney(target2);
+            // this.showPPCard(target2);
             this.pauseGame();
         } else if (this.gameInfo.getCashTimes === 4){
             if (this.goldView.targetCash < 100+target3+this.gameInfo.tmpGoldNum) return;
-            this.showPPCard(target3);
+            this.receiveMoney(target3);
+            // this.showPPCard(target3);
             this.pauseGame();
             // if (this.goldView.targetCash >= target2+target3+this.gameInfo.tmpGoldNum) {
             //     this.gameHand.active = false;
@@ -384,6 +396,7 @@ cc.Class({
         num = Number(num);
         let ppcard = num === 50 ? this.ppcard50 : num === 100 ? this.ppcard100 : this.ppcard150;
         ppcard.active = false;
+        this.showFlyGolds();
         this.gameController.getAudioUtils().playEffect('income', 0.4);
         // this.setClickListener();
         if (this.gameInfo.getCashTimes === 1) {
@@ -415,6 +428,29 @@ cc.Class({
         // ))
     },
 
+    /**不展示ppcard，直接收钱 */
+    receiveMoney (num) {
+        num = Number(num);
+        this.gameController.getAudioUtils().playEffect('income', 0.9);
+        this.showFlyGolds();
+        this.goldView.addCash(0-num);
+        this.gameInfo.tmpGoldNum = this.goldView.targetCash;
+        if (this.gameInfo.getCashTimes === 2) {
+            this.showPPs();
+            // this.continueGame();
+        } else if (this.gameInfo.getCashTimes === 3) {
+            this.showSevens();
+            this.gameHand.active = false;
+        }
+        this.gameController.addCash(num);
+        this.gameInfo.getCashTimes++;
+        if (this.gameController.cashView.targetCash >= 350) {
+            this.offTouchListener();
+            this.enabled = false;
+            this.gameController.guideView.showCashOutHand();
+        }
+    },
+
     /**展示777 */
     showSevens () {
         let topView = cc.find('Canvas/center/game/top/topBox').getComponent('TopView');
@@ -439,6 +475,9 @@ cc.Class({
     completePPs () {
         this.gameInfo.isPPCoin = true; // 设置掉落pp金币
         this.continueGame();
+        setTimeout(() => {
+            this.receiveMoney(100);
+        }, 3000);
     },
 
     /**展示777完毕 */
@@ -460,8 +499,33 @@ cc.Class({
                 this.releaseCoins();
                 this.continueGame();
                 this.allBricks.active = false;
+                setTimeout(() => {
+                    this.receiveMoney(100);
+                }, 3000);
             })
         ));
+    },
+
+    /**展示金币飞顶部 */
+    showFlyGolds () {
+        let paypal = cc.find('Canvas/center/UI/paypal');
+        let paypalIcon = paypal.getChildByName('icon');
+        let flygold = cc.find('Canvas/center/UI/flygold');
+        let destPos = flygold.convertToNodeSpaceAR(paypal.convertToWorldSpaceAR(paypalIcon.position));
+        flygold.children.forEach((each, index) => {
+            each.opacity = 0;
+            each.active = true;
+            each.runAction(cc.sequence(
+                cc.delayTime(index*0.1),
+                cc.fadeIn(0.2),
+                cc.moveTo(0.4, destPos),
+                cc.fadeOut(0.2),
+                cc.callFunc(() => {
+                    each.position = cc.v2(0, 0);
+                    each.active = false;
+                })
+            ));
+        });
     },
 
     update (dt) {
@@ -480,6 +544,7 @@ cc.Class({
                 this.sendCoin();
                 let delay = Math.random()/2;
                 setTimeout(() => {
+                    this.sendCoin();
                     this.sendCoin();
                 }, delay*1000);
             }

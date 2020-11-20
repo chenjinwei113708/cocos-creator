@@ -9,12 +9,16 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
+        this.isApplovin = false; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(0, -58.331),
                 children: {
                     MainCamera: {
                         position: cc.v2(-310, 25),
+                    },
+                    adsonly: {
+                        active: this.isApplovin ? true : false
                     },
                 }
             },
@@ -43,19 +47,21 @@ export default class GameModel {
                     icon: {
                         position: cc.v2(-385.84, -199.951)
                     },
-                    congrat: {
-                        // angle: 90,
-                        // opacity: 255,
-                        width: 277.38,  // applovin
-                        height: 540,
-                        opacity: 190
-                    },
-                    congratBlur: {
-                        // angle: 90,
-                        // opacity: 255,
+                    congrat: this.isApplovin ? {
                         width: 277.38, // applovin
                         height: 540,
                         opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
+                    },
+                    congratBlur: this.isApplovin ? {
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
                     },
                     audioBtn: {
                         position: cc.v2(-423.28, 214.908)
@@ -69,6 +75,9 @@ export default class GameModel {
                 children: {
                     MainCamera: {
                         position: cc.v2(0, 58.331),
+                    },
+                    adsonly: {
+                        active: this.isApplovin ? true : false
                     },
                 }
             },
@@ -97,19 +106,21 @@ export default class GameModel {
                     icon: {
                         position: cc.v2(198.584, 430.964)
                     },
-                    congrat: {
-                        // angle: 0,
-                        // opacity: 255,
+                    congrat: this.isApplovin ? {
                         width: 603, // applovin
                         height: 1170,
                         opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
                     },
-                    congratBlur: {
-                        // angle: 0,
-                        // opacity: 255,
+                    congratBlur: this.isApplovin ? {
                         width: 603, // applovin
                         height: 1170,
                         opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
                     },
                     audioBtn: {
                         position: cc.v2(0, 397.765)

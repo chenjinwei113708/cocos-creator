@@ -87,11 +87,13 @@ cc.Class({
 
     /**点击提现 */
     clickCashout () {
-        if (this.gameController.cashView.cash>=300 && !this.info.isCashout){
+        if (this.gameController.cashView.cash>=350 && !this.info.isCashout){
             this.info.isCashout = true;
             this.cashoutHand.active = false;
             this.showNotification();
-            this.gameController.cashView.addCash(-300);
+            this.gameController.cashView.addCash(-350);
+        } else {
+            this.gameController.download();
         }
     },
 

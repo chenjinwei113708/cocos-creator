@@ -88,14 +88,15 @@ cc.Class({
         }
         if (this.isAudioEnabled) {
             // 播放音效时bgm声音减低
-            cc.audioEngine.setMusicVolume(0.5);
-            let effectId = cc.audioEngine.playEffect(this[effectName], false);
-            cc.audioEngine.setEffectsVolume(volumn);
+            // cc.audioEngine.setMusicVolume(0.5);
+            // let effectId = cc.audioEngine.playEffect(this[effectName], false);
+            // cc.audioEngine.setEffectsVolume(volumn);
+            let effectId = cc.audioEngine.play(this[effectName], false, volumn);
 
-            cc.audioEngine.setFinishCallback(effectId, function () {
-                 // 恢复音量
-                cc.audioEngine.setMusicVolume(0.8);
-            });
+            // cc.audioEngine.setFinishCallback(effectId, function () {
+            //      // 恢复音量
+            //     cc.audioEngine.setMusicVolume(0.8);
+            // });
         }
     },
     
