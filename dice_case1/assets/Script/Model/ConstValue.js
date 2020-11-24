@@ -1,6 +1,11 @@
 /**
  * 这个脚本用来存储一些全局都会用到的常量
  */
+export const GAME_LEVEL = {
+    LEVEL1: 'level1',
+    LEVEL2: 'level2',
+    LEVEL3: 'level3',
+};
 
 export const CELL_TYPE = {
     C5: 'c5',

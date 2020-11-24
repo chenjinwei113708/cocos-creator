@@ -1,5 +1,5 @@
 import {
-    // GAME_LEVEL,
+    GAME_LEVEL,
     CELL_TYPE,
     ACTION_TYPE,
     CELL_STATUS
@@ -12,6 +12,11 @@ cc.Class({
         ppcard: cc.Node, // 现金卡片
         box: cc.Node, // 棋盘
         paypal: cc.Node, // 顶部栏
+        hand: cc.Node, // 指引手
+        mask1: cc.Node, // 遮罩 旋转按钮
+        mask2: cc.Node, // 遮罩 拖动放置
+        touch1: cc.Node, // 触碰区域1 开始位置
+        touch2: cc.Node, // 触碰区域2 放置位置
         // 不同类型的图
         sprite5: cc.SpriteFrame,
         sprite10: cc.SpriteFrame,
@@ -27,7 +32,7 @@ cc.Class({
 
     onLoad () {
         this.gameInfo = {
-            // nowLevel: GAME_LEVEL.LEVEL1,
+            nowLevel: GAME_LEVEL.LEVEL1,
             cellStatus: CELL_STATUS.CAN_MOVE,
             direcDelay: 40, // 判断延时
             lastCheckTime: 0,  // 上次判断时间
@@ -36,6 +41,9 @@ cc.Class({
             // nowTouch: null, // 上次点击的触碰点
             // nowTouchPos: null, // 上次点击的触碰点的位置
         };
+
+        // 游戏总共几关
+        this.gameLevels = [GAME_LEVEL.LEVEL1, GAME_LEVEL.LEVEL2, GAME_LEVEL.LEVEL3]
 
         // 不同类型对应的图片
         this.sprites = {
@@ -57,11 +65,43 @@ cc.Class({
             [undefined, ...this.box.getChildByName('kong5').children],
         ];
 
-        this.showPPcard();
+        // 这一关将要执行的动画
+        this.actionList = [];
+
+        // 每一关对应的动画
+        this.actionLevel = [];
+
+        this.changeToNextLevel();
     },
 
     setGameController (gameController) {
         this.gameController = gameController;
+    },
+
+    changeToNextLevel () {
+        if (this.actionLevel.length === 0){
+            // this.gameController.guideView.showCashOutHand();
+            // this.offTouchListener();
+            // return;
+        }
+        // let nextList = this.actionLevel.splice(0, 1)[0];
+        // this.actionList.push(...nextList);
+        this.gameInfo.nowLevel = this.gameLevels.splice(0, 1)[0];
+        
+        if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1) {
+            this.showPPcard();
+        } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
+            this.showMask(1);
+            // this.doActions();
+        } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
+            this.showMask(2);
+            this.setTouchListener();
+            // this.doActions();
+        }
+    },
+
+    setCellStatus (status) {
+        this.gameInfo.cellStatus = status;
     },
 
     setTouchListener () {
@@ -85,31 +125,17 @@ cc.Class({
             this.gameController.getAudioUtils().playEffect('click', 0.5);
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
             // console.log('onTouchStart, ', this.gameInfo.nowLevel);
-            if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1 || this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
-                // console.log('onTouchStart, touchPos', touchPos);
-                if (touchPos.x >= this.touch1.position.x - this.touch1.width/2 &&
-                    touchPos.x <= this.touch1.position.x + this.touch1.width/2 &&
-                    touchPos.y >= this.touch1.position.y - this.touch1.height/2 &&
-                    touchPos.y <= this.touch1.position.y + this.touch1.height/2) {
-                        this.gameInfo.nowTouch = this.touch1;
-                        this.gameInfo.lastCheckTime = Date.now();
-                        this.gameInfo.nowTouchPos = touchPos;
-                        this.setCellStatus(CELL_STATUS.IS_MOVE);
-                        // console.log('onTouchStart, doActions');
-                        this.doActions();
-                        this.offTouchListener();
-                }
-            } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
-                if (touchPos.x >= this.touch2.position.x - this.touch2.width/2 &&
-                    touchPos.x <= this.touch2.position.x + this.touch2.width/2 &&
-                    touchPos.y >= this.touch2.position.y - this.touch2.height/2 &&
-                    touchPos.y <= this.touch2.position.y + this.touch2.height/2) {
-                        this.gameInfo.nowTouch = this.touch2;
-                        this.gameInfo.lastCheckTime = Date.now();
-                        this.gameInfo.nowTouchPos = touchPos;
-                        this.setCellStatus(CELL_STATUS.IS_MOVE);
-                        this.doActions();
-                }
+            if (touchPos.x >= this.touch1.position.x - this.touch1.width/2 &&
+                touchPos.x <= this.touch1.position.x + this.touch1.width/2 &&
+                touchPos.y >= this.touch1.position.y - this.touch1.height/2 &&
+                touchPos.y <= this.touch1.position.y + this.touch1.height/2) {
+                    this.gameInfo.nowTouch = this.touch1;
+                    this.gameInfo.lastCheckTime = Date.now();
+                    this.gameInfo.nowTouchPos = touchPos;
+                    this.setCellStatus(CELL_STATUS.IS_MOVE);
+                    // console.log('onTouchStart, doActions');
+                    this.doActions();
+                    // this.offTouchListener();
             }
         }
         
@@ -160,16 +186,17 @@ cc.Class({
         this.ppcard.opacity = 0;
         this.ppcard.scale = 0;
         this.ppcard.active = true;
-        // this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
+        this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
         this.ppcard.runAction(cc.sequence(
             cc.spawn(cc.fadeIn(0.4), cc.scaleTo(0.3, 1)),
             cc.callFunc(() => {
                 let anim = this.ppcard.getComponent(cc.Animation).play();
                 anim.on('finished', () => {
                     if (this.gameInfo.isPPcardReceived) return;
-                    let hand = this.ppcard.getChildByName('hand');
+                    let hand = this.hand;
                     hand.opacity = 0;
                     hand.active = true;
+                    hand.position = cc.v2(-19.44, -54.918);
                     hand.runAction(cc.fadeIn(0.2));
                     hand.getComponent(cc.Animation).play();
                 });
@@ -182,16 +209,57 @@ cc.Class({
         this.gameInfo.isPPcardReceived = true;
         this.gameController.addCash(100);
         this.gameController.getAudioUtils().playEffect('coin', 0.5);
-        this.ppcard.getChildByName('hand').getComponent(cc.Animation).stop();
-        this.ppcard.getChildByName('hand').active = false;
+        this.hand.getComponent(cc.Animation).stop();
+        this.hand.active = false;
         this.ppcard.getComponent(cc.Animation).stop();
         this.ppcard.runAction(cc.sequence(
             cc.spawn(cc.fadeOut(0.3), cc.scaleTo(0.3, 0)),
             cc.callFunc(()=>{
                 this.ppcard.active = false;
+                this.changeToNextLevel();
             })
         ));
     },
+
+    showMask (num=2) {
+        let mask = this[`mask${num}`];
+        // let handPos = 
+        mask.opacity = 0;
+        mask.active = true;
+        mask.runAction(cc.sequence(
+            cc.fadeTo(0.6, 190),
+            cc.callFunc(() => {
+                let hand = this.hand;
+                hand.opacity = 0;
+                hand.active = true;
+                hand.position = cc.v2(73.14, -351.175);
+                hand.runAction(cc.fadeIn(0.2));
+                hand.getComponent(cc.Animation).play();
+            })
+        ));
+    },
+
+    /**交换转盘上面的卡 */
+    switchCards () {
+        if (this.gameInfo.nowLevel !== GAME_LEVEL.LEVEL2 ||
+            this.gameInfo.cellStatus !== CELL_STATUS.CAN_MOVE)
+            return;
+        
+        this.setCellStatus(CELL_STATUS.IS_MOVE);
+        let c50 = cc.find('Canvas/center/game/zhuan/c50');
+        let c20 = cc.find('Canvas/center/game/zhuan/c50/c20');
+        this.mask1.active = false;
+        this.hand.getComponent(cc.Animation).stop();
+        this.hand.active = false;
+        c50.runAction(cc.sequence(
+            cc.moveTo(0.2, cc.v2(42.994, -1)),
+            cc.callFunc(() => {
+                this.changeToNextLevel();
+                this.setCellStatus(CELL_STATUS.CAN_MOVE);
+            })
+        ));
+        c20.runAction(cc.moveTo(0.2, cc.v2(-85.305, 0)));
+    }
 
     // start () {},
 

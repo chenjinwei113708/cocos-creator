@@ -32,6 +32,14 @@ cc.Class({
             type: cc.AudioClip,
             default: null
         },
+        moneyCard: {
+            type: cc.AudioClip,
+            default: null
+        },
+        lightning: {
+            type: cc.AudioClip,
+            default: null
+        },
 
     },
 
