@@ -16,26 +16,22 @@ cc.Class({
             default: null
         },
         // Music
-        bgMusic: {
+        cheer: {
             type: cc.AudioClip,
             default: null
         },
-
-        // Effect
-        bgClick: {
+        coin: {
             type: cc.AudioClip,
             default: null
         },
-
-        startMusic: {
+        switch: {
             type: cc.AudioClip,
             default: null
         },
-
-        endMusic: {
+        combine: {
             type: cc.AudioClip,
             default: null
-        }
+        },
 
     },
 
