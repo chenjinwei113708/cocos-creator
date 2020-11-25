@@ -16,6 +16,10 @@ cc.Class({
             default: null
         },
         // Music
+        click: {
+            type: cc.AudioClip,
+            default: null 
+        },
         cheer: {
             type: cc.AudioClip,
             default: null
