@@ -16,14 +16,26 @@ cc.Class({
             default: null
         },
         // Music
-        bgMusic: cc.AudioClip,
+        bgMusic: {
+            type: cc.AudioClip,
+            default: null
+        },
 
         // Effect
-        bgClick: cc.AudioClip,
+        bgClick: {
+            type: cc.AudioClip,
+            default: null
+        },
 
-        victory: cc.AudioClip,
+        victory: {
+            type: cc.AudioClip,
+            default: null
+        },
 
-        errorMusic: cc.AudioClip
+        errorMusic: {
+            type: cc.AudioClip,
+            default: null
+        }
     },
 
     onLoad() {
@@ -69,7 +81,7 @@ cc.Class({
         if (this.isAudioEnabled) {
             // 播放音效时bgm声音减低
             cc.audioEngine.setMusicVolume(0.5);
-            let effectId = cc.audioEngine.playEffect(this[effectName], false, volumn);
+            let effectId = cc.audioEngine.play(this[effectName], false, volumn);
 
             cc.audioEngine.setFinishCallback(effectId, function () {
                  // 恢复音量
