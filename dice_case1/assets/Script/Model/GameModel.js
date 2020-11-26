@@ -9,12 +9,12 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isApplovin = false; // 是不是applovin平台
+        this.isApplovin = true; // 是不是applovin平台
         this.isIos = true; // 是不是ios平台
         this.HorizontalConfig = {
             game: {
-                position: cc.v2(239.546, 79.659),
-                scale: 0.88,
+                position: cc.v2(255.943, 50.845),
+                scale: 0.682,
                 children: {
                     adsonly: {
                         active: this.isApplovin ? true : false
@@ -67,24 +67,27 @@ export default class GameModel {
                     },
                     // notification: {},
                     paypal: {
-                        position: cc.v2(0, 477.582),
-                        children: {
-                            an_logo: {
-                                active: this.isIos ? false : true,
-                            },
-                            ios_logo: {
-                                active: this.isIos ? true : false,
-                            }
-                        }
+                        position: cc.v2(-236.439, 206.958),
+                        scale: 0.904
                     },
                     playnow: {
-                        position: cc.v2(-179.304, -434.999),
+                        position: cc.v2(-231.197, -224.408),
+                    },
+                    an_logo: {
+                        active: this.isIos ? false : true,
+                        position: cc.v2(-233.127, -10.21),
+                    },
+                    ios_logo: {
+                        active: this.isIos ? true : false,
+                        position: cc.v2(-233.127, -10.21),
                     },
                     an_icon: {
                         active: this.isIos ? false : true,
+                        position: cc.v2(-232.073, -130.521),
                     },
                     ios_icon: {
                         active: this.isIos ? true : false,
+                        position: cc.v2(-232.073, -130.521),
                     },
                     modal: {
                         children: {
@@ -101,7 +104,7 @@ export default class GameModel {
                         }
                     },
                     audioBtn: {
-                        position: cc.v2(-221.356, -253.356)
+                        position: cc.v2(-434.384, 233.086)
                     }
                 }
             }
@@ -163,23 +166,26 @@ export default class GameModel {
                     // notification: {},
                     paypal: {
                         position: cc.v2(0, 477.582),
-                        children: {
-                            an_logo: {
-                                active: this.isIos ? false : true,
-                            },
-                            ios_logo: {
-                                active: this.isIos ? true : false,
-                            }
-                        }
+                        scale: 1
                     },
                     playnow: {
                         position: cc.v2(-179.304, -434.999),
                     },
+                    an_logo: {
+                        active: this.isIos ? false : true,
+                        position: cc.v2(-181.234, -280.597),
+                    },
+                    ios_logo: {
+                        active: this.isIos ? true : false,
+                        position: cc.v2(-181.234, -280.597),
+                    },
                     an_icon: {
                         active: this.isIos ? false : true,
+                        position: cc.v2(-180.18, -353.071),
                     },
                     ios_icon: {
                         active: this.isIos ? true : false,
+                        position: cc.v2(-180.18, -353.071),
                     },
                     modal: {
                         children: {
@@ -196,7 +202,7 @@ export default class GameModel {
                         }
                     },
                     audioBtn: {
-                        position: cc.v2(-221.356, -253.356)
+                        position: cc.v2(220.83, -405.252)
                     }
                 }
             }

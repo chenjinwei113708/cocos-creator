@@ -152,6 +152,7 @@ cc.Class({
             this.setTouchListener();
             // this.doActions();
         } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
+            this.setCellStatus(CELL_STATUS.DONE_MOVE);
             this.showMask(2);
             this.gameInfo.startTouch = this.touch1;
             this.gameInfo.endTouch = this.touch2;
@@ -168,7 +169,7 @@ cc.Class({
 
     setCellStatus (status) {
         this.gameInfo.cellStatus = status;
-        console.log(' ***** setCellStatus cellStatus:', this.gameInfo.cellStatus);
+        // console.log(' ***** setCellStatus cellStatus:', this.gameInfo.cellStatus);
     },
 
     setTouchListener () {
@@ -188,7 +189,7 @@ cc.Class({
     },
 
     onTouchStart (touch) {
-        console.log('onTouchStart');
+        // console.log('onTouchStart');
         if (this.gameInfo.cellStatus === CELL_STATUS.CAN_MOVE) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
             // console.log('onTouchStart, ', this.gameInfo.nowLevel);
@@ -196,7 +197,7 @@ cc.Class({
                 touchPos.x <= this.gameInfo.startTouch.position.x + this.gameInfo.startTouch.width/2 &&
                 touchPos.y >= this.gameInfo.startTouch.position.y - this.gameInfo.startTouch.height/2 &&
                 touchPos.y <= this.gameInfo.startTouch.position.y + this.gameInfo.startTouch.height/2) {
-                    console.log('onTouchStart right');
+                    // console.log('onTouchStart right');
                     if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
                         this.switchCards();
                     } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
@@ -333,6 +334,7 @@ cc.Class({
                         })
                     ));
                     hand.getComponent(cc.Animation).play('drag');
+                    this.setCellStatus(CELL_STATUS.CAN_MOVE);
                 }
                 
             })
@@ -344,7 +346,7 @@ cc.Class({
         if (this.gameInfo.nowLevel !== GAME_LEVEL.LEVEL2 ||
             this.gameInfo.cellStatus !== CELL_STATUS.CAN_MOVE)
             return;
-        console.log(' +++ switch cards cellstatus: ', this.gameInfo.cellStatus);
+        // console.log(' +++ switch cards cellstatus: ', this.gameInfo.cellStatus);
         this.setCellStatus(CELL_STATUS.IS_MOVE);
         let c50 = cc.find('Canvas/center/game/zhuan/c50');
         let c20 = cc.find('Canvas/center/game/zhuan/c50/c20');
@@ -354,8 +356,8 @@ cc.Class({
         c50.runAction(cc.sequence(
             cc.moveTo(0.2, cc.v2(42.994, -1)),
             cc.callFunc(() => {
-                this.changeToNextLevel();
                 this.setCellStatus(CELL_STATUS.CAN_MOVE);
+                this.changeToNextLevel();
             })
         ));
         c20.runAction(cc.moveTo(0.2, cc.v2(-85.305, 0)));
