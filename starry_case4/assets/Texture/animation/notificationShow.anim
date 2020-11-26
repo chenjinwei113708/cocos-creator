@@ -1,0 +1,67 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "notificationShow",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.56,
+  "sample": 25,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "y": [
+        {
+          "frame": 0,
+          "value": 295
+        },
+        {
+          "frame": 0.2,
+          "value": 250
+        },
+        {
+          "frame": 0.4,
+          "value": 250
+        },
+        {
+          "frame": 0.6,
+          "value": 195
+        },
+        {
+          "frame": 1.2,
+          "value": 195
+        },
+        {
+          "frame": 1.56,
+          "value": 210
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.12,
+          "value": 255
+        },
+        {
+          "frame": 0.4,
+          "value": 255
+        },
+        {
+          "frame": 0.56,
+          "value": 255
+        },
+        {
+          "frame": 1.2,
+          "value": 255
+        },
+        {
+          "frame": 1.4,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "events": []
+}
