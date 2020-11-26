@@ -76,10 +76,10 @@ cc.Class({
         this.node.position = cc.v2(this.node.x, this.node.y+45);
         setTimeout(() => {
             this.node.runAction(cc.spawn(
-                cc.fadeIn(0.3),
-                cc.moveTo(0.3, desPos)
+                cc.fadeIn(0.2),
+                cc.moveTo(0.2, desPos)
             ));
-        }, number*10);
+        }, number*7);
         
     },
 

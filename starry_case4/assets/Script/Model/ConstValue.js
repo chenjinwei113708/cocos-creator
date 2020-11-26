@@ -7,7 +7,8 @@ export const CELL_TYPE = {
     GREEN : 2,
     PURPLE : 3,
     RED : 4,
-    YELLOW : 5
+    YELLOW : 5,
+    PP : 6
 }
 export const CELL_BASENUM = 6;
 export const CELL_STATUS = {
@@ -54,7 +55,8 @@ export const TYPE2COLOR = {
     [CELL_TYPE.GREEN]: 'GREEN',
     [CELL_TYPE.PURPLE]: 'PURPLE',
     [CELL_TYPE.RED]: 'RED',
-    [CELL_TYPE.YELLOW]: 'YELLOW'
+    [CELL_TYPE.YELLOW]: 'YELLOW',
+    [CELL_TYPE.PP]: 'BLUE'
 }
 /**颜色 */
 export const COLOR = {

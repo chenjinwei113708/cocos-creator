@@ -254,8 +254,8 @@ export default class GameModel {
         // 不同引导步骤对应的提示手坐标
         this.guidePosition = {
             [this.ORDER.A]: { // 第一次点击格子
-                landscape: cc.v2(238, 217),
-                portrait: cc.v2(25, 217)
+                landscape: cc.v2(338, 217),
+                portrait: cc.v2(125, 217)
             },
             [this.ORDER.B]: { // 第二次点击格子
                 landscape: cc.v2(138, -80),
@@ -272,22 +272,22 @@ export default class GameModel {
         };
         // 不同引导步骤对应的应提示的格子下标, x:第几列，y:第几行
         this.guideCellPos = {
-            [this.ORDER.A]: cc.v2(5, 10),
+            [this.ORDER.A]: cc.v2(1, 1),
             [this.ORDER.B]: cc.v2(4, 4),
         };
         // 游戏规则
         this.gameRules = {
             [this.ORDER.A]: {
-                money: 25, // 收获金额
-                limitArea: [ // 只允许点击一下格子
-                    {x: 5, y: 10},
-                    {x: 6, y: 10},
-                    {x: 5, y: 9},
-                    {x: 6, y: 9},
+                money: 50, // 收获金额
+                limitArea: [ // 只允许点击以下格子
+                    // {x: 5, y: 10}, // 单个格子
+                    {from: {x: 1, y: 1}, to: {x: 3, y: 10}}, // 格子区域
+                    {from: {x: 8, y: 1}, to: {x: 10, y: 10}},
+                    {from: {x: 4, y: 5}, to: {x: 7, y: 6}},
                 ]
             },
             [this.ORDER.B]: {
-                money: 100
+                money: 50
             },
             [this.ORDER.C]: {
                 money: 100
@@ -300,7 +300,7 @@ export default class GameModel {
         this.guideList = [
             (cb) => {
                 // 第零步引导，出现提现卡片
-                this.guideScript.showMoneyCard(25); // 显示金额卡，设置金额为25元
+                this.guideScript.showMoneyCard(100); // 显示金额卡，设置金额为25元
                 this.curGuideStep++; //1
                 // this.curOrder = this.ORDER.B;
             },
@@ -334,11 +334,16 @@ export default class GameModel {
                 // 第三步，重置引导手位置，自定义需要提示的格子,开启倒计时提示功能
                 this.curOrder = this.ORDER.C;
                 this.curGuideStep++; //4
-                let orient = this.isLandscape ? 'landscape' : 'portrait';
-                this.HorizontalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].landscape;
-                this.VerticalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].portrait;
-                this.guideScript.setHandPos(this.guidePosition[this.curOrder][orient]);
-                this.gridScript.startCounting();
+                this.gameInit(this.getPPCellsConf());
+                this.gridScript.initWithCellsModel(this.getCellsModel());//用pp卡模型列表来初始化格子视图
+                setTimeout(() => {
+                    this.gridScript.onClickCell(cc.v2(5, 6), 150);
+                }, 800);
+                // let orient = this.isLandscape ? 'landscape' : 'portrait';
+                // this.HorizontalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].landscape;
+                // this.VerticalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].portrait;
+                // this.guideScript.setHandPos(this.guidePosition[this.curOrder][orient]);
+                // this.gridScript.startCounting();
             },
             (cb) => {
                 // 第四步，重置引导手位置到提现，禁止点击格子
@@ -348,24 +353,24 @@ export default class GameModel {
                 this.VerticalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].portrait;
                 this.guideScript.setHandPos(this.guidePosition[this.curOrder][orient]);
                 this.gridScript.disableTouch();
-                setTimeout(() => {this.guideScript.showHand();}, 1200);
+                setTimeout(() => {this.guideScript.showHand();}, 700);
                 this.curGuideStep++; //5
             },
             (cb) => {
                 // 第五步，重置引导手位置到通知消息，
-                this.curOrder = this.ORDER.D;
-                this.HorizontalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].landscape;
-                this.VerticalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].portrait;
-                let orient = this.isLandscape ? 'landscape' : 'portrait';
-                this.guideScript.setHandPos(this.guidePosition[this.curOrder][orient]);
-                // this.guideScript.showNotification();
-                this.curGuideStep++; //6
+                // this.curOrder = this.ORDER.D;
+                // this.HorizontalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].landscape;
+                // this.VerticalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].portrait;
+                // let orient = this.isLandscape ? 'landscape' : 'portrait';
+                // this.guideScript.setHandPos(this.guidePosition[this.curOrder][orient]);
+                // // this.guideScript.showNotification();
+                // this.curGuideStep++; //6
             }
         ];
     }
 
     //初始化游戏模型
-    gameInit() {
+    gameInit(cellConf) {
         this.cells = []; //所有格子的模型，
         // this.sands = []; //所有沙子的模型
         // this.sandsNum = 9; //沙子的数量
@@ -384,17 +389,17 @@ export default class GameModel {
         //     [1, 4, 3, 4, 2, 2, 1, 5, 3, 3]  // 最顶上的一行
         // ];// 最左边
         //格子的初始化参数（里面存的是格子的类型type）
-        let cellInitConf = [
-            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2], // 最底下的一行
-            [2, 2, 2, 2, 4, 4, 2, 2, 2, 2],
-            [2, 2, 2, 4, 4, 4, 4, 2, 2, 2],
-            [2, 2, 4, 4, 4, 4, 4, 4, 2, 2],
-            [2, 4, 4, 4, 4, 4, 4, 4, 4, 2],
-            [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-            [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-            [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-            [2, 4, 4, 4, 2, 2, 4, 4, 4, 2],
-            [2, 2, 4, 4, 2, 2, 4, 4, 2, 2]  // 最顶上的一行
+        let cellInitConf = cellConf || [
+            [5, 5, 5, 2, 2, 2, 2, 5, 5, 5], // 最底下的一行
+            [5, 5, 5, 2, 2, 2, 2, 5, 5, 5],
+            [5, 5, 5, 2, 2, 2, 2, 5, 5, 5],
+            [5, 5, 5, 2, 2, 2, 2, 5, 5, 5],
+            [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+            [5, 5, 5, 5, 5, 5, 5, 5, 5, 5],
+            [5, 5, 5, 2, 2, 2, 2, 5, 5, 5],
+            [5, 5, 5, 2, 2, 2, 2, 5, 5, 5],
+            [5, 5, 5, 2, 2, 2, 2, 5, 5, 5],
+            [5, 5, 5, 2, 2, 2, 2, 5, 5, 5]  // 最顶上的一行
         ];// 最左边
 
         //格子的初始化金币参数（格子里有没有金币）
@@ -435,25 +440,6 @@ export default class GameModel {
                 this.cells[i][j].setStartXY(j, i); //设置星星开始移动的位置？
             }
         }
-
-        // let sandConf = [
-        //     [3, 3],
-        //     [3, 4],
-        //     [3, 5],
-        //     [4, 3],
-        //     [4, 4],
-        //     [4, 5],
-        //     [5, 3],
-        //     [5, 4],
-        //     [5, 5]
-        // ];
-        // //this.sands和this.cells的构造是一样的
-        // for (var i = 1; i <= GRID_WIDTH; i++) {
-        //     this.sands[i] = [];
-        // }
-        // for (var i = 0; i < sandConf.length; i++) {
-        //     this.sands[sandConf[i][1]][sandConf[i][0]] = new SandModel(sandConf[i][0], sandConf[i][1]); //传入沙子的x,y
-        // }
 
 
     }
@@ -506,6 +492,22 @@ export default class GameModel {
         return this.cells;
     }
 
+    /**拿到全是pp卡的模型 */
+    getPPCellsConf () {
+        return [
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6], // 最底下的一行
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+            [6, 6, 6, 6, 6, 6, 6, 6, 6, 6]  // 最顶上的一行
+        ];// 最左边
+    }
+
     // /**拿到所有沙子的模型 */
     // getSandsModel() {
     //     return this.sands;
@@ -537,6 +539,30 @@ export default class GameModel {
         let resultModels = JSON.parse(JSON.stringify(bombModels));
         // console.log('gameModel selectCell count', bombCount, ' resultModels', resultModels);
         return resultModels; // 返回一个深拷贝的结果
+    }
+
+    /**
+     * 检查格子在不在限制区域
+     * @param {*} limitArea 限制区域
+     * @param {*} cellPos 格子坐标
+     * @return {boolean} 在限制区域则返回true，否则false
+     */
+    checkInLimitArea (limitArea, cellPos) {
+        let item = limitArea.find(each => {
+            if (each.x) {
+                return each.x === cellPos.x && each.y === cellPos.y
+            } else if (each.from){
+                let x1 = each.from.x > each.to.x ? each.from.x : each.to.x; // 较大的x
+                let x2 = each.from.x > each.to.x ? each.to.x :each.from.x; // 较小的x
+                let y1 = each.from.y > each.to.y ? each.from.y : each.to.y; // 较大的y
+                let y2 = each.from.y > each.to.y ? each.to.y :each.from.y; // 较小的y
+                return (cellPos.x >= x2 && cellPos.x <= x1 && cellPos.y >= y2 && cellPos.y <= y1);
+            } else {
+                return false;
+            }
+        });
+        if (item) return true;
+        else return false;
     }
 
     /**

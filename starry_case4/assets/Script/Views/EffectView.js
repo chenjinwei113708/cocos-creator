@@ -30,7 +30,8 @@ cc.Class({
             [CELL_TYPE.GREEN]: this.bombGreen,
             [CELL_TYPE.PURPLE]: this.bombPurple,
             [CELL_TYPE.RED]: this.bombRed,
-            [CELL_TYPE.YELLOW]: this.bombYellow
+            [CELL_TYPE.YELLOW]: this.bombYellow,
+            [CELL_TYPE.PP]: this.bombBlue
         }
     },
 
@@ -57,8 +58,8 @@ cc.Class({
      * 播放爆炸特效
      * @param {*} cells 准备爆照的cellModel
      */
-    playBombEffect (cells, callback) {
-        const delayTime = ANITIME.FADEOUT*1000;
+    playBombEffect (cells, waitTime = 550, callback) {
+        const delayTime = ANITIME.FADEOUT*waitTime;
         cells.forEach((cell, index) => {
             setTimeout(() => {
                 let gridView = cc.find('Canvas').getComponent('GameController').getGridViewScript();
@@ -67,7 +68,12 @@ cc.Class({
                 bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
                 bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
                 bombInstance.parent = this.node;
-                this.audioUtils.playBomb(index, 0.8);
+                if (waitTime < 300) {
+                    if (index % 4 === 0) {this.audioUtils.playBomb(index, 0.8);}
+                } else {
+                    this.audioUtils.playBomb(index, 0.8);
+                }
+                
                 let flyGrade = cc.instantiate(this.flyGrade);
                 flyGrade.active = true;
                 flyGrade.getComponent('FlyGradeView').init(cc.v2(bombInstance.x, bombInstance.y), TYPE2COLOR[cell.type], 10*(index+1)-5);
