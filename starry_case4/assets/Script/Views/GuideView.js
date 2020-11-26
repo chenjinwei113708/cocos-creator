@@ -26,12 +26,14 @@ cc.Class({
         mask: cc.Node, // 遮罩
         congrat: cc.Node, // 提现到账
         congratBlur: cc.Node, // 提现到账模糊节点
-        paypalCards: [cc.Node]
+        paypalCards: [cc.Node],
+        ppicons: cc.Node, // pp图标
     },
     // LIFE-CYCLE CALLBACKS:
     onLoad () { 
         this.gameController = cc.find('Canvas').getComponent('GameController');
         this.moneyCardEnabled = true;
+        this.showPPIconTimes = 0; // 显示pp图标的次数
     },
     // start () {},
     /**展示欢迎页面 */
@@ -264,6 +266,37 @@ cc.Class({
         );
     },
 
+    /**
+     * 出现pp图标，飞到顶部pp标志
+     * @param {*} startPos pp图标出现位置
+     * @param {*} callback 
+     */
+    flyPPIcon (startPos, callback) {
+        let paypal = cc.find('Canvas/center/wallet');
+        let screenConfig = this.gameController.gameModel.getPositionConfig();
+        let paypalIcon = screenConfig.wallet.children.paypal;
+        let destPos = this.node.convertToNodeSpaceAR(
+            paypal.convertToWorldSpaceAR(paypalIcon.position));
+        destPos = cc.v2(destPos.x, destPos.y+40);
+        let icon = this.ppicons.children[this.showPPIconTimes % this.ppicons.children.length];
+        this.showPPIconTimes++;
+        icon.active = true;
+        icon.stopAllActions();
+        icon.position = startPos;
+        icon.runAction(cc.sequence(
+            cc.spawn(cc.moveTo(0.6, destPos), cc.scaleTo(0.6, 0.6)).easing(cc.easeOut(1.3)),
+            cc.fadeOut(0.2),
+            cc.callFunc(() => {
+                if (callback) {
+                    callback();
+                } else {
+                    icon.active = false;
+                }
+            })
+        ));
+        
+    },
+
     // 隐藏收钱卡片
     hideMoneyCard () {
         this.deactivateMask();
@@ -416,13 +449,15 @@ cc.Class({
     // 提现
     cashOut () {
         // this.node.runAction
-        if (this.gameController.CashView.cash>=200){
+        if (this.gameController.CashView.cash>=300){
             this.gameController.getAudioUtils().playEffect('clickBtn', 0.6);
             this.hideHand();
             // this.gameController.gotoNextStep();
             // this.showNotification();
             this.showEndPage()
-            this.gameController.CashView.addCash(-250);
+            this.gameController.CashView.addCash(-300);
+        } else {
+            this.gameController.download();
         }
     },
 
@@ -439,12 +474,8 @@ cc.Class({
                 this.congrat.scale = 0.1;
                 this.congrat.active = true;
                 let opacityAction = null;
-                if (this.gameController.gameModel.isLandscape) {
-                    // opacityAction = cc.fadeTo(0.2, 220);
-                    opacityAction = cc.fadeIn(0.2);
-                } else {
-                    opacityAction = cc.fadeIn(0.2);
-                }
+                let posConfig = this.gameController.gameModel.getPositionConfig();
+                opacityAction = cc.fadeTo(0.2, posConfig.guide.children.congrat.opacity);
                 this.congrat.runAction(cc.spawn(
                     opacityAction,
                     // cc.moveBy(0.35, -this.congrat.width, 0),
@@ -467,6 +498,7 @@ cc.Class({
                         cc.fadeIn(.5),
                         cc.callFunc(() => {
                             this.modal.getChildByName('endPage').active = true;
+                            this.gameController.endGame();
                         })
                     ));
                 }),

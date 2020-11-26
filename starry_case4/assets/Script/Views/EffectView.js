@@ -64,21 +64,40 @@ cc.Class({
             setTimeout(() => {
                 let gridView = cc.find('Canvas').getComponent('GameController').getGridViewScript();
                 gridView.deleteCell(cell);
-                let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
-                bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
-                bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
-                bombInstance.parent = this.node;
+                // let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
+                // bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
+                // bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
+                // bombInstance.parent = this.node;
                 if (waitTime < 300) {
-                    if (index % 4 === 0) {this.audioUtils.playBomb(index, 0.8);}
+                    if (index % 4 === 0) {
+                        this.audioUtils.playBomb(index, 0.8);
+                        let startpos = this.controller.guide.convertToNodeSpaceAR(
+                            this.node.convertToWorldSpaceAR(
+                                cc.v2((cell.x-0.5) * CELL_WIDTH, (cell.y-0.5) * CELL_HEIGHT)));
+                        this.controller.guideScript.flyPPIcon(startpos);
+                    }
+                    if (index % 9 === 0) {
+                        let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
+                        bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
+                        bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
+                        bombInstance.parent = this.node;
+                    }
                 } else {
-                    this.audioUtils.playBomb(index, 0.8);
+                    if (index % 3 === 0) {
+                        this.audioUtils.playBomb(index, 0.8);
+                        let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
+                        bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
+                        bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
+                        bombInstance.parent = this.node;
+                    }
+                    
                 }
                 
-                let flyGrade = cc.instantiate(this.flyGrade);
-                flyGrade.active = true;
-                flyGrade.getComponent('FlyGradeView').init(cc.v2(bombInstance.x, bombInstance.y), TYPE2COLOR[cell.type], 10*(index+1)-5);
-                flyGrade.parent = this.node;
-                flyGrade.getComponent('FlyGradeView').fly();
+                // let flyGrade = cc.instantiate(this.flyGrade);
+                // flyGrade.active = true;
+                // flyGrade.getComponent('FlyGradeView').init(cc.v2((cell.x-0.5) * CELL_WIDTH, (cell.y-0.5) * CELL_HEIGHT), TYPE2COLOR[cell.type], 10*(index+1)-5);
+                // flyGrade.parent = this.node;
+                // flyGrade.getComponent('FlyGradeView').fly();
                 if(index === cells.length-1){
                     callback && callback();
                 }

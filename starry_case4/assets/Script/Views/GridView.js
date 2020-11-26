@@ -137,8 +137,12 @@ cc.Class({
         if (this.isInPlayAni) { //播放动画中，不允许点击
             return true;
         }
+        this.isInPlayAni = true;
         let gameRules = this.gameModel.getGameRules();
 
+        if (this.gameModel.curGuideStep >= 4) {
+            waitTime = 250; // 如果到第4步之后了，加快爆炸速度
+        }
         if (gameRules.limitArea) {
             let isInLimitArea = this.gameModel.checkInLimitArea(gameRules.limitArea, cellPos);
             if (!isInLimitArea) return; // 如果超出限制区域，不允许点击
@@ -148,7 +152,6 @@ cc.Class({
         let bombModels = this.gameModel.selectCell(cellPos);
         // 如果数组长度大于1，说明它周围有同类方块
         if(bombModels.length>1){
-            this.isInPlayAni = true;
             // 隐藏指引手
             this.GameController.guideScript.hideHand();
             // 停止提示
@@ -201,6 +204,8 @@ cc.Class({
                     // this.startCounting();
                 }
             }.bind(this));
+        } else {
+            this.isInPlayAni = false;
         }
         
         // if (cellPos) {
@@ -475,8 +480,7 @@ cc.Class({
         showCells.forEach(function (value) {
             this.cellViews[value.y][value.x].getComponent("CellView").setTipHere();
         }, this);
-        if (this.gameModel.curOrder === this.gameModel.ORDER.B ||
-            this.gameModel.curOrder === this.gameModel.ORDER.C) {
+        if (this.gameModel.curOrder === this.gameModel.ORDER.B) {
             this.GameController.guideScript.showHand();
         }
     },

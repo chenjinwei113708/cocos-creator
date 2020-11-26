@@ -18,6 +18,7 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
+        this.isApplovin = false; // 是不是applovin平台
         this.HorizontalConfig = {
             // // 横屏
             background: {
@@ -28,6 +29,11 @@ export default class GameModel {
             },
             grid: {
                 position: cc.v2(-38, -250),
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    },
+                }
             },
             effect: {
                 position: cc.v2(-38, -250),
@@ -93,6 +99,26 @@ export default class GameModel {
                         position: cc.v2(0, 0),
                         angle: 90
                     },
+                    congrat: this.isApplovin ? {
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
+                        width: 603,
+                        height: 1170,
+                    },
+                    congratBlur: this.isApplovin ? {
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
+                        width: 603,
+                        height: 1170,
+                    },
                     ppCard: {
                         position: cc.v2(208, -114)
                     }
@@ -129,6 +155,11 @@ export default class GameModel {
             },
             grid: {
                 position: cc.v2(-250, -263.3),
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    },
+                }
             },
             effect: {
                 position: cc.v2(-250, -250),
@@ -179,17 +210,25 @@ export default class GameModel {
                     notification2: {
                         position: cc.v2(0, 536)
                     },
-                    congrat: {
+                    congrat: this.isApplovin ? {
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255,
+                    } : {
+                        opacity: 255,
+                        angle: 0,
                         width: 603,
                         height: 1170,
-                        position: cc.v2(0, 0),
-                        angle: 0
                     },
-                    congratBlur: {
+                    congratBlur: this.isApplovin ? {
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
                         width: 603,
                         height: 1170,
-                        position: cc.v2(0, 0),
-                        angle: 0
                     },
                     ppCard: {
                         position: cc.v2(0, -150)
@@ -336,9 +375,10 @@ export default class GameModel {
                 this.curGuideStep++; //4
                 this.gameInit(this.getPPCellsConf());
                 this.gridScript.initWithCellsModel(this.getCellsModel());//用pp卡模型列表来初始化格子视图
+                this.gridScript.showTip(this.getTipArea(this.getLeftBombAreas(), TIP_STRATEGY.MOST_GRADE));
                 setTimeout(() => {
-                    this.gridScript.onClickCell(cc.v2(5, 6), 150);
-                }, 800);
+                    this.gridScript.onClickCell(cc.v2(5, 6), 250);
+                }, 1900);
                 // let orient = this.isLandscape ? 'landscape' : 'portrait';
                 // this.HorizontalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].landscape;
                 // this.VerticalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].portrait;
