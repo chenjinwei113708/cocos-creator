@@ -75,7 +75,9 @@ cc.Class({
             if( this.gameModel.isDragging() ) return;
             // // 获取正拖动哪个Model
             var touchPos = touchEvent.getTouches()[0].getLocation();    //获得用户的触屏输入点
+            console.log(`🚀 ~ file: GameController.js ~ line 78 ~ touchPos`, touchPos);
             let canvasPos = this.node.convertToNodeSpaceAR(touchPos);
+            console.log(`🚀 ~ file: GameController.js ~ line 80 ~ canvasPos`, canvasPos);
             let distances = this.gameModel.getDistances(canvasPos);
             
             // 判断是否开始拖拽
