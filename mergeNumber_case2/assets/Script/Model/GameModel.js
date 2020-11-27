@@ -77,6 +77,10 @@ export default class GameModel {
                             }
                         }
                     },
+                    cells2: {
+                        position: cc.v2(262.794, 29.295),
+                        scale: 0.751,
+                    },
                     audioBtn: {
                         position: cc.v2(-427.067, 213.629)
                     }
@@ -146,6 +150,10 @@ export default class GameModel {
                                 position: cc.v2(141.632, -442.691)
                             }
                         }
+                    },
+                    cells2: {
+                        position: cc.v2(0, 0),
+                        scale: 1,
                     },
                     audioBtn: {
                         position: cc.v2(-43.784, 376.57)

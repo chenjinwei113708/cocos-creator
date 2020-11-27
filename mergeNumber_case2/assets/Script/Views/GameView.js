@@ -4,7 +4,8 @@ import {
     CARD_VALUE,
     CARD_GROUP,
     LOST_GAME_CARD_NUM,
-    ACTION_TYPE
+    ACTION_TYPE,
+    CELL_TYPE
 } from "../Model/ConstValue.js";
 
 cc.Class({
@@ -89,43 +90,8 @@ cc.Class({
                     cc.v2(3,2),
                 ]},
             ],
-
             [
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(3,5), newType: 8, others: [
-                    cc.v2(2,5),
-                    cc.v2(3,4),
-                ]},
-                {type: ACTION_TYPE.DOWN, nodes: [
-                    {start: cc.v2(3,5), end: cc.v2(3,4), newType: undefined}
-                ]},
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(3,4), newType: 16, others: [
-                    cc.v2(2,4),
-                ]},
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(3,3), newType: 32, others: [
-                    cc.v2(3,4),
-                ]},
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(3,3), newType: 64, others: [
-                    cc.v2(2,3),
-                ]},
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(3,2), newType: 128, others: [
-                    cc.v2(3,3),
-                ]},
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(3,2), newType: 256, others: [
-                    cc.v2(2,2),
-                ]},
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(3,1), newType: 512, others: [
-                    cc.v2(3,2),
-                ]},
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(3,1), newType: 1024, others: [
-                    cc.v2(2,1),
-                ]},
-                // {type: ACTION_TYPE.DOWN, nodes: [
-                //     {start: cc.v2(2,3), end: cc.v2(2,2), newType: undefined},
-                //     {start: cc.v2(4,3), end: cc.v2(4,2), newType: undefined}
-                // ]},
-                // {type: ACTION_TYPE.COMBINE, center: cc.v2(3,1), newType: 2048, others: [
-                //     cc.v2(3,2),
-                // ]},
+                {type: ACTION_TYPE.CHANGE, center: cc.v2(0, 0), newType: CELL_TYPE.CPP},
             ]
         ];
         // 下一步要执行的动作列表
@@ -175,10 +141,11 @@ cc.Class({
                     break;
                 case ACTION_TYPE.CHANGE:
                     // this.gameController.getAudioUtils().playEffect('change', 0.5);
-                    this.showCool();
-                    setTimeout(() => {
-                        this.actChange(action.center, action.newType);
-                    }, 900);
+                    // this.showCool();
+                    this.actChange(action.center, action.newType);
+                    // setTimeout(() => {
+                        
+                    // }, 900);
                     break;
                 case ACTION_TYPE.BOMB:
                     this.showBombAnim();
@@ -599,29 +566,26 @@ cc.Class({
      */
     actChange (center, newType) {
         for (let i = 1; i <= 5; i++) {
-            for (let j = 1; j <= 5; j++) {
+            for (let j = 1; j <= 7; j++) {
                 if (i === center.x && j === center.y) { continue; }
                 let node = this.getPosNode(cc.v2(i, j));
+                if (newType === CELL_TYPE.CPP) {
+                    node.getComponent(cc.Sprite).spriteFrame = this.cardSprites[11];
+                }
+                node.opacity = 0;
+                node.active = true;
                 node.runAction(cc.sequence(
-                    cc.scaleTo(0.1, 1.15),
+                    cc.spawn(cc.scaleTo(0.1, 1.15), cc.fadeIn(0.1)),
                     cc.scaleTo(0.1, 0.5),
-                    cc.callFunc(() => {
-                        node.getComponent(cc.Sprite).spriteFrame = this.sprites[newType];
-                        if (newType === CELL_TYPE.CPP) {
-                            node.getChildByName('light').active = true;
-                            node.getChildByName('cppIcon').active = true;
-                        } else {
-                            node.getChildByName('light').active = false;
-                            node.getChildByName('cppIcon').active = false;
-                        }
-                        // this.showCombo();
-                    }),
                     cc.scaleTo(0.05, 1),
+                    cc.rotateTo(0.1, -15),
                     cc.callFunc(() => {
-                        if (i === 5 && j === 5) {
-                            this.showFlyCards(7);
-                            setTimeout(() => {this.gameController.addCash(100);}, 300);
-                            this.doActions();
+                        node.runAction(cc.repeat(cc.sequence(cc.rotateTo(0.3, 15), cc.rotateTo(0.3, -15)), 5)); 
+                        if (i === 5 && j === 7) {
+                            setTimeout(() => {this.ppcardFlyToTop();}, 100);
+                            // this.showFlyCards(7);
+                            // setTimeout(() => {this.gameController.addCash(100);}, 300);
+                            // this.doActions();
                         }
                     })
                 ));
@@ -657,17 +621,17 @@ cc.Class({
     /**改变棋盘 */
     changeBoard () {
         let cells1 = cc.find('Canvas/center/game/cells');
-        let cells2 = cc.find('Canvas/center/game/cells2');
+        let cells2 = cc.find('Canvas/center/UI/cells2');
 
         cells2.opacity = 0;
         cells2.active = true;
 
         this.gameController.getAudioUtils().playEffect('change', 0.4);
         cells1.runAction(cc.sequence(
-            cc.fadeOut(0.3),
+            cc.fadeOut(0.1),
             cc.callFunc(() => {
                 cells2.runAction(cc.sequence(
-                    cc.fadeIn(0.3),
+                    cc.fadeIn(0.1),
                     cc.callFunc(() => {
                         this.removeToTrash(cells1);
                         // this.cells = cells2;
@@ -676,12 +640,14 @@ cc.Class({
                         this.kong3 = cells2.getChildByName('kong3');
                         this.kong4 = cells2.getChildByName('kong4');
                         this.kong5 = cells2.getChildByName('kong5');
-                        this.sendCard();
+                        // this.sendCard();
                         // this.clearTrash();
+                        this.doActions();
                     })
                 ))
             })
         ));
+
     },
 
     showFlyCard () {
@@ -714,6 +680,40 @@ cc.Class({
             }),
             cc.fadeOut(0.15),
         ));
+    }, 
+
+    /**全部pp卡飞到顶部 */
+    ppcardFlyToTop (callback) {
+        let index = 0;
+        let ppicon = cc.find('Canvas/center/UI/paypal/icon');
+        let pp = cc.find('Canvas/center/UI/paypal');
+        let ui = cc.find('Canvas/center/UI');
+
+        let destPos = ui.convertToNodeSpaceAR(pp.convertToWorldSpaceAR(ppicon.position));
+        for (let i = 1; i <= 5; i++) {
+            for (let j = 1; j <= 7; j++) {
+                let node = this.getPosNode(cc.v2(i, j));
+                setTimeout(() => {
+                    node.stopAllActions();
+                    node.runAction(cc.sequence(
+                        cc.spawn(cc.moveTo(0.3, destPos), cc.scaleTo(0.3, 0.6), cc.fadeTo(0.3, 100)).easing(cc.easeOut(2.0)),
+                        cc.fadeOut(0.1),
+                        cc.callFunc(() => {
+                            if (i === 5 && j === 7) {
+                                this.gameController.addCash(100);
+                                this.gameController.getAudioUtils().playEffect('coin', 0.4);
+                                // this.showFlyCards(7);
+                                // setTimeout(() => {}, 300);
+                                // this.doActions();
+                                callback && callback();
+                                this.changeToNextLevel();
+                            }
+                        })
+                    ));
+                }, 40*index);
+                index++;
+            }
+        }
     }
 
     // update (dt) {},

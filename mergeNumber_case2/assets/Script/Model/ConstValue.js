@@ -29,6 +29,10 @@ export const LOST_GAME_CARD_NUM = 7; // 输掉游戏的条件，一组里面放�
 
 export const CARD_VALUE = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048];
 
+export const CELL_TYPE = {
+    CPP: 'cpp',
+}
+
 export const ACTION_TYPE = {
     SWITCH: 'switch',
     COMBINE: 'combine',
