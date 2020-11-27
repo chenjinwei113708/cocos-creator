@@ -89,6 +89,9 @@ export default class GameModel {
                 position: cc.v2(0, 433)
             }
         };
+        this.canShowTip = false; // 能否展示提示
+        this.errorArr = []; // 点错物品的数组
+        this.isTipShowed = false; // 是否展示过提示框
         this.startPos = null;
         this.startDrag = false;
         this.curDraggingModel = null;
@@ -145,5 +148,12 @@ export default class GameModel {
         this.curDraggingNode = null;
         this.startDrag = false;
         this.startPos = null;
+    }
+
+    putInErrorArr (name) {
+        if (!name) return;
+        if (this.errorArr.indexOf(name) === -1) {
+            this.errorArr.push(name);
+        }
     }
 }

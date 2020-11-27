@@ -190,6 +190,8 @@ cc.Class({
     dropNode (pos) {
         console.log('error')
         if (!this.gameModel.startDrag) {
+            let dragNode = this.gameModel.curDraggingNode;
+            this.gameModel.putInErrorArr(dragNode.name);
             this.errorTime = this.errorTime ? this.errorTime + 1 : 1;
             this.gameModel.playingAnim = true;
             let errorNode = cc.find('Canvas/center/error');
@@ -234,9 +236,15 @@ cc.Class({
         //     );
         // } 
         // TODO changemodel build again
-        if ( this.errorTime === 2) {
+        // if ( this.errorTime === 2) {
+        //     // 方法2 直接弹窗
+        //     this.gameController.showTip();
+        // }
+        if ( !this.gameModel.isTipShowed && this.gameModel.errorArr.length >= 5) {
             // 方法2 直接弹窗
+            this.gameController.enableTip();
             this.gameController.showTip();
+            this.gameModel.isTipShowed = true;
         }
     }
 });

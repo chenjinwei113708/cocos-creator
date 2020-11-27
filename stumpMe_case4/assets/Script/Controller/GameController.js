@@ -75,9 +75,9 @@ cc.Class({
             if( this.gameModel.isDragging() ) return;
             // // 获取正拖动哪个Model
             var touchPos = touchEvent.getTouches()[0].getLocation();    //获得用户的触屏输入点
-            // console.log(`🚀 ~ file: GameController.js ~ line 78 ~ touchPos`, touchPos);
+            // console.log(`file: GameController.js ~ line 78 ~ touchPos`, touchPos);
             let canvasPos = this.node.convertToNodeSpaceAR(touchPos);
-            // console.log(`🚀 ~ file: GameController.js ~ line 80 ~ canvasPos`, canvasPos);
+            // console.log(`file: GameController.js ~ line 80 ~ canvasPos`, canvasPos);
             let distances = this.gameModel.getDistances(canvasPos);
             
             // 判断是否开始拖拽
@@ -134,13 +134,24 @@ cc.Class({
         }
     },
     showEndPage () {
+        // let item = cc.find('Canvas/center/item');
+        let piggy = cc.find('Canvas/center/item/3');
+        let check = cc.find('Canvas/center/check');
         let modal = cc.find('Canvas/center/modal');
-        modal.getChildByName('endPage').active = true;
-        modal.active = true;
-        modal.runAction(cc.fadeIn(.4));
-        this.gameEnd();
+        check.position = piggy.position;
+        check.active = true;
+        check.runAction(cc.sequence(
+            cc.blink(0.6, 2),
+            cc.callFunc(() => {
+                modal.getChildByName('endPage').active = true;
+                modal.active = true;
+                modal.runAction(cc.fadeIn(.4));
+                this.gameEnd();
+            })
+        ));
     },
     showTip () {
+        if (!this.gameModel.canShowTip) return;
         let modal = cc.find('Canvas/center/modal');
         modal.getChildByName('middlePage').active = true;
         modal.active = true;
@@ -155,5 +166,11 @@ cc.Class({
                 modal.getChildByName('middlePage').active = false;
             })
         ));
+    },
+    /**允许出现提示 */
+    enableTip () {
+        let tip = cc.find('Canvas/center/tip');
+        this.gameModel.canShowTip = true;
+        tip.getComponent(cc.Animation).play();
     }
 });
