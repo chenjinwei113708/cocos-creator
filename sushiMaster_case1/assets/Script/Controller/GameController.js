@@ -124,8 +124,8 @@ cc.Class({
     },
 
     // /**加钱 */
-    // addCash (num) {
-    //     this.cashView.addCash(num);
-    // },
+    addCash (num) {
+        this.cashView.addCash(num);
+    },
 
 });

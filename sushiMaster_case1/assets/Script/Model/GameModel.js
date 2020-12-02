@@ -9,142 +9,144 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isApplovin = false; // 是不是applovin平台
+        this.isApplovin = true; // 是不是applovin平台
         this.HorizontalConfig = {
-            // game: {
-            //     position: cc.v2(239.546, 79.659),
-            //     scale: 0.88,
-            //     children: {
-            //         adsonly: {
-            //             active: this.isApplovin ? true : false
-            //         }
-            //     }
-            // },
-            // UI: {
-            //     children: {
-            //         congrat: this.isApplovin ? {
-            //             width: 277.38, // applovin
-            //             height: 540,
-            //             opacity: 190
-            //         } : {
-            //             opacity: 255,
-            //             angle: 90,
-            //         },
-            //         congratBlur: this.isApplovin ? {
-            //             width: 277.38, // applovin
-            //             height: 540,
-            //             opacity: 190
-            //         } : {
-            //             opacity: 255,
-            //             angle: 90,
-            //         },
-            //         notification: {},
-            //         paypal: {
-            //             position: cc.v2(-283.1, 127.459),
-            //             children: {
-            //                 laoren: {
-            //                     width: 160,
-            //                     height: 89,
-            //                     position: cc.v2(392.037, 117.86)
-            //                 },
-            //                 icon: {
-            //                     position: cc.v2(-67.054, -7.471)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(137.034, -40.34)
-            //                 },
-            //                 cash: {
-            //                     position: cc.v2(135.994, 31.177)
-            //                 }
-            //             }
-            //         },
-            //         banner: {
-            //             position: cc.v2(-261.323, -242.363),
-            //             children: {
-            //                 icon: {
-            //                     position: cc.v2(-70.997, 131.491)
-            //                 },
-            //                 logo: {
-            //                     position: cc.v2(76.109, 130.311)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(17.395, 25.327)
-            //                 }
-            //             }
-            //         },
-            //         audioBtn: {
-            //             position: cc.v2(-415.577, 212.604)
-            //         }
-            //     }
-            // }
+            game: {
+                position: cc.v2(221.805, 36.801),
+                scale: 0.836,
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    congrat: this.isApplovin ? {
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
+                    },
+                    congratBlur: this.isApplovin ? {
+                        width: 277.38, // applovin
+                        height: 540,
+                        opacity: 190
+                    } : {
+                        opacity: 255,
+                        angle: 90,
+                    },
+                    board1: {
+                        position: cc.v2(221.805, 36.801),
+                        scale: 0.836,
+                    },
+                    board2: {
+                        position: cc.v2(221.805, 36.801),
+                        scale: 0.836,
+                    },
+                    // notification: {},
+                    paypal: {
+                        position: cc.v2(-404.028, 202.133),
+                        children: {
+                            topicon: {
+                                position: cc.v2(21.316, 16.215)
+                            },
+                            btn: {
+                                position: cc.v2(283.104, 10.126)
+                            },
+                        }
+                    },
+                    banner: {
+                        position: cc.v2(-298.387, -144.439),
+                        children: {
+                            icon: {
+                                position: cc.v2(25.738, 27.599),
+                                scale: 1.5
+                            },
+                            logo: {
+                                position: cc.v2(33.214, 130.164)
+                            },
+                            btn: {
+                                position: cc.v2(27.204, -72.948)
+                            }
+                        }
+                    },
+                    audioBtn: {
+                        position: cc.v2(-252.054, 116.422)
+                    }
+                }
+            }
         }
         this.VerticalConfig = {
-            // game: {
-            //     position: cc.v2(0, 0),
-            //     scale: 1,
-            //     children: {
-            //         adsonly: {
-            //             active: this.isApplovin ? true : false
-            //         }
-            //     }
-            // },
-            // UI: {
-            //     children: {
-            //         congrat: this.isApplovin ? {
-            //             width: 603, // applovin
-            //             height: 1170,
-            //             opacity: 255
-            //         } : {
-            //             opacity: 255,
-            //             angle: 0,
-            //         },
-            //         congratBlur: this.isApplovin ? {
-            //             width: 603, // applovin
-            //             height: 1170,
-            //             opacity: 255
-            //         } : {
-            //             opacity: 255,
-            //             angle: 0,
-            //         },
-            //         // notification: {},
-            //         paypal: {
-            //             position: cc.v2(0, 396.319),
-            //             children: {
-            //                 laoren: {
-            //                     width: 319.4,
-            //                     height: 177.4,
-            //                     position: cc.v2(-0.75, -186.539)
-            //                 },
-            //                 icon: {
-            //                     position: cc.v2(-155.976, -7.471)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(137.034, -40.34)
-            //                 },
-            //                 cash: {
-            //                     position: cc.v2(135.994, 31.177)
-            //                 }
-            //             }
-            //         },
-            //         banner: {
-            //             position: cc.v2(0, -458.318),
-            //             children: {
-            //                 icon: {
-            //                     position: cc.v2(-197, 27)
-            //                 },
-            //                 logo: {
-            //                     position: cc.v2(-49.894, 28.893)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(148.009, 28.4)
-            //                 }
-            //             }
-            //         },
-            //         audioBtn: {
-            //             position: cc.v2(0, 403.152)
-            //         }
-            //     }
-            // }
+            game: {
+                position: cc.v2(0, 0),
+                scale: 1,
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    congrat: this.isApplovin ? {
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
+                    },
+                    congratBlur: this.isApplovin ? {
+                        width: 603, // applovin
+                        height: 1170,
+                        opacity: 255
+                    } : {
+                        opacity: 255,
+                        angle: 0,
+                    },
+                    board1: {
+                        position: cc.v2(0, 0),
+                        scale: 1,
+                    },
+                    board2: {
+                        position: cc.v2(0, 0),
+                        scale: 1,
+                    },
+                    // notification: {},
+                    paypal: {
+                        position: cc.v2(0, 461.6),
+                        children: {
+                            topicon: {
+                                position: cc.v2(-173.284, -26.412)
+                            },
+                            btn: {
+                                position: cc.v2(171.055, -31.443)
+                            },
+                        }
+                    },
+                    banner: {
+                        position: cc.v2(0, -428),
+                        children: {
+                            icon: {
+                                position: cc.v2(-218.802, -0.954),
+                                scale: 1
+                            },
+                            logo: {
+                                position: cc.v2(-54.667, -1.658)
+                            },
+                            btn: {
+                                position: cc.v2(152.749, -5.468)
+                            }
+                        }
+                    },
+                    audioBtn: {
+                        position: cc.v2(0, 349.492)
+                    }
+                }
+            }
         }
 
         //guiding用来记录是否还需要继续进行拖动手势引导
