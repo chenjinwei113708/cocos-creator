@@ -18,53 +18,11 @@ export default class GameModel {
                 children: {
                     adsonly: {
                         active: this.isApplovin ? true : false
-                    },
-                    paycard: {
-                        children: {
-                            an_name: {
-                                active: this.isIos ? false : true,
-                            },
-                            ios_name: {
-                                active: this.isIos ? true : false
-                            }
-                        }
                     }
                 }
             },
             UI: {
                 children: {
-                    congrat: this.isApplovin ? {
-                        width: 277.38, // applovin
-                        height: 540,
-                        opacity: 190,
-                        children: {
-                            android: {
-                                active: this.isIos ? false : true
-                            },
-                            ios: {
-                                active: this.isIos ? true : false
-                            }
-                        }
-                    } : {
-                        opacity: 255,
-                        angle: 90,
-                        children: {
-                            android: {
-                                active: this.isIos ? false : true
-                            },
-                            ios: {
-                                active: this.isIos ? true : false
-                            }
-                        }
-                    },
-                    congratBlur: this.isApplovin ? {
-                        width: 277.38, // applovin
-                        height: 540,
-                        opacity: 190
-                    } : {
-                        opacity: 255,
-                        angle: 90,
-                    },
                     // notification: {},
                     paypal: {
                         position: cc.v2(-236.439, 206.958),
@@ -141,53 +99,11 @@ export default class GameModel {
                 children: {
                     adsonly: {
                         active: this.isApplovin ? true : false
-                    },
-                    paycard: {
-                        children: {
-                            an_name: {
-                                active: this.isIos ? false : true,
-                            },
-                            ios_name: {
-                                active: this.isIos ? true : false
-                            }
-                        }
                     }
                 }
             },
             UI: {
                 children: {
-                    congrat: this.isApplovin ? {
-                        width: 603, // applovin
-                        height: 1170,
-                        opacity: 255,
-                        children: {
-                            android: {
-                                active: this.isIos ? false : true
-                            },
-                            ios: {
-                                active: this.isIos ? true : false
-                            }
-                        }
-                    } : {
-                        opacity: 255,
-                        angle: 0,
-                        children: {
-                            android: {
-                                active: this.isIos ? false : true
-                            },
-                            ios: {
-                                active: this.isIos ? true : false
-                            }
-                        }
-                    },
-                    congratBlur: this.isApplovin ? {
-                        width: 603, // applovin
-                        height: 1170,
-                        opacity: 255
-                    } : {
-                        opacity: 255,
-                        angle: 0,
-                    },
                     // notification: {},
                     paypal: {
                         position: cc.v2(0, 452.335),

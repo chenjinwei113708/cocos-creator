@@ -199,10 +199,10 @@ cc.Class({
     },
 
     onTouchStart (touch) {
-        console.log('onTouchStart');
+        // console.log('onTouchStart');
         if (this.gameInfo.cellStatus === CELL_STATUS.CAN_MOVE) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
-            console.log('onTouchStart, ', this.gameInfo.nowLevel);
+            // console.log('onTouchStart, ', this.gameInfo.nowLevel);
             if (touchPos.x >= this.gameInfo.startTouch.position.x - this.gameInfo.startTouch.width/2 &&
                 touchPos.x <= this.gameInfo.startTouch.position.x + this.gameInfo.startTouch.width/2 &&
                 touchPos.y >= this.gameInfo.startTouch.position.y - this.gameInfo.startTouch.height/2 &&
@@ -760,13 +760,13 @@ cc.Class({
 
     /**播放闪电动画 */
     showLightning () {
-        this.gameController.getAudioUtils().playEffect('lightning', 1);
-        let lightning = cc.find('Canvas/center/game/lightning');
-        lightning.active = true;
-        let animstate = lightning.getComponent(cc.Animation).play();
-        animstate.on('finished', () => {
-            lightning.active = false;
-        });
+        // this.gameController.getAudioUtils().playEffect('lightning', 1);
+        // let lightning = cc.find('Canvas/center/game/lightning');
+        // lightning.active = true;
+        // let animstate = lightning.getComponent(cc.Animation).play();
+        // animstate.on('finished', () => {
+        //     lightning.active = false;
+        // });
     },
     // start () {},
 
