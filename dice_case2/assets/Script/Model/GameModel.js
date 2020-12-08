@@ -10,7 +10,7 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.isApplovin = true; // 是不是applovin平台
-        this.isIos = true; // 是不是ios平台
+        this.isIos = false; // 是不是ios平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(255.943, 50.845),
@@ -89,6 +89,31 @@ export default class GameModel {
                         active: this.isIos ? true : false,
                         position: cc.v2(-232.073, -130.521),
                     },
+                    iphone: {
+                        width: 1170,
+                        height: 603,
+                        children: {
+                            iphone12: {
+                                scale: 0.65
+                            }
+                        }
+                    },
+                    airpods: {
+                        width: 1170,
+                        height: 603,
+                        children: {
+                            mask: {
+                                width: 1170,
+                                height: 603,
+                            },
+                            bgblur: {
+                                active: false
+                            },
+                            getAirpods: {
+                                scale: 0.7
+                            }
+                        }
+                    },
                     modal: {
                         children: {
                             endPage: {
@@ -165,7 +190,7 @@ export default class GameModel {
                     },
                     // notification: {},
                     paypal: {
-                        position: cc.v2(0, 477.582),
+                        position: cc.v2(0, 452.335),
                         scale: 1
                     },
                     playnow: {
@@ -186,6 +211,31 @@ export default class GameModel {
                     ios_icon: {
                         active: this.isIos ? true : false,
                         position: cc.v2(-180.18, -353.071),
+                    },
+                    iphone: {
+                        width: 603,
+                        height: 1170,
+                        children: {
+                            iphone12: {
+                                scale: 1
+                            }
+                        }
+                    },
+                    airpods: {
+                        width: 603,
+                        height: 1170,
+                        children: {
+                            mask: {
+                                width: 603,
+                                height: 1170,
+                            },
+                            bgblur: {
+                                active: true
+                            },
+                            getAirpods: {
+                                scale: 0.85
+                            }
+                        }
                     },
                     modal: {
                         children: {

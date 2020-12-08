@@ -15,7 +15,11 @@ export const CELL_TYPE = {
     C20: 'c20',
     C50: 'c50',
     C100: 'c100',
-    CPP: 'cpp'
+    CAir: 'cair',
+    CPhoneBlue: 'cphoneblue',
+    CPhoneOrange: 'cphoneorange',
+    CPP: 'cpp',
+    CNone: 'cnone'
 };
 
 export const CELL_STATUS = {

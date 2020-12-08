@@ -31,6 +31,9 @@ cc.Class({
         sprite20: cc.SpriteFrame,
         sprite50: cc.SpriteFrame,
         sprite100: cc.SpriteFrame,
+        spriteAir: cc.SpriteFrame,
+        spritePhoneBlue: cc.SpriteFrame,
+        spritePhoneOrange: cc.SpriteFrame,
         spritePP: cc.SpriteFrame,
         spritePPcard: cc.SpriteFrame,
         spritePPlight: cc.SpriteFrame,
@@ -40,6 +43,9 @@ cc.Class({
 
     onLoad () {
         this.hintbox = cc.find('Canvas/center/game/hint/hintbox');
+        this.tryToWin = cc.find('Canvas/center/game/hint/trytowin');
+        this.iphoneNum = cc.find('Canvas/center/UI/paypal/topAbox/text').getComponent('NumView');
+        this.iphonePuzzle = cc.find('Canvas/center/game/hint/iphonePuzzle');
         this.gameInfo = {
             nowLevel: GAME_LEVEL.LEVEL1,
             cellStatus: CELL_STATUS.CAN_MOVE,
@@ -65,6 +71,9 @@ cc.Class({
             [CELL_TYPE.C50]: this.sprite50,
             [CELL_TYPE.C100]: this.sprite100,
             [CELL_TYPE.CPP]: this.spritePP,
+            [CELL_TYPE.CAir]: this.spriteAir,
+            [CELL_TYPE.CPhoneBlue]: this.spritePhoneBlue,
+            [CELL_TYPE.CPhoneOrange]: this.spritePhoneOrange,
         };
 
         // 各个坐标对应的方块，下标0不用，左上角坐标为(1, 1), 顶部为第一行，第一行第二个的坐标为 (1, 2)
@@ -85,9 +94,9 @@ cc.Class({
             [
                 // {type: ACTION_TYPE.SWITCH, start: cc.v2(4,2), end: cc.v2(3,2)},
                 {type: ACTION_TYPE.COMBINE, center: cc.v2(1,3), others: [cc.v2(1,4), cc.v2(1,5)],
-                    newType: CELL_TYPE.C100},
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(1,3), others: [cc.v2(2,3), cc.v2(3,3)],
-                    newType: CELL_TYPE.CPP},
+                    newType: CELL_TYPE.CNone},
+                // {type: ACTION_TYPE.COMBINE, center: cc.v2(1,3), others: [cc.v2(2,3), cc.v2(3,3)],
+                //     newType: CELL_TYPE.CPP},
             ],
             [
                 {type: ACTION_TYPE.CHANGE, center: cc.v2(1,3), newType: CELL_TYPE.CPP},
@@ -144,20 +153,21 @@ cc.Class({
         this.gameInfo.nowLevel = this.gameLevels.splice(0, 1)[0];
         
         if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1) {
-            this.showPPcard();
-        } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
-            this.showMask(1);
+            // this.showPPcard();
             this.gameInfo.startTouch = this.touch0;
             this.gameInfo.endTouch = this.touch2;
-            this.setTouchListener();
+            this.showMask(1);
+        } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
+            // this.showMask(1);
             // this.doActions();
-        } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
             this.setCellStatus(CELL_STATUS.DONE_MOVE);
             this.showMask(2);
             this.gameInfo.startTouch = this.touch1;
             this.gameInfo.endTouch = this.touch2;
             let nextList = this.actionLevel.splice(0, 1)[0];
             this.actionList.push(...nextList);
+        } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
+            
         } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL4) {
             this.showPPcard(true);
         } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL5) {
@@ -189,18 +199,19 @@ cc.Class({
     },
 
     onTouchStart (touch) {
-        // console.log('onTouchStart');
+        console.log('onTouchStart');
         if (this.gameInfo.cellStatus === CELL_STATUS.CAN_MOVE) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
-            // console.log('onTouchStart, ', this.gameInfo.nowLevel);
+            console.log('onTouchStart, ', this.gameInfo.nowLevel);
             if (touchPos.x >= this.gameInfo.startTouch.position.x - this.gameInfo.startTouch.width/2 &&
                 touchPos.x <= this.gameInfo.startTouch.position.x + this.gameInfo.startTouch.width/2 &&
                 touchPos.y >= this.gameInfo.startTouch.position.y - this.gameInfo.startTouch.height/2 &&
                 touchPos.y <= this.gameInfo.startTouch.position.y + this.gameInfo.startTouch.height/2) {
                     // console.log('onTouchStart right');
-                    if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
+                    this.tryToWin.active = false;
+                    if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1) {
                         this.switchCards();
-                    } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
+                    } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
                         this.gameController.getAudioUtils().playEffect('click', 1.1);
                         this.mask2.active = false;
                         this.hand.active = false;
@@ -229,7 +240,7 @@ cc.Class({
     },
     onTouchEnd (touch) {
         if (this.gameInfo.cellStatus === CELL_STATUS.IS_MOVE) {
-            if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
+            if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
                 let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
                 touchPos = cc.v2(touchPos.x, touchPos.y+80);
                 if (touchPos.x >= this.gameInfo.endTouch.position.x - this.gameInfo.endTouch.width/2 &&
@@ -242,6 +253,7 @@ cc.Class({
                     this.moveBrick.active = false;
                     this.setCellStatus(CELL_STATUS.DONE_MOVE);
                     this.mask1.active = false;
+                    
                     this.hand.getComponent(cc.Animation).stop();
                     this.hand.active = false;
                     this.hintbox.getComponent(cc.Animation).stop();
@@ -313,6 +325,9 @@ cc.Class({
         // let handPos = 
         mask.opacity = 0;
         mask.active = true;
+        this.tryToWin.opacity = 0;
+        this.tryToWin.active = true;
+        this.tryToWin.runAction(cc.fadeIn(0.6));
         mask.runAction(cc.sequence(
             cc.fadeTo(0.6, 190),
             cc.callFunc(() => {
@@ -323,6 +338,7 @@ cc.Class({
                 if (num === 1) {
                     hand.runAction(cc.fadeIn(0.2));
                     hand.getComponent(cc.Animation).play('shake');
+                    this.setTouchListener();
                 } else if (num === 2) {
                     let hintbox = this.hintbox;
                     hintbox.opacity = 0;
@@ -343,7 +359,7 @@ cc.Class({
 
     /**交换转盘上面的卡 */
     switchCards () {
-        if (this.gameInfo.nowLevel !== GAME_LEVEL.LEVEL2 ||
+        if (this.gameInfo.nowLevel !== GAME_LEVEL.LEVEL1 ||
             this.gameInfo.cellStatus !== CELL_STATUS.CAN_MOVE)
             return;
         // console.log(' +++ switch cards cellstatus: ', this.gameInfo.cellStatus);
@@ -454,7 +470,7 @@ cc.Class({
         if (!centerNode) return;
         let centerPos = cc.v2(centerNode.position.x, centerNode.position.y);
         let otherNodes = others.map(other => {return this.cells[other.x][other.y];});
-        const moveTime = 0.2;
+        const moveTime = 0.4;
         let originPos = [];
         otherNodes.forEach((other, index) => {
             originPos[index] = cc.v2(other.position.x, other.position.y);
@@ -465,30 +481,46 @@ cc.Class({
                     if (index === otherNodes.length-1) {
                         this.gameController.getAudioUtils().playEffect('combine', 0.8);
                         
-                        centerNode.runAction(cc.sequence(
-                            // cc.scaleTo(0.1, 1.15),
-                            // cc.scaleTo(0.1, 0.5),
-                            cc.callFunc(() => {
-                                centerNode.getComponent(cc.Sprite).spriteFrame = this.sprites[newType];
-                                if (newType === CELL_TYPE.CPP) {
-                                    this.showFlyCards(7);
-                                    this.addPPcardLight(centerNode);
-                                    // this.gameController.addCash(100);
-                                    // centerNode.getChildByName('light').active = true;
-                                    // centerNode.getChildByName('cppIcon').active = true;
-                                } else {
-                                    // centerNode.getChildByName('light').active = false;
-                                    // centerNode.getChildByName('cppIcon').active = false;
-                                }
-                                // this.showCombo();
-                            }),
-                            cc.repeat(cc.sequence(cc.rotateTo(0.1, 15), cc.rotateTo(0.1, -15)), 3),
-                            cc.rotateTo(0.1, 0),
-                            // cc.scaleTo(0.05, 1),
-                            cc.callFunc(() => {
-                                if (!isMulti) {this.doActions();}
-                            })
-                        ))
+                        if (newType !== CELL_TYPE.CNone) {
+                            centerNode.runAction(cc.sequence(
+                                // cc.scaleTo(0.1, 1.15),
+                                // cc.scaleTo(0.1, 0.5),
+                                cc.callFunc(() => {
+                                    centerNode.getComponent(cc.Sprite).spriteFrame = this.sprites[newType];
+                                    if (newType === CELL_TYPE.CPP) {
+                                        this.showFlyCards(7);
+                                        this.addPPcardLight(centerNode);
+                                        // this.gameController.addCash(100);
+                                        // centerNode.getChildByName('light').active = true;
+                                        // centerNode.getChildByName('cppIcon').active = true;
+                                    } else {
+                                        // centerNode.getChildByName('light').active = false;
+                                        // centerNode.getChildByName('cppIcon').active = false;
+                                    }
+                                    // this.showCombo();
+                                }),
+                                cc.repeat(cc.sequence(cc.rotateTo(0.1, 15), cc.rotateTo(0.1, -15)), 3),
+                                cc.rotateTo(0.1, 0),
+                                // cc.scaleTo(0.05, 1),
+                                cc.callFunc(() => {
+                                    if (!isMulti) {this.doActions();}
+                                })
+                            ));
+                        } else {
+                            this.addPhoneNum(10);
+                            let centerPos = cc.v2(centerNode.position.x, centerNode.position.y);
+                            centerNode.runAction(cc.sequence(
+                                cc.delayTime(0.1*(index+1)),
+                                cc.spawn(cc.fadeIn(0.2), cc.scaleTo(0.2, 0.4), cc.moveBy(0.2, 0, 150)),
+                                cc.callFunc(() => {
+                                    centerNode.opacity = 0;
+                                    centerNode.scale = 1;
+                                    centerNode.position = centerPos;
+                                    if (!isMulti) {this.doActions();}
+                                })
+                            ));
+                        }
+                        
                     }
                     other.opacity = 0;
                     other.runAction(cc.sequence(
@@ -690,6 +722,23 @@ cc.Class({
                 ));
             }, i*60);
         }
+    },
+
+    /**增加iphone碎片的数量/进度条 */
+    addPhoneNum (num) {
+        this.iphonePuzzle.opacity = 0;
+        this.iphonePuzzle.scale = 0;
+        this.iphonePuzzle.active = true;
+        this.gameController.getAudioUtils().playEffect('moneyCard', 0.4);
+        this.iphonePuzzle.runAction(cc.sequence(
+            cc.spawn(cc.fadeIn(0.2), cc.scaleTo(0.2, 1)),
+            cc.delayTime(0.9),
+            cc.scaleTo(0.2, 0),
+            cc.callFunc(() => {
+                this.iphonePuzzle.active = false;
+            })
+        ));
+        this.iphoneNum.addCash(num);
     },
 
     /**增加会发光的pp卡 */
