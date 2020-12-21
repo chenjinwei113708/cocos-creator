@@ -144,12 +144,13 @@ cc.Class({
         this.gameInfo.nowLevel = this.gameLevels.splice(0, 1)[0];
         
         if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1) {
-            this.showPPcard();
+            this.showPPcard(true);
         } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
-            this.showMask(1);
-            this.gameInfo.startTouch = this.touch0;
-            this.gameInfo.endTouch = this.touch2;
+            // this.showMask(1);
+            // this.gameInfo.startTouch = this.touch0;
+            // this.gameInfo.endTouch = this.touch2;
             this.setTouchListener();
+            this.changeToNextLevel();
             // this.doActions();
         } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
             this.setCellStatus(CELL_STATUS.DONE_MOVE);
@@ -199,7 +200,7 @@ cc.Class({
                 touchPos.y <= this.gameInfo.startTouch.position.y + this.gameInfo.startTouch.height/2) {
                     // console.log('onTouchStart right');
                     if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
-                        this.switchCards();
+                        // this.switchCards();
                     } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
                         this.gameController.getAudioUtils().playEffect('click', 1.1);
                         this.mask2.active = false;
@@ -273,7 +274,15 @@ cc.Class({
             cc.spawn(cc.fadeIn(0.4), cc.scaleTo(0.3, 1)),
             cc.callFunc(() => {
                 if (isAutoGet) {
-                    setTimeout(() => {this.receivePPcard();}, 500);
+                    if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1) {
+                        let anim = this.ppcard.getComponent(cc.Animation).play();
+                        anim.on('finished', () => {
+                            if (this.gameInfo.isPPcardReceived) return;
+                            this.receivePPcard();
+                        });
+                    } else {
+                        setTimeout(() => {this.receivePPcard();}, 500);
+                    }
                 } else {
                     let anim = this.ppcard.getComponent(cc.Animation).play();
                     anim.on('finished', () => {
@@ -303,9 +312,14 @@ cc.Class({
             cc.spawn(cc.fadeOut(0.3), cc.scaleTo(0.3, 0)),
             cc.callFunc(()=>{
                 this.ppcard.active = false;
-                this.changeToNextLevel();
+                if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1) {
+                    this.switchCards();
+                } else {
+                    this.changeToNextLevel();
+                }
             })
         ));
+        
     },
 
     showMask (num=2) {
@@ -343,7 +357,7 @@ cc.Class({
 
     /**交换转盘上面的卡 */
     switchCards () {
-        if (this.gameInfo.nowLevel !== GAME_LEVEL.LEVEL2 ||
+        if ((this.gameInfo.nowLevel !== GAME_LEVEL.LEVEL2 && this.gameInfo.nowLevel !== GAME_LEVEL.LEVEL1) ||
             this.gameInfo.cellStatus !== CELL_STATUS.CAN_MOVE)
             return;
         // console.log(' +++ switch cards cellstatus: ', this.gameInfo.cellStatus);
@@ -353,15 +367,17 @@ cc.Class({
         this.mask1.active = false;
         this.hand.getComponent(cc.Animation).stop();
         this.hand.active = false;
-        c50.runAction(cc.sequence(
-            cc.moveTo(0.2, cc.v2(42.994, -1)),
-            cc.callFunc(() => {
-                this.setCellStatus(CELL_STATUS.CAN_MOVE);
-                this.changeToNextLevel();
-            })
-        ));
-        c20.runAction(cc.moveTo(0.2, cc.v2(-85.305, 0)));
-        this.gameController.getAudioUtils().playEffect('switch', 1.3);
+        // c50.runAction(cc.sequence(
+        //     cc.moveTo(0.2, cc.v2(42.994, -1)),
+        //     cc.callFunc(() => {
+        //         this.setCellStatus(CELL_STATUS.CAN_MOVE);
+        //         this.changeToNextLevel();
+        //     })
+        // ));
+        // c20.runAction(cc.moveTo(0.2, cc.v2(-85.305, 0)));
+        // this.gameController.getAudioUtils().playEffect('switch', 1.3);
+        this.setCellStatus(CELL_STATUS.CAN_MOVE);
+        this.changeToNextLevel();
     },
 
     /**执行动作序列 */

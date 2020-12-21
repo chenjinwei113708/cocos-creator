@@ -53,6 +53,11 @@ cc.Class({
 
     /**点击提现 */
     clickCashout () {
+        if (this.gameController.cashView.cash>=1 && !this.info.isCashout) {
+            this.info.isCashout = true;
+            this.gameController.download();
+            return;
+        }
         if (this.gameController.cashView.cash>=400 && !this.info.isCashout){
             this.info.isCashout = true;
             this.cashoutHand.active = false;
