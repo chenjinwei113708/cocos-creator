@@ -86,8 +86,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 960,
-      "height": 540
+      "width": 540,
+      "height": 960
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -96,8 +96,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 480,
-      "y": 270,
+      "x": 270,
+      "y": 480,
       "z": 0
     },
     "_scale": {
@@ -156,7 +156,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 482.5719194492911
+      "z": 483.64812471974074
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -250,8 +250,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 960,
-      "height": 540
+      "width": 540,
+      "height": 960
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -311,8 +311,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 960,
-      "height": 540
+      "width": 540,
+      "height": 960
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -619,7 +619,11 @@
     "modal": {
       "__id__": 14
     },
-    "hand": null,
+    "cashoutHand": null,
+    "notification": null,
+    "notiHand": null,
+    "congrat": null,
+    "congratBlur": null,
     "_id": "55w7FP89tNK6/L9kKZ4yxN"
   },
   {
@@ -1563,8 +1567,8 @@
     "_enabled": true,
     "_designResolution": {
       "__type__": "cc.Size",
-      "width": 960,
-      "height": 540
+      "width": 540,
+      "height": 960
     },
     "_fitWidth": false,
     "_fitHeight": true,
