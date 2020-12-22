@@ -40,6 +40,14 @@ cc.Class({
         this.info.boxPos = boxPos;
         this.info.type = type;
         this.node.getComponent(cc.Sprite).spriteFrame = this.gameController.gameView.sprites[type];
+        this.setIsConnected(false);
+        if (type === CELL_TYPE.CPP) {
+            this.node.getChildByName('lighty').active = true;
+            this.node.getChildByName('lightpp').active = true;
+        } else {
+            this.node.getChildByName('lighty').active = false;
+            this.node.getChildByName('lightpp').active = false;
+        }
     },
 
     // 设置为已经连中
@@ -49,6 +57,16 @@ cc.Class({
 
     start () {
         // console.log(' cardview,', this.node.position, this.info);
+    },
+
+    /**自动选择当前方块 */
+    autoPickCell (callback) {
+        if (!this.info.isConnected) {
+            this.gameController.gameView.pickCell(this.info.boxPos, this.info.type, this.node.position, callback);
+        }
+        // if (callback) {
+        //     setTimeout(callback, 500);
+        // }
     },
 
     /**

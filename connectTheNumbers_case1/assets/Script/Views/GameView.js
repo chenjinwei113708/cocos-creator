@@ -19,6 +19,7 @@ cc.Class({
     touch: cc.Node, // 用户触碰点
     box: cc.Node, // 棋盘
     boxEffect: cc.Node, // 棋盘效果层
+    ppcard: cc.Node, // pp卡
     spriteC150: cc.SpriteFrame,
     spriteC50: cc.SpriteFrame,
     spriteC200: cc.SpriteFrame,
@@ -78,16 +79,18 @@ cc.Class({
     // 开启碰撞检测系统
     var manager = cc.director.getCollisionManager();
     manager.enabled = true;
-    manager.enabledDebugDraw = true; // 碰撞debug
+    // manager.enabledDebugDraw = true; // 碰撞debug
     this.initBoxCells();
+    this.showGuideHand();
   },
 
   initBoxCells () {
+    let model = this.gameController.gameModel.level1Model;
     this.boxCells.forEach((line, index) => {
       if (index === 0) return;
       line.forEach((cell, index2) => {
         if (index2 === 0) return;
-        cell.getComponent('CardView').setInfo(cc.v2(index, index2), CELL_TYPE.C150);
+        cell.getComponent('CardView').setInfo(cc.v2(index, index2), model[index][index2]);
       });
     });
   },
@@ -118,6 +121,7 @@ cc.Class({
   onTouchStart (eventTouch) {
     if (this.gameInfo.status === CELL_STATUS.CAN_MOVE) {
       // this.setCellStatus(CELL_STATUS.IS_MOVE);
+      this.hideGuideHand();
       var touchPos = this.node.convertToNodeSpaceAR(eventTouch.getLocation());
       // console.log('onTouchStart', touchPos.x, ' ', touchPos.y);
       this.touch.active = true;
@@ -165,7 +169,7 @@ cc.Class({
    * @param {CELL_TYPE} cellType 方块的类型
    * @param {cc.v2} gamePos 方块的游戏坐标
    */
-  pickCell (boxPos, cellType, gamePos) {
+  pickCell (boxPos, cellType, gamePos, callback) {
     // 如果是第一个点
     if (this.gameInfo.status === CELL_STATUS.CAN_MOVE) {
       this.setCellStatus(CELL_STATUS.IS_MOVE);
@@ -191,7 +195,7 @@ cc.Class({
         this.boxCells[boxPos.x][boxPos.y].getComponent('CardView').setIsConnected(true);
 
         this.resetUserLine(gamePos, cellType);
-        this.drawLine(gamePos);
+        this.drawLine(gamePos, callback);
       }
       // console.log('pickCell canSelect', canSelect);
       // console.log('pickCell IS_MOVE', boxPos);
@@ -214,7 +218,6 @@ cc.Class({
     return result;
   },
 
-  putCellInArr () {},
   // update (dt) {
   // },
 
@@ -261,34 +264,164 @@ cc.Class({
   },
 
   /**绘制连线路径 */
-  drawLine(movePos) {
+  drawLine(movePos, callback) {
     // console.log('drawLine', movePos);
     const graph = this.path;
     graph.lineTo(movePos.x, movePos.y);
     // graph.lineTo(200, -200);
     graph.stroke();
+    // console.log('drawLine', Date.now());
+    if (callback) {
+      setTimeout(() => {
+        callback && callback();
+      }, 100);
+    }
+    this.gameController.getAudioUtils().playEffect('click', 1);
     // graph.fill();
   },
 
   /**选中的卡片飞到顶部 */
   cellFlyToTop(arr) {
-    let iconloca = this.payapl.getChildByName('icon').getChildByName('loca');
+    let iconloca = this.payapl.getChildByName('loca');
     let destPos = this.node.convertToNodeSpaceAR(this.payapl.convertToWorldSpaceAR(iconloca.position));
+    
     arr.forEach((boxPos, index) => {
-      let cell = this.boxCells[boxPos.x][boxPos.y];
+      let cell = this.boxEffectCells[boxPos.x][boxPos.y];
+      let cellbtm = this.boxCells[boxPos.x][boxPos.y];
+
+      cell.opacity = 255;
+      cell.active = true;
+      cellbtm.opacity = 0;
+      cell.getComponent(cc.Sprite).spriteFrame = cellbtm.getComponent(cc.Sprite).spriteFrame;
+      if (cellbtm.getComponent('CardView').info.type === CELL_TYPE.CPP) {
+        cell.getChildByName('lighty').active = true;
+        cell.getChildByName('lightpp').active = true;
+      } else {
+        cell.getChildByName('lighty').active = false;
+        cell.getChildByName('lightpp').active = false;
+      }
+
       let originPos = cc.v2(cell.x, cell.y);
       cell.runAction(cc.sequence(
+        cc.delayTime(0.02*index),
         cc.moveTo(0.4, destPos),
         cc.fadeOut(0.2),
         cc.callFunc(() => {
           cell.position = originPos;
+          cell.active = false;
+          // cellbtm.active = true;
+          // cellbtm.position = originPos;
           if (index === (arr.length - 1)) {
-            this.setCellStatus(CELL_STATUS.CAN_MOVE);
+            // this.setCellStatus(CELL_STATUS.CAN_MOVE); // 允许用户进行下一次消除
+            this.setCellStatus(CELL_STATUS.DONE_MOVE);
+            // this.changeAllToCPP();
+          }
+          if (index === 0) {
+            let num = arr.length >= 25 ? 300 : 100; // 如果连接个数大于等于25个
+            this.showPPCard(num);
           }
         })
       ));
     });
   },
+
+  // 展示pp卡
+  showPPCard (num = 100) {
+    const pp = this.ppcard;
+    this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
+    pp.getChildByName('text').getComponent(cc.Label).string = '$ '+ num + '.00';
+    pp.scale = 0;
+    pp.opacity = 0;
+    pp.active = true;
+    pp.runAction(cc.sequence(
+      cc.spawn(cc.scaleTo(0.3, 1.1), cc.fadeIn(0.3)),
+      cc.scaleTo(0.1, 0.9),
+      cc.scaleTo(0.1, 1),
+      cc.delayTime(0.4),
+      cc.scaleTo(0.3, 0),
+      cc.callFunc(() => {
+        this.gameController.addCash(Number(num));
+        this.gameController.getAudioUtils().playEffect('coin', 0.5);
+        if (num === 100) {
+          this.changeAllToCPP();
+        } else if (num === 300) {
+          this.gameController.guideView.showCashOutHand();
+        }
+      })
+    ));
+  },
+
+  /**全部卡片转变成pp卡 */
+  changeAllToCPP () {
+    this.setCellStatus(CELL_STATUS.DONE_MOVE);
+    let index = 0;
+    for(let i = 1; i <= 5; i++) {
+      for(let j = 1; j <= 5; j++) {
+        let cell = this.boxCells[i][j];
+        cell.runAction(cc.sequence(
+          cc.delayTime(0.015*index),
+          cc.scaleTo(0.2, 0),
+          cc.callFunc(() => {
+            let cardScript = cell.getComponent('CardView');
+            cardScript.setInfo(cardScript.info.boxPos, CELL_TYPE.CPP);
+            cell.active = true;
+            cell.opacity = 255;
+          }),
+          cc.scaleTo(0.2, 1),
+          cc.callFunc(() => {
+            // console.log('change index::::::', index);
+            if (i===5 && j===5) {
+              this.offTouchListener(); // 不允许用户点击
+              this.setCellStatus(CELL_STATUS.CAN_MOVE);
+              this.autoSelectAll();
+            }
+          })
+        ));
+        index++;
+      }
+    }
+  },
+
+  /**自动连接所有方块 */
+  autoSelectAll () {
+    // console.log('-------- auto');
+    let index = 0;
+    for(let i = 1; i <= 5; i++) {
+      for(let j = 1; j <= 5; j++) {
+        let k = i%2 === 0 ? (6-j) : j;
+        let cell = this.boxCells[i][k];
+        // console.log('auto select', i, ', ', k);
+        let cardScript = cell.getComponent('CardView');
+        setTimeout(() => {
+          let callback = undefined;
+          if (i=== 5 && j === 5) {
+            callback = () => {
+              let touchEvent = {};
+              touchEvent.getLocation = () => cc.v2(0,0);
+              this.onTouchEnd(touchEvent);
+            };
+            // setTimeout(callback, 5*5*30);
+          }
+          cardScript.autoPickCell(callback);
+          
+        }, 40*index);
+        index++;
+      }
+    }
+  },
+
+  showGuideHand () {
+    const hand = cc.find('Canvas/center/game/hand');
+    hand.opacity = 0;
+    hand.active = true;
+    hand.getComponent(cc.Animation).play('guide1');
+  },
+
+  hideGuideHand () {
+    const hand = cc.find('Canvas/center/game/hand');
+    hand.getComponent(cc.Animation).stop();
+    hand.active = false
+  }
 
 
 });
