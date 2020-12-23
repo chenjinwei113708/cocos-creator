@@ -43,10 +43,10 @@ cc.Class({
         // 更新速度 // updateUnit的每一级不能大于updateLevel的上一级
         this.updateUnit = {
             A: 1,
-            B: 7,
-            C: 8,
+            B: 4,
+            C: 7,
             D: 9,
-            E: 10
+            E: 30
         };
     },
 
@@ -74,7 +74,7 @@ cc.Class({
     },
 
     update (dt) {
-        const icon = '$';
+        const icon = '';
         this.timer += dt;
         let isPlus = this.targetCash>this.cash ? true : false;
         let delta = Math.abs(this.targetCash - this.cash);
@@ -87,7 +87,7 @@ cc.Class({
             // console.log(this.cash, this.targetCash);
             if(delta>0){
                 isPlus ? this.cash+=this.updateUnit[level] : this.cash-=this.updateUnit[level];
-                this.label.string = icon+this.cash;
+                this.label.string = icon+this.cash+".00";
             }else{
                 this.stopUpdate();
             }
