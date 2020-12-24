@@ -48,7 +48,10 @@ cc.Class({
         }, 4000);
     },
 
-    /**添加新消息 */
+    /**
+     * 添加新消息
+     * @param {number} money 消息中的金额数量
+     */
     addNewMsg (money) {
         this.info.msglist.push(money);
         if (!this.info.isPlayingAnim) {
@@ -74,7 +77,7 @@ cc.Class({
      * @param {number} money 金额(整数)
      */
     _showNewMsg (money) {
-        console.log('showNewMsg ', money, ' ', this.info.isPlayingAnim);
+        // console.log('showNewMsg ', money, ' ', this.info.isPlayingAnim);
 
         // 设置下一条消息的内容
         let time = new Date();

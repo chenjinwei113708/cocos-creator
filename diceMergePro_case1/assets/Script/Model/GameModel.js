@@ -1,4 +1,8 @@
 import {
+    GRID_WIDTH,
+    GRID_HEIGHT,
+    CELL_TYPE,
+    COMBINE_TYPE
 } from "./ConstValue";
 
 // import SandModel from "./SandModel";
@@ -155,6 +159,27 @@ export default class GameModel {
 
         this.guideScript = null;
 
+        /** 方块模型，（1， 1）代表第一行，第一列，为坐标原点
+         * 'CE'代表空格子，下标0不用
+         */
+        this.cellModel = [
+            [],
+            [undefined, 'CE', 'CE', 'CE', 'CE', 'CE'],
+            [undefined, 'CE', 'CE', 'CE', 'CE', 'CE'],
+            [undefined, 'CE', 'CE', 'C1', 'CE', 'CE'],
+            [undefined, 'CE', 'CE', 'CE', 'CE', 'CE'],
+            [undefined, 'CE', 'CE', 'CE', 'CE', 'CE'],
+        ];
+
+        /**等待出现的组合
+         * (0,0)代表中心，x加/减代表列的加/减，y加/减代表行的加/减，
+         * 注意：目前最多只能有两个格子的组合，就是数组长度不能超过2，
+         * 注意：而且(0,0)只能放数组末尾
+         */
+        this.nextCardsList = [
+            [{relatPos: cc.v2(0,0), type: CELL_TYPE.C2}],
+        ];
+
         /**游戏进行顺序*/
         this.guideList = [
             // (cb) => {
@@ -188,6 +213,202 @@ export default class GameModel {
     /**获得坐标config */
     getPositionConfig () {
         return this.isLandscape ? this.HorizontalConfig : this.VerticalConfig;
+    }
+
+    /**
+     * 检查能否将卡片组放进格子模型
+     * @param {cc.v2} boxPos 棋盘坐标，放置的位置
+     * @param {*} cards [{relatPos: cc.v2, type: CELL_TYPE}]  卡片组：[{相对位置，类型}]
+     * @param {boolean} ifPutDown 是否要放下，如果为true的话，则在能放入的前提下，会修改格子模型
+     * @return 如果可以返回true，否则false
+     */
+    checkIfCanPut (boxPos, cards, ifPutDown = false) {
+        if (!boxPos || !cards || cards.length === 0) return false;
+
+        let canput = true; // 记录能否放下牌组
+        let putRecord = [];
+        cards.forEach((card, index) => {
+            let newPos = {x: boxPos.x+card.relatPos.x, y: boxPos.y+card.relatPos.y};
+            if (this.cellModel[newPos.x][newPos.y] !== CELL_TYPE.CE) { // 此处非空格
+                canput = false;
+            } else if (ifPutDown) { // 此处是空格，而且要放下方块
+                this.cellModel[newPos.x][newPos.y] = card.type;
+                putRecord.push(newPos);
+            }
+        });
+        if (!canput) { // 如果这个组合放不下，就还原格子模型
+            putRecord.forEach((cardPos, index) => {
+                this.cellModel[cardPos.x][cardPos.y] = CELL_TYPE.CE; // 把刚才放下的位置变成空格子
+            });
+        }
+        return canput;
+    }
+
+    /**
+     * 把卡片放进模型
+     * @param {cc.v2} boxPos 放置的位置(棋盘坐标)
+     * @param {*} cards [{relatPos: cc.v2, type: CELL_TYPE}]  卡片组：[{相对位置，类型}]
+     */
+    putCardIntoModel (boxPos, cards) {
+        let canput = this.checkIfCanPut(boxPos, cards, true);
+        if (!canput) return null;
+        let connectArr = this.getConnectArr(boxPos);
+        // console.log('putCardIntoModel, boxPos:', boxPos, ' cards', cards);
+        // console.log('putCardIntoModel, connectArr:', connectArr);
+    }
+
+    /**
+     * 拿到可以合并的卡片组的坐标。
+     * @param {?cc.v2} center 中心点，也可以不传。如果传的话，会以中心点来检查。如果不传的话，会遍历整个棋盘的格子
+     * @return result 返回一个数组，里面是可以合并的点的坐标，数组第一个元素是中心点。如果没有可以合并的点，则返回null
+     */
+    getConnectArr (center) {
+        let area =  null;
+        if (!center) {
+            let r = 1;
+            while (r <= GRID_HEIGHT && area === null) {
+                let c = 1;
+                while (c <= GRID_WIDTH && area === null) {
+                    center = cc.v2(r, c);
+                    area = this.checkConnectArea(center);
+                    c++;
+                }
+                r++;
+            }
+        } else {
+            area =  this.checkConnectArea(center);
+        }
+        if (area) {
+            let result = [];
+            // console.log('area', area);
+            result.push(cc.v2(center.x, center.y));
+            for (let i = 1; i <= GRID_HEIGHT; i++) {
+                for (let j = 1; j <= GRID_WIDTH; j++) {
+                    if (center.x === i && center.y === j) continue;
+                    // console.log('**(', i, ', ', j, ')', area[i][j]);
+                    if (area[i][j] === 1) {
+                        // console.log('   push++,(', i, ', ', j, ')');
+                        result.push(cc.v2(i, j));
+                    }
+                }
+            }
+            return result;
+        } else return null;
+    }
+
+    /**
+     * 检查中心点周围有无可以合成的点，也就是上下左右是不是同类型的点
+     * @param {cc.v2} center 检查中心点、起点的位置
+     * @param {*} resultArr 第一次调用的时候不用传，会自动生成新的
+     * @return resultArr 二维数组，值为1的点的坐标就是可以合成的区域。如果中心点周围没有可以合成的点或者中心是空格子，就会返回null
+     */
+    checkConnectArea (center, resultArr) {
+        let type = this.cellModel[center.x][center.y];
+        // console.log(' --- checkConnectArea: (', center.x,', ', center.y, ')');
+        // 如果中心点是空格子，返回null
+        if (type === CELL_TYPE.CE) return null;
+        // 如果上下左右都不是同类型
+        if (this.cellModel[center.x-1][center.y] !== type &&
+            this.cellModel[center.x+1][center.y] !== type &&
+            this.cellModel[center.x][center.y-1] !== type &&
+            this.cellModel[center.x][center.y+1] !== type) {
+                return null;
+            }
+        if (!resultArr) {
+            // 0:还未检查，1：同类型，2：不同类型
+            resultArr = [
+                [],
+                [undefined, 0, 0, 0, 0, 0],
+                [undefined, 0, 0, 0, 0, 0],
+                [undefined, 0, 0, 0, 0, 0],
+                [undefined, 0, 0, 0, 0, 0],
+                [undefined, 0, 0, 0, 0, 0],
+                []
+            ];
+            resultArr[center.x][center.y] = 1;
+        }
+        // 如果上面的牌还没检查过
+        if (resultArr[center.x-1][center.y] === 0) {
+            if (this.cellModel[center.x-1][center.y] === type) { //上面的牌和中心牌是同类
+                resultArr[center.x-1][center.y] = 1; // 把上面的牌记为同类
+                this.checkConnectArea(cc.v2(center.x-1, center.y), resultArr); // 以上面的牌为中心展开检查
+            } else { // 否则
+                resultArr[center.x-1][center.y] = 2; // 把上面的牌记为异类
+            }
+        }
+        // 下面
+        if (resultArr[center.x+1][center.y] === 0) {
+            if (this.cellModel[center.x+1][center.y] === type) {
+                resultArr[center.x+1][center.y] = 1;
+                this.checkConnectArea(cc.v2(center.x+1, center.y), resultArr);
+            } else {
+                resultArr[center.x+1][center.y] = 2;
+            }
+        }
+        // 左面
+        if (resultArr[center.x][center.y-1] === 0) {
+            if (this.cellModel[center.x][center.y-1] === type) {
+                resultArr[center.x][center.y-1] = 1;
+                this.checkConnectArea(cc.v2(center.x, center.y-1), resultArr);
+            } else {
+                resultArr[center.x][center.y-1] = 2;
+            }
+        }
+        // 右面
+        if (resultArr[center.x][center.y+1] === 0) {
+            if (this.cellModel[center.x][center.y+1] === type) {
+                resultArr[center.x][center.y+1] = 1;
+                this.checkConnectArea(cc.v2(center.x, center.y+1), resultArr);
+            } else {
+                resultArr[center.x][center.y+1] = 2;
+            }
+        }
+        return resultArr;
+    }
+
+    /**
+     * 将一组卡片进行合并，并返回合并生成的卡片类型
+     * @param {[cc.v2]} cardsPos 卡片坐标数组，第一个元素是中心卡片，其他卡片会合并到中心
+     * @return 成功则返回新生成的卡片类型，否则返回null
+     */
+    combineCards (cardsPos) {
+        if (cardsPos.length <= 0) return null;
+        let type = this.cellModel[cardsPos[0].x][cardsPos[0].y];
+        let sameType = true;
+        let sameTypeIndex = [];
+        cardsPos.forEach((pos, index) => {
+            if (this.cellModel[pos.x][pos.y] !== type) {
+                // 如果合并的格子当中有不同类型的卡
+                sameType = false;
+            } else {
+                sameTypeIndex.push(index);
+                this.cellModel[pos.x][pos.y] = CELL_TYPE.CE; // 合并之后，原来的位置变成空格子
+            }
+        });
+        if (!sameType) { // 如果合成失败，存在不同类型的卡片
+            // 则把刚才变成空格子的地方还原成原来的卡片
+            cardsPos.forEach((pos, index) => {
+                if (sameTypeIndex.indexOf(index) > -1) {
+                    this.cellModel[pos.x][pos.y] = type;
+                }
+            });
+            return null;
+        } else {
+            return COMBINE_TYPE[type];
+        }
+    }
+
+    /**拿到下一组卡牌
+     * @return 返回一个数组，数组里面存了一组卡牌信息 [{relatPos: cc.v2, type: CELL_TYPE}]
+     */
+    getNextCards () {
+        const typelist = [CELL_TYPE.C1, CELL_TYPE.C2, CELL_TYPE.C3, CELL_TYPE.C4, CELL_TYPE.C5, CELL_TYPE.C6];
+        if (this.nextCardsList.length > 0) {
+            return this.nextCardsList.splice(0, 1)[0];
+        } else {
+            let rand = Math.floor(Math.random()*6)+1;
+            return [{relatPos: cc.v2(0,0), type: typelist[rand]}]
+        }
     }
 
     // // 设置通知的位置,要让通知在屏幕顶部

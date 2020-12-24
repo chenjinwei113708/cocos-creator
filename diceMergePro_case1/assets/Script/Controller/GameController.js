@@ -41,7 +41,7 @@ cc.Class({
 
         // 主游戏
         this.gameView = this.game.getComponent('GameView');
-        // this.gameView.setGameController(this);
+        this.gameView.setGameController(this);
         // 金币相关脚本
         this.cashView = this.cash.getComponent('CashView');
 
