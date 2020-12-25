@@ -35,7 +35,7 @@ cc.Class({
         // 记录信息
         this.info = {
             cellStatus: CELL_STATUS.CAN_MOVE,
-            direcDelay: 30, // 判断延时
+            direcDelay: 20, // 判断延时
             lastCheckTime: 0,  // 上次判断时间
             currentDices: [{relatPos: cc.v2(0,0), type: CELL_TYPE.C1}], // 现在的筛子组合
             nextDices: [{relatPos: cc.v2(0,-1), type: CELL_TYPE.C1}, {relatPos: cc.v2(0,0), type: CELL_TYPE.C1}], // 下一个筛子组合
@@ -104,6 +104,8 @@ cc.Class({
         this.initWithModel(this.gameController.gameModel.cellModel);
         this.getNextDices();
         this.setTouchListener();
+        let arr = this.gameController.gameModel.getConnectArr();
+        console.log('arr --- ',arr);
     },
 
     initWithModel (model) {

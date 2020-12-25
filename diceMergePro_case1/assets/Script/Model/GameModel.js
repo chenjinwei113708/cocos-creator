@@ -291,9 +291,9 @@ export default class GameModel {
         } else {
             area =  this.checkConnectArea(center);
         }
+        // console.log('getConnectArr area', area);
         if (area) {
             let result = [];
-            // console.log('area', area);
             result.push(cc.v2(center.x, center.y));
             for (let i = 1; i <= GRID_HEIGHT; i++) {
                 for (let j = 1; j <= GRID_WIDTH; j++) {
@@ -305,6 +305,7 @@ export default class GameModel {
                     }
                 }
             }
+            // console.log('getConnectArr result arr ::: ', result);
             if (result.length >= 3) return result;
             else return null;
         } else return null;
@@ -314,9 +315,10 @@ export default class GameModel {
      * 检查中心点周围有无可以合成的点，也就是上下左右是不是同类型的点
      * @param {cc.v2} center 检查中心点、起点的位置
      * @param {*} resultArr 第一次调用的时候不用传，会自动生成新的
+     * @param {*} info 第一次调用的时候不用传，会自动生成新的
      * @return resultArr 二维数组，值为1的点的坐标就是可以合成的区域。如果中心点周围没有可以合成的点或者中心是空格子，就会返回null
      */
-    checkConnectArea (center, resultArr) {
+    checkConnectArea (center, resultArr, info) {
         let type = this.cellModel[center.x][center.y];
         // console.log(' --- checkConnectArea: (', center.x,', ', center.y, ')');
         // 如果中心点是空格子，返回null
@@ -341,11 +343,17 @@ export default class GameModel {
             ];
             resultArr[center.x][center.y] = 1;
         }
+        if (!info) {
+            info = {
+                number: 1, // 相同牌的个数
+            }
+        }
         // 如果上面的牌还没检查过
         if (resultArr[center.x-1][center.y] === 0) {
             if (this.cellModel[center.x-1][center.y] === type) { //上面的牌和中心牌是同类
                 resultArr[center.x-1][center.y] = 1; // 把上面的牌记为同类
-                this.checkConnectArea(cc.v2(center.x-1, center.y), resultArr); // 以上面的牌为中心展开检查
+                info.number++;
+                this.checkConnectArea(cc.v2(center.x-1, center.y), resultArr, info); // 以上面的牌为中心展开检查
             } else { // 否则
                 resultArr[center.x-1][center.y] = 2; // 把上面的牌记为异类
             }
@@ -354,7 +362,8 @@ export default class GameModel {
         if (resultArr[center.x+1][center.y] === 0) {
             if (this.cellModel[center.x+1][center.y] === type) {
                 resultArr[center.x+1][center.y] = 1;
-                this.checkConnectArea(cc.v2(center.x+1, center.y), resultArr);
+                info.number++;
+                this.checkConnectArea(cc.v2(center.x+1, center.y), resultArr, info);
             } else {
                 resultArr[center.x+1][center.y] = 2;
             }
@@ -363,7 +372,8 @@ export default class GameModel {
         if (resultArr[center.x][center.y-1] === 0) {
             if (this.cellModel[center.x][center.y-1] === type) {
                 resultArr[center.x][center.y-1] = 1;
-                this.checkConnectArea(cc.v2(center.x, center.y-1), resultArr);
+                info.number++;
+                this.checkConnectArea(cc.v2(center.x, center.y-1), resultArr, info);
             } else {
                 resultArr[center.x][center.y-1] = 2;
             }
@@ -372,12 +382,17 @@ export default class GameModel {
         if (resultArr[center.x][center.y+1] === 0) {
             if (this.cellModel[center.x][center.y+1] === type) {
                 resultArr[center.x][center.y+1] = 1;
-                this.checkConnectArea(cc.v2(center.x, center.y+1), resultArr);
+                info.number++;
+                this.checkConnectArea(cc.v2(center.x, center.y+1), resultArr, info);
             } else {
                 resultArr[center.x][center.y+1] = 2;
             }
         }
-        return resultArr;
+        if (info && info.number >= 3){
+            // 要有至少3个相邻牌才可以合并
+            // console.log('--- ', info.number);
+            return resultArr;
+        } else return null;
     }
 
     /**
