@@ -17,6 +17,7 @@ cc.Class({
 
     properties: {
         box: cc.Node,
+        boxbg: cc.Node,
         touchStartArea: cc.Node,
         spriteC1: cc.SpriteFrame,
         spriteC2: cc.SpriteFrame,
@@ -40,6 +41,9 @@ cc.Class({
             nextDices: [{relatPos: cc.v2(0,-1), type: CELL_TYPE.C1}, {relatPos: cc.v2(0,0), type: CELL_TYPE.C1}], // 下一个筛子组合
             currentMove: null, // 当前移动的结点
             currentTurn: null, // 当前放在转盘的结点
+            lastCanPutArr: null, // 上一次提示放置的位置,
+            nowHoverPos: null, // 当前用户停留在什么棋盘坐标
+            isFirstStep: true, // 是不是用户第一次操作
         };
         this.sprites = {
            [CELL_TYPE.C1]: this.spriteC1,
@@ -81,6 +85,14 @@ cc.Class({
             [undefined, ...this.box.getChildByName('line4').children],
             [undefined, ...this.box.getChildByName('line5').children],
         ];
+        this.cellbgs = [
+            [],
+            [undefined, ...this.boxbg.getChildByName('line1').children],
+            [undefined, ...this.boxbg.getChildByName('line2').children],
+            [undefined, ...this.boxbg.getChildByName('line3').children],
+            [undefined, ...this.boxbg.getChildByName('line4').children],
+            [undefined, ...this.boxbg.getChildByName('line5').children],
+        ]
     },
 
     setGameController (gameController) {
@@ -90,12 +102,6 @@ cc.Class({
     // 开始
     start () {
         this.initWithModel(this.gameController.gameModel.cellModel);
-        let cards = [
-            {relatPos: cc.v2(0, 0), type: CELL_TYPE.C1},
-            {relatPos: cc.v2(-1, 0), type: CELL_TYPE.C1},
-            {relatPos: cc.v2(-1, +1), type: CELL_TYPE.C1},
-        ];
-        // this.gameController.gameModel.putCardIntoModel(cc.v2(3,4), cards);
         this.getNextDices();
         this.setTouchListener();
     },
@@ -152,9 +158,21 @@ cc.Class({
         if (this.info.cellStatus === CELL_STATUS.IS_MOVE &&
             Date.now() - this.info.lastCheckTime >= this.info.direcDelay) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
-            // this.four1.position = touchPos;
-            // this.checkInPos(touchPos, false);
-            this.info.currentMove.position = cc.v2(touchPos.x, touchPos.y+80);
+            let putpos = cc.v2(touchPos.x, touchPos.y+80);
+            this.info.currentMove.position = putpos;
+
+            let boxPos = this.convertToBoxPos(putpos);
+            // console.log('onTouchMove ----  boxPos', boxPos);
+            // 用户更换到其他格子了,重置选中的底部格子
+            if ((boxPos && !this.info.nowHoverPos) ||
+                (this.info.nowHoverPos && !boxPos) ||
+                (boxPos && (this.info.nowHoverPos.x !== boxPos.x || this.info.nowHoverPos.y !== boxPos.y)) ) {
+                let canPutArr = this.gameController.gameModel.checkIfCanPut(boxPos, this.info.currentDices);
+                // console.log('onTouchMove canPutArr', canPutArr);
+                this.setCellBg(canPutArr);
+                this.info.nowHoverPos = boxPos;
+            }
+            
             this.info.lastCheckTime = Date.now();
         }
     },
@@ -162,31 +180,105 @@ cc.Class({
     onTouchEnd (touch) {
         if (this.info.cellStatus === CELL_STATUS.IS_MOVE) {
             let touchPos = this.node.convertToNodeSpaceAR(touch.touch._point);
+            let putpos = cc.v2(touchPos.x, touchPos.y+80);
             // this.info.currentMove.opacity = 255;
             this.info.currentMove.active = false;
-            this.info.currentTurn.active = true;
-            // let inDest = this.checkInPos(touchPos, true);
-            // if (inDest) {
-            //     // 放对位置了
-            //     this.four1.scale = 1;
-            //     this.four1.position = this.info.four1Pos;
-            //     this.four1.active = false;
-            //     this.setCellStatus(CELL_STATUS.DONE_MOVE);
-            //     this.hand.getComponent(cc.Animation).stop();
-            //     this.hand.active = false;
-            //     setTimeout(() => {this.showBomb();}, 100);
-            // } else {
-            //     this.four1.scale = 1;
-            //     this.four1.position = this.info.four1Pos;
-            //     this.setCellStatus(CELL_STATUS.CAN_MOVE);
-            // }
-            this.setCellStatus(CELL_STATUS.CAN_MOVE);
+            
+            let boxPos = this.convertToBoxPos(putpos);
+            this.setCellBg(null);
+
+            let canPutArr = this.gameController.gameModel.checkIfCanPut(boxPos, this.info.currentDices);
+            // 如果可以放进格子
+            if (canPutArr) {
+                if (this.info.isFirstStep) this.hideFirstGuide();
+                let connectArr = this.gameController.gameModel.putCardIntoModel(boxPos, this.info.currentDices);
+                // 如果存在可以合并的牌
+                if (connectArr) {
+                    this.actCombine(connectArr);
+                    this.setCellStatus(CELL_STATUS.DONE_MOVE);
+                } else {
+                    this.getNextDices(); // 直接拿一组新方块
+                    this.setCellStatus(CELL_STATUS.CAN_MOVE);
+                }
+            } else {
+                // 如果手上的方块没放进格子，则不需要拿新方块
+                this.info.currentTurn.active = true;
+                this.setCellStatus(CELL_STATUS.CAN_MOVE);
+            }
+
+            this.info.nowHoverPos = null;
+            // console.log('onTouchEnd connectArr', connectArr);
+        }
+    },
+
+
+    /**
+     * 显示放下去的格子
+     * @param {*} boxPos 棋盘坐标
+     * @param {*} cardsModel 卡牌组模型 [{relatPos: cc.v2, type: CELL_TYPE}]
+     */
+    showCells (boxPos, cardsModel) {
+        if (!cardsModel) return;
+        cardsModel.forEach((model, index) => {
+            let cell = this.cells[boxPos.x+model.relatPos.x][boxPos.y+model.relatPos.y];
+            cell.getComponent(cc.Sprite).spriteFrame = this.sprites[model.type];
+            cell.active = true;
+            cell.opacity = 255;
+        });
+    },
+
+    /**
+     * 把方块下面的格子变成黑色
+     * @param {[cc.v2]} canPutArr 如果传数组，则会把相应位置的格子变成黑色，如果传null则会把原来的黑色格子变白
+     */
+    setCellBg (canPutArr) {
+        const light = new cc.color(255, 255, 255);
+        const dark = new cc.color(207, 207, 207);
+        
+        if (this.info.lastCanPutArr) {
+            this.info.lastCanPutArr.forEach(pos => {
+                let bg = this.cellbgs[pos.x][pos.y];
+                bg.color = light;
+            });
+        }
+        this.info.lastCanPutArr = canPutArr;
+        if (!canPutArr || canPutArr.length<=0) return;
+
+        canPutArr.forEach(pos => {
+            let bg = this.cellbgs[pos.x][pos.y];
+            bg.color = dark;
+        });
+        this.info.lastCanPutArr = canPutArr;
+    },
+
+    /**
+     * 把游戏坐标转换成棋盘坐标
+     * @param {*} pos
+     * @return 返回对应的棋盘坐标。如果没有对应的格子，则返回null
+     */
+    convertToBoxPos (pos) {
+        // 左上角起点坐标（-174， 112） 间隔87 宽度77.5 缓冲距离15
+        const center = {x: -174, y: 112};
+        const dist = 87;
+        const width = 77.5;
+        const half = width/2;
+        const huan = 5;
+        const colY = [0, center.x, center.x+dist, center.x+dist*2, center.x+dist*3, center.x+dist*4];
+        const rowX = [0, center.y, center.y-dist, center.y-dist*2, center.y-dist*3, center.y-dist*4];
+        let xx = rowX.findIndex((y, i) => i>0 && (pos.y >= (y-half+huan) && pos.y <= (y+half-huan)) );
+        let yy = colY.findIndex((x, i) => i>0 && (pos.x >= (x-half+huan) && pos.x <= (x+half-huan)));
+        
+        if (xx>0 && yy>0) {
+            return cc.v2(xx, yy);
+        } else {
+            return null;
         }
     },
 
     /**拿到下一组新的骰子 */
     getNextDices () {
         let next = this.gameController.gameModel.getNextCards();
+        // console.log('getNextDices next: ', next);
         if (next.length < 0 || next.length > 2) return false;
         this.info.currentDices = this.info.nextDices;
         this.info.nextDices = next;
@@ -194,6 +286,9 @@ cc.Class({
         this.renderNewDices('nextc', this.info.nextDices);
         this.info.currentTurn = this.renderNewDices('turnc', this.info.currentDices);
         this.info.currentMove = this.renderNewDices('movec', this.info.currentDices);
+
+        this.info.currentMove.active = false;
+        this.info.currentTurn.active = true;
     },
 
     /**
@@ -234,6 +329,61 @@ cc.Class({
         }
         return areacont[kind];
     },
+
+    /**
+     * 把卡片组合起来
+     * @param {[cc.v2]} arr 
+     */
+    actCombine (arr) {
+        if (!arr || arr.length === 0) return;
+        let center = this.cells[arr[0].x][arr[0].y];
+        let newType = this.gameController.gameModel.combineCards(arr);
+        arr.forEach((boxPos, index) => {
+            let cell = this.cells[boxPos.x][boxPos.y];
+            let originPos = cc.v2(cell.position.x, cell.position.y);
+            if (index !== 0) {
+                cell.runAction(cc.sequence(
+                    cc.moveTo(0.3, center.position.x, center.position.y),
+                    cc.callFunc(() => {
+                        cell.opacity = 0;
+                        cell.position = originPos;
+                        if (index === arr.length-1) {
+                            center.runAction(cc.sequence(
+                                cc.callFunc(() => {
+                                    center.getComponent(cc.Sprite).spriteFrame = this.sprites[newType];
+                                }),
+                                cc.scaleTo(0.1, 1.1),
+                                cc.repeat(cc.sequence(cc.rotateTo(0.1, 15), cc.rotateTo(0.1, -15)), 3),
+                                cc.spawn(cc.rotateTo(0.1, 0), cc.scaleTo(0.1, 1)),
+                                cc.callFunc(() => {
+                                    let connectArr = this.gameController.gameModel.getConnectArr();
+                                    if (connectArr) {
+                                        this.actCombine(connectArr)
+                                    } else {
+                                        this.getNextDices();
+                                        this.setCellStatus(CELL_STATUS.CAN_MOVE);
+                                    }
+                                    // console.log('组合完毕');
+                                })
+                            ));
+                        }
+                    })
+                ));
+            }
+        });
+    },
+
+    // 影藏第一步引导
+    hideFirstGuide () {
+        this.isFirstStep = false;
+        let hand = this.node.getChildByName('handanim');
+        let box = this.node.getChildByName('ligbox');
+        [hand, box].forEach(each => {
+            if (!each) return;
+            each.getComponent(cc.Animation).stop();
+            each.active = false;
+        });
+    }
 
     // update (dt) {},
 });

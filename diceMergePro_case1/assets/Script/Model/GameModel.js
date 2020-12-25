@@ -169,6 +169,7 @@ export default class GameModel {
             [undefined, 'CE', 'CE', 'C1', 'CE', 'CE'],
             [undefined, 'CE', 'CE', 'CE', 'CE', 'CE'],
             [undefined, 'CE', 'CE', 'CE', 'CE', 'CE'],
+            []
         ];
 
         /**等待出现的组合
@@ -202,6 +203,11 @@ export default class GameModel {
 
     }
 
+    //设置游戏控制器
+    setGameController(gameController) {
+        this.gameController = gameController;
+    }
+
     //设置引导脚本
     setGuideView(guideScript) {
         this.guideScript = guideScript;
@@ -220,41 +226,48 @@ export default class GameModel {
      * @param {cc.v2} boxPos 棋盘坐标，放置的位置
      * @param {*} cards [{relatPos: cc.v2, type: CELL_TYPE}]  卡片组：[{相对位置，类型}]
      * @param {boolean} ifPutDown 是否要放下，如果为true的话，则在能放入的前提下，会修改格子模型
-     * @return 如果可以返回true，否则false
+     * @return 如果可以放下，则返回放得下的格子的坐标数组，否则返回null
      */
     checkIfCanPut (boxPos, cards, ifPutDown = false) {
-        if (!boxPos || !cards || cards.length === 0) return false;
+        if (!boxPos || !cards || cards.length === 0) return null;
 
         let canput = true; // 记录能否放下牌组
         let putRecord = [];
+        let canPutArr = [];
         cards.forEach((card, index) => {
-            let newPos = {x: boxPos.x+card.relatPos.x, y: boxPos.y+card.relatPos.y};
+            let newPos =cc.v2(boxPos.x+card.relatPos.x, boxPos.y+card.relatPos.y);
             if (this.cellModel[newPos.x][newPos.y] !== CELL_TYPE.CE) { // 此处非空格
                 canput = false;
             } else if (ifPutDown) { // 此处是空格，而且要放下方块
                 this.cellModel[newPos.x][newPos.y] = card.type;
                 putRecord.push(newPos);
             }
+            canPutArr.push(newPos);
         });
         if (!canput) { // 如果这个组合放不下，就还原格子模型
             putRecord.forEach((cardPos, index) => {
                 this.cellModel[cardPos.x][cardPos.y] = CELL_TYPE.CE; // 把刚才放下的位置变成空格子
             });
+            return null;
+        } else {
+            return canPutArr;
         }
-        return canput;
     }
 
     /**
      * 把卡片放进模型
      * @param {cc.v2} boxPos 放置的位置(棋盘坐标)
      * @param {*} cards [{relatPos: cc.v2, type: CELL_TYPE}]  卡片组：[{相对位置，类型}]
+     * @return result 返回一个数组，里面是可以合并的点的坐标，数组第一个元素是中心点。如果没有可以合并的点，则返回null
      */
     putCardIntoModel (boxPos, cards) {
-        let canput = this.checkIfCanPut(boxPos, cards, true);
-        if (!canput) return null;
+        let putArr = this.checkIfCanPut(boxPos, cards, true);
+        if (!putArr) return null;
+        this.gameController.gameView.showCells(boxPos, cards);
         let connectArr = this.getConnectArr(boxPos);
         // console.log('putCardIntoModel, boxPos:', boxPos, ' cards', cards);
         // console.log('putCardIntoModel, connectArr:', connectArr);
+        return connectArr;
     }
 
     /**
@@ -292,7 +305,8 @@ export default class GameModel {
                     }
                 }
             }
-            return result;
+            if (result.length >= 3) return result;
+            else return null;
         } else return null;
     }
 
@@ -382,7 +396,13 @@ export default class GameModel {
                 sameType = false;
             } else {
                 sameTypeIndex.push(index);
-                this.cellModel[pos.x][pos.y] = CELL_TYPE.CE; // 合并之后，原来的位置变成空格子
+                if (index === 0) {
+                    // 合并之后，中点变成新类型
+                    this.cellModel[pos.x][pos.y] = COMBINE_TYPE[type];
+                } else {
+                    this.cellModel[pos.x][pos.y] = CELL_TYPE.CE; // 合并之后，原来的位置变成空格子
+                }
+                
             }
         });
         if (!sameType) { // 如果合成失败，存在不同类型的卡片
@@ -406,7 +426,7 @@ export default class GameModel {
         if (this.nextCardsList.length > 0) {
             return this.nextCardsList.splice(0, 1)[0];
         } else {
-            let rand = Math.floor(Math.random()*6)+1;
+            let rand = Math.floor(Math.random()*6);
             return [{relatPos: cc.v2(0,0), type: typelist[rand]}]
         }
     }

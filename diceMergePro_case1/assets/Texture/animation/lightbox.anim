@@ -1,0 +1,69 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "lightbox",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.8666666666666667,
+  "sample": 15,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "9e3826ae-5f9b-4727-87de-172c838556d6"
+            }
+          },
+          {
+            "frame": 0.13333333333333333,
+            "value": {
+              "__uuid__": "856235e1-d3f9-4ed1-ad65-9e1c54cb07ec"
+            }
+          },
+          {
+            "frame": 0.26666666666666666,
+            "value": {
+              "__uuid__": "9e3826ae-5f9b-4727-87de-172c838556d6"
+            }
+          },
+          {
+            "frame": 0.6666666666666666,
+            "value": {
+              "__uuid__": "856235e1-d3f9-4ed1-ad65-9e1c54cb07ec"
+            }
+          },
+          {
+            "frame": 0.8,
+            "value": {
+              "__uuid__": "9e3826ae-5f9b-4727-87de-172c838556d6"
+            }
+          }
+        ]
+      }
+    },
+    "props": {
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 255
+        },
+        {
+          "frame": 0.26666666666666666,
+          "value": 190
+        },
+        {
+          "frame": 0.4666666666666667,
+          "value": 0
+        },
+        {
+          "frame": 0.6666666666666666,
+          "value": 255
+        }
+      ]
+    }
+  },
+  "events": []
+}

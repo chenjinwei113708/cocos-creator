@@ -1,0 +1,149 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "moveguide",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 2.2,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "hand": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.4,
+              "value": 255
+            },
+            {
+              "frame": 1.6,
+              "value": 255
+            },
+            {
+              "frame": 1.8,
+              "value": 0
+            },
+            {
+              "frame": 2.2,
+              "value": 0
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                21.734,
+                -71.442,
+                0
+              ]
+            },
+            {
+              "frame": 0.4,
+              "value": [
+                21.734,
+                -16.287,
+                0
+              ]
+            }
+          ]
+        },
+        "comps": {
+          "cc.Sprite": {
+            "spriteFrame": [
+              {
+                "frame": 0,
+                "value": {
+                  "__uuid__": "97a9f4c3-2215-4952-85a8-a771ee14b927"
+                }
+              },
+              {
+                "frame": 0.6,
+                "value": {
+                  "__uuid__": "4d387975-0afe-4f88-a626-348f35c3cfc7"
+                }
+              },
+              {
+                "frame": 1.6,
+                "value": {
+                  "__uuid__": "97a9f4c3-2215-4952-85a8-a771ee14b927"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "virtbox": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.6,
+              "value": 0
+            },
+            {
+              "frame": 0.8,
+              "value": 255
+            },
+            {
+              "frame": 1.8,
+              "value": 255
+            },
+            {
+              "frame": 2,
+              "value": 0
+            }
+          ]
+        }
+      }
+    },
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            36.774,
+            -384.269,
+            0
+          ]
+        },
+        {
+          "frame": 0.8,
+          "value": [
+            36.774,
+            -384.269,
+            0
+          ]
+        },
+        {
+          "frame": 1.4,
+          "value": [
+            81.78,
+            6.16,
+            0
+          ]
+        },
+        {
+          "frame": 2,
+          "value": [
+            81.78,
+            6.16,
+            0
+          ]
+        },
+        {
+          "frame": 2.2,
+          "value": [
+            36.774,
+            -384.269,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}

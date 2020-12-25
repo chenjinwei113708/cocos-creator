@@ -49,6 +49,7 @@ cc.Class({
         this.guideView = this.guide.getComponent('GuideView');
         this.guideView.setGameController(this);
         this.gameModel.setGuideView(this.guideView);
+        this.gameModel.setGameController(this);
 
 
         //用centerView脚本来布置整个画面，包括横竖屏的响应方法。
