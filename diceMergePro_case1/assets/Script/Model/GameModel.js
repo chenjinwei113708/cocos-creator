@@ -171,6 +171,7 @@ export default class GameModel {
             [undefined, 'CE', 'CE', 'CE', 'CE', 'CE'],
             []
         ];
+        this.kongTimes = 0; // 放进来的牌没有合成其他牌的次数。只要合成一次，就会重新计数
 
         /**等待出现的组合
          * (0,0)代表中心，x加/减代表列的加/减，y加/减代表行的加/减，
@@ -267,6 +268,11 @@ export default class GameModel {
         let connectArr = this.getConnectArr(boxPos);
         // console.log('putCardIntoModel, boxPos:', boxPos, ' cards', cards);
         // console.log('putCardIntoModel, connectArr:', connectArr);
+        if (connectArr || (cards[0] && cards[0].type === CELL_TYPE.CPP) ) {
+            this.kongTimes = 0;
+        } else {
+            this.kongTimes++;
+        }
         return connectArr;
     }
 
@@ -433,6 +439,27 @@ export default class GameModel {
         }
     }
 
+    /**
+     * 消除所有卡
+     * @return 返回被消除的卡的棋盘坐标和类型 [{boxPos: cc.v2, type: CELL_TYPE}]
+     */
+    eliminateAllCards () {
+        let result = [];
+        for (let i = 1; i <= GRID_HEIGHT; i++) {
+            for (let j = 1; j <= GRID_WIDTH; j++) {
+                if (this.cellModel[i][j] !== CELL_TYPE.CE) {
+                    result.push({
+                        boxPos: cc.v2(i, j),
+                        type: this.cellModel[i][j]
+                    });
+                    // 置空
+                    this.cellModel[i][j] = CELL_TYPE.CE;
+                }
+            }
+        }
+        return result;
+    }
+
     /**拿到下一组卡牌
      * @return 返回一个数组，数组里面存了一组卡牌信息 [{relatPos: cc.v2, type: CELL_TYPE}]
      */
@@ -441,8 +468,16 @@ export default class GameModel {
         if (this.nextCardsList.length > 0) {
             return this.nextCardsList.splice(0, 1)[0];
         } else {
-            let rand = Math.floor(Math.random()*6);
-            return [{relatPos: cc.v2(0,0), type: typelist[rand]}]
+            if (this.kongTimes >= 8) {
+                // 如果用户放了3次还没合成任何牌，则下一个返回爆炸牌 CPP
+                this.kongTimes = 0;
+                return [{relatPos: cc.v2(0,0), type: CELL_TYPE.CPP}];
+            } else {
+                // 随机返回牌
+                let rand = Math.floor(Math.random()*6);
+                return [{relatPos: cc.v2(0,0), type: typelist[rand]}];
+            }
+            
         }
     }
 

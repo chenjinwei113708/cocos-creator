@@ -9,7 +9,9 @@
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 import {
     CELL_TYPE,
-    CELL_STATUS
+    CELL_STATUS,
+    GRID_WIDTH,
+    GRID_HEIGHT
 } from '../Model/ConstValue';
 
 cc.Class({
@@ -44,6 +46,7 @@ cc.Class({
             lastCanPutArr: null, // 上一次提示放置的位置,
             nowHoverPos: null, // 当前用户停留在什么棋盘坐标
             isFirstStep: true, // 是不是用户第一次操作
+            guideTimeout: null, // 指引点击定时器
         };
         this.sprites = {
            [CELL_TYPE.C1]: this.spriteC1,
@@ -54,6 +57,8 @@ cc.Class({
            [CELL_TYPE.C6]: this.spriteC6,
            [CELL_TYPE.CPP]: this.spriteCPP,
         };
+        this.bomb = this.node.getChildByName('bomb');
+        this.clickHand = this.node.getChildByName('hand');
 
         // 骰子组合
         let nextnode = this.node.getChildByName('nextdice');
@@ -122,6 +127,12 @@ cc.Class({
 
     setCellStatus (status) {
         this.info.cellStatus = status;
+        if (status === CELL_STATUS.CAN_MOVE) {
+            this.info.guideTimeout && clearTimeout(this.info.guideTimeout);
+            this.info.guideTimeout = setTimeout(()=>{
+                this.showClickHand();
+            }, 3000);
+        }
     },
 
     setTouchListener () {
@@ -145,7 +156,10 @@ cc.Class({
                 touchPos.y >= this.touchStartArea.position.y - this.touchStartArea.height/2 &&
                 touchPos.y <= this.touchStartArea.position.y + this.touchStartArea.height/2) {
                     this.info.lastCheckTime = Date.now();
+
                     this.setCellStatus(CELL_STATUS.IS_MOVE);
+                    this.hideClickHand();
+
                     this.info.currentMove.opacity = 255;
                     this.info.currentMove.active = true;
                     
@@ -192,6 +206,7 @@ cc.Class({
             let canPutArr = this.gameController.gameModel.checkIfCanPut(boxPos, this.info.currentDices);
             // 如果可以放进格子
             if (canPutArr) {
+                this.gameController.getAudioUtils().playEffect('bubble', 1.5);
                 if (this.info.isFirstStep) this.hideFirstGuide();
                 let connectArr = this.gameController.gameModel.putCardIntoModel(boxPos, this.info.currentDices);
                 // 如果存在可以合并的牌
@@ -199,8 +214,13 @@ cc.Class({
                     this.actCombine(connectArr);
                     this.setCellStatus(CELL_STATUS.DONE_MOVE);
                 } else {
-                    this.getNextDices(); // 直接拿一组新方块
-                    this.setCellStatus(CELL_STATUS.CAN_MOVE);
+                    if (this.info.currentDices[0].type === CELL_TYPE.CPP) {
+                        this.actBomb();
+                    } else {
+                        this.getNextDices(); // 直接拿一组新方块
+                        this.setCellStatus(CELL_STATUS.CAN_MOVE);
+                    }
+                    
                 }
             } else {
                 // 如果手上的方块没放进格子，则不需要拿新方块
@@ -340,6 +360,7 @@ cc.Class({
         if (!arr || arr.length === 0) return;
         let center = this.cells[arr[0].x][arr[0].y];
         let newType = this.gameController.gameModel.combineCards(arr);
+        
         arr.forEach((boxPos, index) => {
             let cell = this.cells[boxPos.x][boxPos.y];
             let originPos = cc.v2(cell.position.x, cell.position.y);
@@ -350,6 +371,13 @@ cc.Class({
                         cell.opacity = 0;
                         cell.position = originPos;
                         if (index === arr.length-1) {
+                            let money = 5+Math.ceil(Math.random()*10);
+                            money = (this.gameController.cashView.targetCash+money) > 100 ?
+                                (100 - this.gameController.cashView.targetCash) : money;
+                            if (money>0) {
+                                this.gameController.showNewMsg(money);
+                            }
+                            
                             center.runAction(cc.sequence(
                                 cc.callFunc(() => {
                                     center.getComponent(cc.Sprite).spriteFrame = this.sprites[newType];
@@ -358,13 +386,26 @@ cc.Class({
                                 cc.repeat(cc.sequence(cc.rotateTo(0.1, 15), cc.rotateTo(0.1, -15)), 3),
                                 cc.spawn(cc.rotateTo(0.1, 0), cc.scaleTo(0.1, 1)),
                                 cc.callFunc(() => {
-                                    let connectArr = this.gameController.gameModel.getConnectArr();
-                                    if (connectArr) {
-                                        this.actCombine(connectArr)
+                                    if (newType === CELL_TYPE.CPP) {
+                                        this.actBomb();
                                     } else {
-                                        this.getNextDices();
-                                        this.setCellStatus(CELL_STATUS.CAN_MOVE);
+                                        if (this.gameController.cashView.targetCash < 100) {
+                                            let connectArr = this.gameController.gameModel.getConnectArr();
+                                            if (connectArr) {
+                                                this.actCombine(connectArr)
+                                            } else {
+                                                if (this.gameController.cashView.targetCash < 100) {
+                                                    this.getNextDices();
+                                                    this.setCellStatus(CELL_STATUS.CAN_MOVE);
+                                                } else {
+                                                    this.showMoneyCard();
+                                                }
+                                            }
+                                        } else {
+                                            this.showMoneyCard();
+                                        }
                                     }
+                                    
                                     // console.log('组合完毕');
                                 })
                             ));
@@ -375,9 +416,45 @@ cc.Class({
         });
     },
 
-    // 影藏第一步引导
+    /**爆炸 */
+    actBomb () {
+        this.bomb.active = true;
+        let animstate = this.bomb.getComponent(cc.Animation).play('bomb');
+        this.gameController.getAudioUtils().playEffect('lightning', 0.6);
+        animstate.on('finished', () => {
+            this.bomb.active = false;
+        });
+        let bombModels = this.gameController.gameModel.eliminateAllCards();
+        // [{boxPos: cc.v2, type: CELL_TYPE}]
+        bombModels.forEach((model, index) => {
+            let node = this.cells[model.boxPos.x][model.boxPos.y];
+            node.runAction(cc.sequence(
+                cc.scaleTo(0.2, 0),
+                cc.callFunc(() => {
+                    node.scale = 1;
+                    node.opacity = 0;
+                    if (index === bombModels.length-1) {
+                        let money = 100-this.gameController.cashView.targetCash;
+                        if (money>0) {
+                            this.gameController.showNewMsg(money);
+                        }
+                        
+                        if (this.gameController.cashView.targetCash < 100) {
+                            this.getNextDices();
+                            this.setCellStatus(CELL_STATUS.CAN_MOVE);
+                        } else {
+                            this.showMoneyCard();
+                        }
+                        
+                    }
+                })
+            ));
+        });
+    },
+
+    // 隐藏第一步引导
     hideFirstGuide () {
-        this.isFirstStep = false;
+        this.info.isFirstStep = false;
         let hand = this.node.getChildByName('handanim');
         let box = this.node.getChildByName('ligbox');
         [hand, box].forEach(each => {
@@ -385,6 +462,46 @@ cc.Class({
             each.getComponent(cc.Animation).stop();
             each.active = false;
         });
+    },
+
+    /**展示点击手势 */
+    showClickHand () {
+        if (this.info.isFirstStep) return;
+        this.clickHand.active = true;
+        this.clickHand.opacity = 0;
+        this.clickHand.runAction(cc.sequence(
+            cc.fadeIn(0.3),
+            cc.callFunc(() => {
+                this.clickHand.getComponent(cc.Animation).play();
+            })
+        ));
+    },
+
+    /**隐藏点击手势 */
+    hideClickHand () {
+        this.info.guideTimeout && clearTimeout(this.info.guideTimeout);
+        if (this.clickHand.active) {
+            this.clickHand.getComponent(cc.Animation).play();
+            this.clickHand.active = false;
+        }
+    },
+
+    /**展示现金卡 */
+    showMoneyCard () {
+        let moneyCard = this.node.getChildByName('winmoney');
+        let mask = cc.find('Canvas/center/game/mask');
+
+        this.setCellStatus(CELL_STATUS.DONE_MOVE);
+        this.gameController.getAudioUtils().playEffect('moneyCard', 0.6);
+        moneyCard.scale = 0;
+        moneyCard.active = true;
+        moneyCard.runAction(cc.sequence(
+            cc.scaleTo(0.4, 1.1),
+            cc.scaleTo(0.2, 1)
+        ));
+        mask.active = true;
+        mask.opacity = 0;
+        mask.runAction(cc.fadeTo(0.4, 150));
     }
 
     // update (dt) {},

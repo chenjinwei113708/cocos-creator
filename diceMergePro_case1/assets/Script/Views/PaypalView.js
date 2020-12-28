@@ -8,12 +8,15 @@
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
+/**
+ * 注意：不要把item的active设为false，可以把opacity设为0
+ */
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        item1: cc.Node, // 通知1
-        item2: cc.Node, // 通知2
+        item1: cc.Node, // 通知1 不要把item的active设为false
+        item2: cc.Node, // 通知2 不要把item的active设为false
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -33,19 +36,19 @@ cc.Class({
 
     start () {
         // this.becomeLight();
-        setTimeout(() => {
-            this.addNewMsg(15);
-            this.addNewMsg(10);
-            this.addNewMsg(5);
-        }, 1000);
-        setTimeout(() => {
-            this.addNewMsg(33);
-            this.addNewMsg(44);
-            this.addNewMsg(11);
-            this.addNewMsg(12);
-            this.addNewMsg(13);
-            this.addNewMsg(15);
-        }, 4000);
+        // setTimeout(() => {
+        //     this.addNewMsg(15);
+        //     this.addNewMsg(10);
+        //     this.addNewMsg(5);
+        // }, 1000);
+        // setTimeout(() => {
+        //     this.addNewMsg(33);
+        //     this.addNewMsg(44);
+        //     this.addNewMsg(11);
+        //     this.addNewMsg(12);
+        //     this.addNewMsg(13);
+        //     this.addNewMsg(15);
+        // }, 4000);
     },
 
     /**
@@ -93,6 +96,7 @@ cc.Class({
 
         this.gameController.addCash(money);
 
+        this.gameController.getAudioUtils().playEffect('coin', 0.6);
         [this.nextItem, this.activeItem].forEach((item, index) => {
             item.runAction(cc.sequence(
                 cc.moveBy(0.4, 0, item.height),

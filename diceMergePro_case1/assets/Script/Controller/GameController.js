@@ -21,6 +21,7 @@ cc.Class({
     onLoad() {
         // 游戏开始 等待平台SDK加载后调用gameInit
         PlayformSDK.gameStart();
+        this.paypalView = cc.find('Canvas/center/UI/paypal/box').getComponent('PaypalView');
     },
 
     // start () {
@@ -122,6 +123,11 @@ cc.Class({
         this.node.on(cc.Node.EventType.TOUCH_START, function (touchEvent) {
             this.AudioUtils.getComponent('AudioUtils').playEffect('bgClick', 2)
         }, this)
+    },
+
+    /**添加paypal到账信息 */
+    showNewMsg (num) {
+        this.paypalView.addNewMsg(num);
     },
 
     /**加钱 */
