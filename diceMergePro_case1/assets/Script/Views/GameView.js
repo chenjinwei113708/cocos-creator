@@ -109,8 +109,8 @@ cc.Class({
         this.initWithModel(this.gameController.gameModel.cellModel);
         this.getNextDices();
         this.setTouchListener();
-        let arr = this.gameController.gameModel.getConnectArr();
-        console.log('arr --- ',arr);
+        // let arr = this.gameController.gameModel.getConnectArr();
+        // console.log('arr --- ',arr);
     },
 
     initWithModel (model) {

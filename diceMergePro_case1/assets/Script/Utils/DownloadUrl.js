@@ -1,6 +1,6 @@
 export const DownloadUrl = {
-    iosUrl: 'https://itunes.apple.com/app/id1468229094',
-    androidUrl: 'https://play.google.com/store/apps/details?id=com.bluembo.tritos&hl=en_GB',
+    iosUrl: 'https://apps.apple.com/app/id1539135307',
+    androidUrl: 'https://play.google.com/store/apps/details?id=com.shark.dicemergepro',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;

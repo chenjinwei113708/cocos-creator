@@ -15,24 +15,24 @@ cc.Class({
             type: cc.SpriteFrame,
             default: null
         },
-        // Music
-        bgMusic: {
-            type: cc.AudioClip,
-            default: null
-        },
 
         // Effect
-        bgClick: {
+        moneyCard: {
             type: cc.AudioClip,
             default: null
         },
 
-        startMusic: {
+        bubble: {
             type: cc.AudioClip,
             default: null
         },
 
-        endMusic: {
+        lightning: {
+            type: cc.AudioClip,
+            default: null
+        },
+
+        coin: {
             type: cc.AudioClip,
             default: null
         }
