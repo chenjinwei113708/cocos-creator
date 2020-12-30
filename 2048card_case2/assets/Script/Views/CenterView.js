@@ -3,7 +3,12 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        gameController: null
+        gameController: null,
+        cashout_id: cc.SpriteFrame,
+        cashout_ms: cc.SpriteFrame,
+        cashout_th: cc.SpriteFrame,
+        win_id_ms: cc.SpriteFrame,
+        win_th: cc.SpriteFrame,
     },
 
 
@@ -153,9 +158,14 @@ cc.Class({
                     // console.log(path, elemConf[key])
                     cc.find(path).setScale(elemConf[key]);
                     break;
+                case 'spriteFrame':
+                    // console.log(key, path, elemConf[key]);
+                    cc.find(path).getComponent(cc.Sprite).spriteFrame = this[elemConf[key]];
+                    break;
                 // case 'progressBarDirection':
                 //     cc.find(path).getComponent('cc.ProgressBar').reverse = elemConf[key];
                 default: 
+                    // console.log(key, path, elemConf[key]);
                     cc.find(path)[key] = elemConf[key];
                     break
             }

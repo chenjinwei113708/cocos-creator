@@ -23,11 +23,6 @@ cc.Class({
         PlayformSDK.gameStart();
     },
 
-    // start () {
-    //     // 初始化完成调用下平台SDK
-    //     PlayformSDK.gameReady();
-    // },
-
     gameInit() {
         // cc.director.setDisplayStats(false);
         //是否显示左下方fps信息
@@ -79,6 +74,9 @@ cc.Class({
         // this.guideView.showWelcomePage();
 
         // this.gotoNextStep();
+    },
+
+    start () {
     },
 
     /**执行任务队列 */

@@ -12,7 +12,8 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isApplovin = true; // 是不是applovin平台
+        this.isApplovin = false; // 是不是applovin平台
+        this.lang = 'id'; // id | th | ms (印尼语|泰语|马来语)
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(239.06, 3.824),
@@ -39,7 +40,7 @@ export default class GameModel {
                         children: {
                             progress: {
                                 position: cc.v2(130, 0),
-                                scale: 0.9
+                                scale: 0.9,
                             },
                         }
                     },
@@ -52,9 +53,20 @@ export default class GameModel {
                             icon: {
                                 position: cc.v2(-152.868, 72.339)
                             },
+                            // btn: {
+                            //     position: cc.v2(12.213, 70.484),
+                            //     ...((this.lang && this.lang!=='') ? (() => {
+                            //         switch (this.lang) {
+                            //             case 'id': return {spriteFrame: 'win_id_ms'};
+                            //             case 'ms': return {spriteFrame: 'win_id_ms'};
+                            //             case 'th': return {spriteFrame: 'win_th'};
+                            //             default: return {};
+                            //         }
+                            //     })() : {}),
+                            // },
                             btn: {
                                 position: cc.v2(12.213, 70.484)
-                            },
+                            }
                         }
                     },
                     notification: {
@@ -145,6 +157,39 @@ export default class GameModel {
                 }
             }
         }
+
+        // 设置多语言图片
+        if (this.lang && this.lang!=='') {
+            ['HorizontalConfig', 'VerticalConfig'].forEach(each => {
+                let cashout = '';
+                let win = '';
+                switch (this.lang) {
+                    case 'id': 
+                        cashout = 'cashout_id';
+                        win = 'win_id_ms';
+                        break;
+                    ;
+                    case 'ms':
+                        cashout = 'cashout_ms';
+                        win = 'win_id_ms';
+                        break;
+                    case 'th':
+                        cashout = 'cashout_th';
+                        win = 'win_th';
+                        break;
+                    default:
+                        cashout = 'cashout_id';
+                        win = 'win_id_ms';
+                }
+                this[each].UI.children.pp.children.progress.children = {
+                    btn: {
+                        spriteFrame: cashout
+                    }
+                };
+                this[each].UI.children.banner.children.btn.spriteFrame = win;
+            });
+        }
+        
 
         //guiding用来记录是否还需要继续进行拖动手势引导
         this.guiding = true;
