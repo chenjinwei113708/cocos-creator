@@ -9,7 +9,7 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isApplovin = true; // 是不是applovin平台
+        this.isApplovin = false; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(239.546, 79.659),
@@ -58,7 +58,7 @@ export default class GameModel {
                         }
                     },
                     banner: {
-                        position: cc.v2(-261.323, -242.363),
+                        position: cc.v2(-261.323, -230.363),
                         children: {
                             icon: {
                                 position: cc.v2(-70.997, 131.491)
@@ -70,6 +70,9 @@ export default class GameModel {
                                 position: cc.v2(17.395, 25.327)
                             }
                         }
+                    },
+                    illustration: {
+                        position: cc.v2(-239, -248)
                     },
                     audioBtn: {
                         position: cc.v2(-415.577, 212.604)
@@ -125,7 +128,7 @@ export default class GameModel {
                         }
                     },
                     banner: {
-                        position: cc.v2(0, -458.318),
+                        position: cc.v2(0, -424.973),
                         children: {
                             icon: {
                                 position: cc.v2(-197, 27)
@@ -137,6 +140,9 @@ export default class GameModel {
                                 position: cc.v2(148.009, 28.4)
                             }
                         }
+                    },
+                    illustration: {
+                        position: cc.v2(0, -459.806)
                     },
                     audioBtn: {
                         position: cc.v2(0, 403.152)
