@@ -26,7 +26,7 @@ export default class GameModel {
             UI: {
                 children: {
                     audioBtn: {
-                        position: cc.v2(-407.111, 206.164)
+                        position: cc.v2(-442.111, 123.164)
                     },
                     pp: {
                         width: 741,
