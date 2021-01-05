@@ -1,0 +1,109 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "drag",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.8,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "props": {
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.4,
+          "value": 255
+        },
+        {
+          "frame": 1.2,
+          "value": 255
+        },
+        {
+          "frame": 1.6,
+          "value": 0
+        }
+      ],
+      "scale": [
+        {
+          "frame": 0,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.3,
+            "y": 1.3
+          }
+        },
+        {
+          "frame": 0.4,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 1.2,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 1.6,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.3,
+            "y": 1.3
+          }
+        }
+      ],
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            73.14,
+            -351.175,
+            0
+          ]
+        },
+        {
+          "frame": 0.4,
+          "value": [
+            73.14,
+            -351.175,
+            0
+          ]
+        },
+        {
+          "frame": 1.2,
+          "value": [
+            26.85,
+            235.784,
+            0
+          ]
+        },
+        {
+          "frame": 1.6,
+          "value": [
+            26.85,
+            235.784,
+            0
+          ]
+        },
+        {
+          "frame": 1.8,
+          "value": [
+            26.85,
+            235.784,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}
