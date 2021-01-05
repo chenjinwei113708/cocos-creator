@@ -144,7 +144,8 @@ cc.Class({
         this.gameInfo.nowLevel = this.gameLevels.splice(0, 1)[0];
         
         if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL1) {
-            this.showPPcard(true);
+            // this.showPPcard(true);
+            this.changeToNextLevel();
         } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL2) {
             // this.showMask(1);
             // this.gameInfo.startTouch = this.touch0;
@@ -160,7 +161,7 @@ cc.Class({
             let nextList = this.actionLevel.splice(0, 1)[0];
             this.actionList.push(...nextList);
         } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL4) {
-            this.showPPcard(true);
+            this.showPPcard(false);
         } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL5) {
             let nextList = this.actionLevel.splice(0, 1)[0];
             this.actionList.push(...nextList);
@@ -290,7 +291,7 @@ cc.Class({
                         let hand = this.hand;
                         hand.opacity = 0;
                         hand.active = true;
-                        hand.position = cc.v2(54.978, -54.918);
+                        hand.position = cc.v2(154.978, -64.918);
                         hand.runAction(cc.fadeIn(0.2));
                         hand.getComponent(cc.Animation).play();
                     });
@@ -308,6 +309,9 @@ cc.Class({
         this.hand.getComponent(cc.Animation).stop();
         this.hand.active = false;
         this.ppcard.getComponent(cc.Animation).stop();
+        this.gameController.download();
+        return;
+
         this.ppcard.runAction(cc.sequence(
             cc.spawn(cc.fadeOut(0.3), cc.scaleTo(0.3, 0)),
             cc.callFunc(()=>{
