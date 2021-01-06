@@ -36,6 +36,33 @@ cc.Class({
         this.gameController = gameController;
     },
 
+    hideHand () {
+        // this.hand.getComponent(cc.Animation).stop('guideHand');
+        // this.hand.active = false;
+        // this.hidePlay();
+    },
+    setHandPos (pos) {
+        // if (pos) this.hand.position = pos;
+    },
+    showHand (pos) {
+        // if (pos) this.hand.position = pos;
+        // this.hand.opacity = 0;
+        // this.hand.active = true;
+        // this.hand.runAction(
+        //     cc.sequence(
+        //         cc.fadeIn(0.5),
+        //         cc.callFunc(
+        //             ()=>{this.hand.getComponent(cc.Animation).play('guideHand');}
+        //         )
+        //     )
+        // );
+    },
+
+    /** 展示paypal卡弹出动画 */
+    showPaypalCardFly (amount, callback) {
+        callback && callback();
+    },
+
     /**展示提示手 */
     showCashOutHand () {
         this.cashoutHand.opacity = 0;
