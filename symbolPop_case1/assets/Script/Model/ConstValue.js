@@ -44,7 +44,7 @@ export const DIRECTION = {
 
 // ********************   时间表  animation time 单位秒 **************************
 export const ANITIME = {
-    FADEOUT: 0.05,
+    FADEOUT: 0.15,
     MOVE: 0.1, //移动一格的时间
     NUM_FLY_TIME: 1.3 //数字飞到指定位置的时间
 }

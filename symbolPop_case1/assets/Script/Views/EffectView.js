@@ -15,7 +15,8 @@ cc.Class({
         bombPurple: cc.Prefab,
         bombRed: cc.Prefab,
         bombYellow: cc.Prefab,
-        flyGrade: cc.Prefab
+        flyGrade: cc.Prefab,
+        wavePref: cc.Prefab
     },
 
 
@@ -59,10 +60,13 @@ cc.Class({
      * @param {*} cells 准备爆照的cellModel
      */
     playBombEffect (cells, waitTime = 550, callback) {
-        const delayTime = ANITIME.FADEOUT*waitTime;
+        const delayTime = ANITIME.FADEOUT*cells.length/3*waitTime;
+        let count = 0;
         cells.forEach((cell, index) => {
+            let t = index === 0 ? 0 : Math.random()*delayTime;
             setTimeout(() => {
-                let gridView = cc.find('Canvas').getComponent('GameController').getGridViewScript();
+                // let gridView = cc.find('Canvas').getComponent('GameController').getGridViewScript();
+                let gridView = this.gridView;
                 gridView.deleteCell(cell);
                 // let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
                 // bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
@@ -77,18 +81,12 @@ cc.Class({
                         this.controller.guideScript.flyPPIcon(startpos);
                     }
                     if (index % 9 === 0) {
-                        let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
-                        bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
-                        bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
-                        bombInstance.parent = this.node;
+                        this.showWave(cell);
                     }
                 } else {
                     if (index % 3 === 0) {
                         // this.audioUtils.playBomb(index, 0.8);
-                        // let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
-                        // bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
-                        // bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
-                        // bombInstance.parent = this.node;
+                        this.showWave(cell);
                     }
                     
                 }
@@ -98,12 +96,32 @@ cc.Class({
                 // flyGrade.getComponent('FlyGradeView').init(cc.v2((cell.x-0.5) * CELL_WIDTH, (cell.y-0.5) * CELL_HEIGHT), TYPE2COLOR[cell.type], 10*(index+1)-5);
                 // flyGrade.parent = this.node;
                 // flyGrade.getComponent('FlyGradeView').fly();
-                if(index === cells.length-1){
-                    callback && callback();
+                // if(index === cells.length-1){
+                //     callback && callback();
+                // }
+                count++;
+                if (count === cells.length) {
+                    setTimeout(()=> {
+                        callback && callback();
+                    }, 400);
                 }
-            }, index*delayTime);
+            }, t);
         })
     },
+
+    showWave (cell) {
+        let bombInstance = cc.instantiate(this.wavePref);
+        bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
+        bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
+        bombInstance.parent = this.node;
+        bombInstance.scale = 0;
+        bombInstance.runAction(cc.sequence(
+            cc.scaleTo(0.2, 0.7),
+            cc.spawn(cc.scaleTo(0.2, 1.3), cc.fadeOut(0.2)),
+            cc.removeSelf()
+        ));
+    },
+
     /**
      * 播放特效
      * @param {*} effectQueue 

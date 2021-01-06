@@ -93,6 +93,7 @@ cc.Class({
         var action = cc.fadeOut(ANITIME.FADEOUT);
         // 执行一串动作
         cc.tween(this.node)
+            .then(cc.delayTime(0.1))
             .then(action)
             .removeSelf() // 移除自己
             .start(); // 开始执行
@@ -114,15 +115,18 @@ cc.Class({
         switch(direction) {
             case DIRECTION.DOWN:
                 // 执行一串动作
-                this.node.runAction(
-                    cc.moveTo(moveTime,
-                        cc.v2(currentX, currentY-step*CELL_HEIGHT))
+                this.node.runAction(cc.sequence(
+                    cc.moveBy(0.15, 0, 20), 
+                    cc.moveTo(moveTime, cc.v2(currentX, currentY-step*CELL_HEIGHT))),
+                    // cc.moveTo(moveTime,
+                    //     cc.v2(currentX, currentY-step*CELL_HEIGHT))
                 );
                 break;
             case DIRECTION.LEFT:
                 // 执行一串动作
                 let sequence = cc.sequence(
                     cc.delayTime(waitTime),
+                    cc.moveBy(0.1, 20, 0), 
                     cc.moveTo(moveTime,
                         cc.v2(currentX-step*CELL_WIDTH, currentY))
                 );
