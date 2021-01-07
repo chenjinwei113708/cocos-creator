@@ -137,9 +137,9 @@ cc.Class({
         }, this)
     },
 
-    // /**加钱 */
-    // addCash (num) {
-    //     this.cashView.addCash(num);
-    // },
+    /**加钱 */
+    addCash (num) {
+        this.cashView.addCash(num);
+    },
 
 });

@@ -21,140 +21,62 @@ export default class GameModel {
         this.isLandscape = false;
         this.isApplovin = false; // 是不是applovin平台
         this.HorizontalConfig = {
-            // game: {
-            //     position: cc.v2(239.546, 79.659),
-            //     scale: 0.88,
-            //     children: {
-            //         adsonly: {
-            //             active: this.isApplovin ? true : false
-            //         }
-            //     }
-            // },
-            // UI: {
-            //     children: {
-            //         congrat: this.isApplovin ? {
-            //             width: 277.38, // applovin
-            //             height: 540,
-            //             opacity: 190
-            //         } : {
-            //             opacity: 255,
-            //             angle: 90,
-            //         },
-            //         congratBlur: this.isApplovin ? {
-            //             width: 277.38, // applovin
-            //             height: 540,
-            //             opacity: 190
-            //         } : {
-            //             opacity: 255,
-            //             angle: 90,
-            //         },
-            //         notification: {},
-            //         paypal: {
-            //             position: cc.v2(-283.1, 127.459),
-            //             children: {
-            //                 laoren: {
-            //                     width: 160,
-            //                     height: 89,
-            //                     position: cc.v2(392.037, 117.86)
-            //                 },
-            //                 icon: {
-            //                     position: cc.v2(-67.054, -7.471)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(137.034, -40.34)
-            //                 },
-            //                 cash: {
-            //                     position: cc.v2(135.994, 31.177)
-            //                 }
-            //             }
-            //         },
-            //         banner: {
-            //             position: cc.v2(-261.323, -242.363),
-            //             children: {
-            //                 icon: {
-            //                     position: cc.v2(-70.997, 131.491)
-            //                 },
-            //                 logo: {
-            //                     position: cc.v2(76.109, 130.311)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(17.395, 25.327)
-            //                 }
-            //             }
-            //         },
-            //         audioBtn: {
-            //             position: cc.v2(-415.577, 212.604)
-            //         }
-            //     }
-            // }
+            game: {
+                position: cc.v2(230.752, 59.781),
+                scale: 0.9,
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    },
+                    tool: {
+                        position: cc.v2(-523.187, -231.448)
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    paypal: {
+                        scale: 0.9,
+                        position: cc.v2(-234.57, 143.662),
+                    },
+                    flyCash: {
+                        position: cc.v2(230.752, 100.269),
+                        scale: 0.8,
+                    },
+                    audioBtn: {
+                        position: cc.v2(-410.189, 52.554)
+                    }
+                }
+            }
         }
         this.VerticalConfig = {
-            // game: {
-            //     position: cc.v2(0, 0),
-            //     scale: 1,
-            //     children: {
-            //         adsonly: {
-            //             active: this.isApplovin ? true : false
-            //         }
-            //     }
-            // },
-            // UI: {
-            //     children: {
-            //         congrat: this.isApplovin ? {
-            //             width: 603, // applovin
-            //             height: 1170,
-            //             opacity: 255
-            //         } : {
-            //             opacity: 255,
-            //             angle: 0,
-            //         },
-            //         congratBlur: this.isApplovin ? {
-            //             width: 603, // applovin
-            //             height: 1170,
-            //             opacity: 255
-            //         } : {
-            //             opacity: 255,
-            //             angle: 0,
-            //         },
-            //         // notification: {},
-            //         paypal: {
-            //             position: cc.v2(0, 396.319),
-            //             children: {
-            //                 laoren: {
-            //                     width: 319.4,
-            //                     height: 177.4,
-            //                     position: cc.v2(-0.75, -186.539)
-            //                 },
-            //                 icon: {
-            //                     position: cc.v2(-155.976, -7.471)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(137.034, -40.34)
-            //                 },
-            //                 cash: {
-            //                     position: cc.v2(135.994, 31.177)
-            //                 }
-            //             }
-            //         },
-            //         banner: {
-            //             position: cc.v2(0, -458.318),
-            //             children: {
-            //                 icon: {
-            //                     position: cc.v2(-197, 27)
-            //                 },
-            //                 logo: {
-            //                     position: cc.v2(-49.894, 28.893)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(148.009, 28.4)
-            //                 }
-            //             }
-            //         },
-            //         audioBtn: {
-            //             position: cc.v2(0, 403.152)
-            //         }
-            //     }
-            // }
+            game: {
+                position: cc.v2(0, 0),
+                scale: 1,
+                children: {
+                    adsonly: {
+                        active: this.isApplovin ? true : false
+                    },
+                    tool: {
+                        position: cc.v2(0, -393.011)
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    paypal: {
+                        scale: 1,
+                        position: cc.v2(0, 373.3396),
+                    },
+                    flyCash: {
+                        position: cc.v2(0, 0),
+                        scale: 1,
+                    },
+                    audioBtn: {
+                        position: cc.v2(-225.524, 275.209)
+                    }
+                }
+            }
         }
 
         //guiding用来记录是否还需要继续进行拖动手势引导
@@ -366,6 +288,20 @@ export default class GameModel {
         });
         if (item) return true;
         else return false;
+    }
+
+    /**拿到指定的爆炸格子 */
+    getMyBombArea () {
+        let models = [];
+        models.push(this.cells[4][1]);
+        models.push(this.cells[5][2]);
+        models.push(this.cells[6][3]);
+        models.push(this.cells[7][4]);
+        models.push(this.cells[8][5]);
+        models.push(this.cells[9][6]);
+        models.push(this.cells[10][7]);
+        let resultModels = JSON.parse(JSON.stringify(models));
+        return resultModels;
     }
 
     /**

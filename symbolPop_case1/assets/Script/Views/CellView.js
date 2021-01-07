@@ -78,7 +78,7 @@ cc.Class({
     setTipHere(){
         // console.log('tipHere');
         // this.node.runAction(this.animTipHere);
-        this.animation.play();
+        // this.animation.play();
     },
 
     /**停止原地提示 */

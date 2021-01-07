@@ -16,7 +16,11 @@ cc.Class({
         bombRed: cc.Prefab,
         bombYellow: cc.Prefab,
         flyGrade: cc.Prefab,
-        wavePref: cc.Prefab
+        wavePref: cc.Prefab,
+        flyCards: cc.Node,
+        paypal: cc.Node,
+        ppcard: cc.Node,
+        mask: cc.Node,
     },
 
 
@@ -60,8 +64,17 @@ cc.Class({
      * @param {*} cells 准备爆照的cellModel
      */
     playBombEffect (cells, waitTime = 550, callback) {
-        const delayTime = ANITIME.FADEOUT*cells.length/3*waitTime;
+        const delayTime = ANITIME.FADEOUT*cells.length/4.5*waitTime;
         let count = 0;
+        setTimeout(() => {
+            this.showFlyCards(10, ()=>{
+                this.gridView.isInPlayAni = false; // 动画播放完成，允许用户点击
+                if (!this.gridView.isCanMove) {
+                    this.gridView.isCanMove = true;
+                    this.gridView.setListener();
+                }
+            });
+        }, delayTime/3);
         cells.forEach((cell, index) => {
             let t = index === 0 ? 0 : Math.random()*delayTime;
             setTimeout(() => {
@@ -74,7 +87,7 @@ cc.Class({
                 // bombInstance.parent = this.node;
                 if (waitTime < 300) {
                     if (index % 4 === 0) {
-                        // this.audioUtils.playBomb(index, 0.8);
+                        this.audioUtils.playEffect('bubble', 0.7);
                         let startpos = this.controller.guide.convertToNodeSpaceAR(
                             this.node.convertToWorldSpaceAR(
                                 cc.v2((cell.x-0.5) * CELL_WIDTH, (cell.y-0.5) * CELL_HEIGHT)));
@@ -85,7 +98,7 @@ cc.Class({
                     }
                 } else {
                     if (index % 3 === 0) {
-                        // this.audioUtils.playBomb(index, 0.8);
+                        this.audioUtils.playEffect('bubble', 0.7);
                         this.showWave(cell);
                     }
                     
@@ -120,6 +133,80 @@ cc.Class({
             cc.spawn(cc.scaleTo(0.2, 1.3), cc.fadeOut(0.2)),
             cc.removeSelf()
         ));
+    },
+
+    /**展示pp卡飞上去 */
+    showFlyCards (num = 5, callback) {
+        let cards = this.flyCards.children;
+        let destPos = this.flyCards.convertToNodeSpaceAR(
+            this.paypal.convertToWorldSpaceAR(this.paypal.getChildByName('boxpp').position));
+        for (let i = 0; i < num; i++) {
+            setTimeout(() => {
+                let card = cards[i];
+                let posy = -285+Math.random()*388;
+                let posx = -194+Math.random()*388;
+                let ang = -180+Math.random()*360;
+                card.position = cc.v2(posx, posy);
+                card.angle = ang;
+                card.opacity = 0;
+                card.scale = 0;
+                card.active = true;
+                // console.log('fly ', i, ' pos: ', card.position.x, card.position.y, ' destPos', destPos);
+                let fadeIntime = 0.2*Math.random()+0.1;
+                let moveTotime = 0.4*Math.random()+0.4;
+                card.runAction(cc.sequence(
+                    cc.spawn(cc.fadeIn(fadeIntime), cc.scaleTo(fadeIntime, 1)),
+                    cc.spawn(cc.rotateTo(0.6, 0), cc.moveTo(moveTotime, destPos)),
+                    cc.fadeOut(0.15),
+                    cc.callFunc(() => {
+                        if (i === num-1) {
+                            callback&& callback();
+                        }
+                    })
+                ));
+                if (i === 5) {
+                    this.controller.addCash(100);
+                    this.controller.getAudioUtils().playEffect('coin', 0.4);
+                    this.ppcard.scale = 0;
+                    this.ppcard.opacity = 0;
+                    this.ppcard.active = true;
+                    this.ppcard.runAction(cc.sequence(
+                        cc.spawn(cc.scaleTo(0.3, 1.05), cc.fadeTo(0.3, 230)),
+                        cc.repeat(cc.sequence(cc.scaleTo(0.2, 0.95), cc.scaleTo(0.2, 1.05)), 2),
+                        cc.spawn(cc.scaleTo(0.3, 0.5), cc.fadeOut(0.3, 0)),
+                        cc.callFunc(() => {
+                            if (this.controller.cashView.targetCash >= 300) {
+                                setTimeout(() => {this.show300Card();}, 200);
+                            }
+                        })
+                    ));
+                }
+            }, i*90);
+        }
+    },
+
+    show300Card () {
+        this.controller.getAudioUtils().playEffect('moneyCard', 0.4);
+        this.ppcard.scale = 0;
+        this.ppcard.opacity = 0;
+        this.ppcard.active = true;
+        this.ppcard.stopAllActions();
+        this.ppcard.getChildByName('won100').active = false;
+        this.ppcard.getChildByName('won300').active = true;
+        this.ppcard.getChildByName('withdraw').active = true;
+        this.ppcard.getChildByName('congrat').active = true;
+        this.ppcard.getChildByName('later').active = true;
+        this.ppcard.getChildByName('redeem').active = true;
+        this.ppcard.runAction(cc.sequence(
+            cc.spawn(cc.scaleTo(0.4, 1.05), cc.fadeTo(0.3, 255)),
+            cc.callFunc(() => {
+                // this.ppcard.runAction(cc.repeatForever(cc.sequence(cc.scaleTo(0.4, 0.98), cc.scaleTo(0.4, 1.02))));
+            })
+        ));
+        this.mask.opacity = 0;
+        this.mask.active = true;
+        this.mask.runAction(cc.fadeTo(0.5, 190));
+        // this.ppcard.runAction(cc.spawn(cc.scaleTo(0.3, 1.05), cc.fadeIn(0.3)));
     },
 
     /**

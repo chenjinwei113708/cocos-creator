@@ -28,20 +28,28 @@ cc.Class({
             type: cc.Node
         },
 
+        tool: cc.Node, // 工具栏
+        starTool: cc.Node, // 星星工具
+        flyStars: cc.Node, // 飞星
+        toolHand: cc.Node, // 工具栏的手
+        hand: cc.Node,
+
     },
 
 
     onLoad: function () {
-        this.setListener();
+        setTimeout(() => {this.guideClickStar();}, 500);
 
         this.lastTouchPos = cc.Vec2(-1, -1);
 
-        this.isCanMove = true;
+        this.isCanMove = false;
         this.isInPlayAni = false; // 是否在播放中
 
         this.effectView = cc.find('Canvas/center/game/effect').getComponent('EffectView'); //特效显示层脚本
 
         // this.GameController = cc.find('Canvas').getComponent('GameController'); // 游戏控制器脚本
+
+        this.starTimes = 1; // 可以点击星星的次数
 
         this.freeTime = 0; //空闲时间，用户有多长时间没有触摸屏幕，单位秒
         // this.myInterval = setInterval(this.addFreeTime.bind(this), 1000);//计时器，用来计算空闲时间
@@ -109,12 +117,82 @@ cc.Class({
         this.myInterval = setInterval(this.addFreeTime.bind(this), 1000); //计时器，用来计算空闲时间
     },
 
+    guideClickStar () {
+        this.toolHand.opacity = 0;
+        this.toolHand.active = true;
+        let hereState = this.toolHand.getComponent(cc.Animation).play('starHere');
+        hereState.on('finished', () => {
+            this.toolHand.getComponent(cc.Animation).play('click');
+        });
+    },
+
+    hideToolHand () {
+        this.toolHand.getComponent(cc.Animation).stop();
+        this.toolHand.active = false;
+    },
+
+    hideGuideHand () {
+        this.hand.getComponent(cc.Animation).stop();
+        this.hand.active = false;
+    },
+
+    guideClickCell () {
+        this.hand.position = cc.v2(-109.83, -176.503);
+        this.hand.opacity = 0;
+        this.hand.active = true;
+        this.hand.runAction(cc.sequence(
+            cc.spawn(cc.fadeIn(0.3), cc.moveBy(0.3, 0, 30)),
+            cc.callFunc(() => {
+                this.hand.getComponent(cc.Animation).play('shake');
+            })
+        ));
+    },
+
+    /**点击星星消除工具 */
+    onClickStar () {
+        if (this.isInPlayAni || this.starTimes <=0) { //播放动画中，不允许点击
+            return true;
+        }
+        this.isInPlayAni = true;
+        this.hideToolHand();
+        // 星星次数减一
+        this.starTimes --;
+        this.starTool.getChildByName('num').getComponent(cc.Label).string = `x${this.starTimes}`;
+        // 爆炸
+        let bombModels = this.gameModel.getMyBombArea();
+        this.GameController.getAudioUtils().playEffect('cheer', 0.4);
+        // 星星飞到爆炸点;
+        this.flyStars.children.forEach((node, index) => {
+            let model = bombModels[index];
+            if (!model) return;
+            let cell = this.cellViews[model.y][model.x];
+            let desPos = cc.v2(cell.position.x, cell.position.y);
+            // console.log(' -- ', index, '  ', desPos);
+            desPos = this.tool.convertToNodeSpaceAR(this.node.convertToWorldSpaceAR(desPos));
+            node.scale = 0;
+            node.opacity = 200;
+            node.active = true;
+            node.runAction(cc.sequence(
+                cc.scaleTo(0.1, 0.2),
+                cc.delayTime(0.05*index),
+                cc.spawn(cc.moveTo(0.4, desPos), cc.scaleTo(0.3, 0.8)),
+                cc.callFunc(() => {
+                    if (index === this.flyStars.children.length-4) {
+                        this.bombAndMove(bombModels);
+                    }
+                }),
+                cc.fadeOut(0.2),
+            ));
+        });
+        
+    },
+
     /**
      * 点击格子
      * @param {*} pos 点击格子下标
      * @param {*} waitTime 爆炸时间间隔
      */
-    onClickCell(cellPos, waitTime = 550) {
+    onClickCell(cellPos) {
         // console.log('gridview cellPos ', cellPos);
         if (this.isInPlayAni) { //播放动画中，不允许点击
             return true;
@@ -122,9 +200,7 @@ cc.Class({
         this.isInPlayAni = true;
         let gameRules = this.gameModel.getGameRules();
 
-        if (this.gameModel.curGuideStep >= 4) {
-            waitTime = 250; // 如果到第4步之后了，加快爆炸速度
-        }
+        
         if (gameRules.limitArea) {
             let isInLimitArea = this.gameModel.checkInLimitArea(gameRules.limitArea, cellPos);
             if (!isInLimitArea) return; // 如果超出限制区域，不允许点击
@@ -134,58 +210,7 @@ cc.Class({
         let bombModels = this.gameModel.selectCell(cellPos);
         // 如果数组长度大于1，说明它周围有同类方块
         if (bombModels.length > 1) {
-            // 隐藏指引手
-            this.GameController.guideScript.hideHand();
-            // 停止提示
-            this.stopTip(this.tip);
-            clearInterval(this.myInterval);
-            // 更新积分显示
-            let grade = bombModels.length * bombModels.length * 5;
-            // this.GameController.GradeView.addGrade(grade);
-            // 计算下移和左移的格子
-            let downModels = [];
-            let leftModels = [];
-            this.gameModel.calculateMoveModels(bombModels, downModels, leftModels);
-            // // 计算还有没有可以爆炸的区域
-            this.tip = this.gameModel.getTipArea(this.gameModel.getLeftBombAreas(), TIP_STRATEGY.MOST_GRADE);
-            // console.log('gridview tip:',this.tip);
-            this.effectView.playBombEffect(bombModels, waitTime, function () {
-                // 播放下移动画
-                let waitTime = 0;
-                downModels.forEach(downcell => {
-                    let needTime = this.cellViews[downcell.y][downcell.x].getComponent('CellView').move(
-                        downcell.moveCmd.direction, downcell.moveCmd.step, cc.v2(downcell.x, downcell.y));
-                    waitTime = needTime > waitTime ? needTime : waitTime;
-                    // 根据移动位置，更新cellViews，需要下移的格子放到指定位置，原位置的格子置为空
-                    this.cellViews[downcell.y - downcell.moveCmd.step][downcell.x] = this.cellViews[downcell.y][downcell.x];
-                    this.cellViews[downcell.y][downcell.x] = null;
-                });
-                // 播放左移动画
-                // console.log('gridview zuo，',leftModels);
-                leftModels.forEach(leftcell => {
-                    this.cellViews[leftcell.y][leftcell.x].getComponent('CellView').move(
-                        leftcell.moveCmd.direction, leftcell.moveCmd.step, cc.v2(leftcell.x, leftcell.y), waitTime);
-                    // 根据移动位置，更新cellViews，需要左移的格子放到指定位置，原位置的格子置为空
-                    this.cellViews[leftcell.y][leftcell.x - leftcell.moveCmd.step] = this.cellViews[leftcell.y][leftcell.x];
-                    this.cellViews[leftcell.y][leftcell.x] = null;
-                });
-                let animEndCallback = () => {
-                    this.isInPlayAni = false;
-                };
-                this.freeTime = 0;
-                if (this.tip.length === 0) {
-                    this.noMoreBomb();
-                    // 显示提现
-                    // this.GameController.guideScript.showMoneyCard(gameRules.money);
-                    this.GameController.guideScript.showPaypalCardFly(gameRules.money, animEndCallback);
-
-                } else {
-                    // 显示提现
-                    // this.GameController.guideScript.showMoneyCard(gameRules.money);
-                    this.GameController.guideScript.showPaypalCardFly(gameRules.money, animEndCallback);
-                    // this.startCounting();
-                }
-            }.bind(this));
+            this.bombAndMove(bombModels);
         } else {
             this.isInPlayAni = false;
         }
@@ -197,6 +222,67 @@ cc.Class({
         //     this.isCanMove = false;
         // }
         return true;
+    },
+
+    /**爆炸并且移动 */
+    bombAndMove (bombModels, waitTime = 550) {
+        if (this.gameModel.curGuideStep >= 4) {
+            waitTime = 250; // 如果到第4步之后了，加快爆炸速度
+        }
+        let gameRules = this.gameModel.getGameRules();
+        // 隐藏指引手
+        this.GameController.guideScript.hideHand();
+        this.hideGuideHand();
+        // 停止提示
+        this.stopTip(this.tip);
+        clearInterval(this.myInterval);
+        // 更新积分显示
+        let grade = bombModels.length * bombModels.length * 5;
+        // this.GameController.GradeView.addGrade(grade);
+        // 计算下移和左移的格子
+        let downModels = [];
+        let leftModels = [];
+        this.gameModel.calculateMoveModels(bombModels, downModels, leftModels);
+        // // 计算还有没有可以爆炸的区域
+        this.tip = this.gameModel.getTipArea(this.gameModel.getLeftBombAreas(), TIP_STRATEGY.MOST_GRADE);
+        // console.log('gridview tip:',this.tip);
+        this.effectView.playBombEffect(bombModels, waitTime, function () {
+            // 播放下移动画
+            let waitTime = 0;
+            downModels.forEach(downcell => {
+                let needTime = this.cellViews[downcell.y][downcell.x].getComponent('CellView').move(
+                    downcell.moveCmd.direction, downcell.moveCmd.step, cc.v2(downcell.x, downcell.y));
+                waitTime = needTime > waitTime ? needTime : waitTime;
+                // 根据移动位置，更新cellViews，需要下移的格子放到指定位置，原位置的格子置为空
+                this.cellViews[downcell.y - downcell.moveCmd.step][downcell.x] = this.cellViews[downcell.y][downcell.x];
+                this.cellViews[downcell.y][downcell.x] = null;
+            });
+            // 播放左移动画
+            // console.log('gridview zuo，',leftModels);
+            leftModels.forEach(leftcell => {
+                this.cellViews[leftcell.y][leftcell.x].getComponent('CellView').move(
+                    leftcell.moveCmd.direction, leftcell.moveCmd.step, cc.v2(leftcell.x, leftcell.y), waitTime);
+                // 根据移动位置，更新cellViews，需要左移的格子放到指定位置，原位置的格子置为空
+                this.cellViews[leftcell.y][leftcell.x - leftcell.moveCmd.step] = this.cellViews[leftcell.y][leftcell.x];
+                this.cellViews[leftcell.y][leftcell.x] = null;
+            });
+            let animEndCallback = () => {
+                // this.isInPlayAni = false;
+            };
+            this.freeTime = 0;
+            if (this.tip.length === 0) {
+                this.noMoreBomb();
+                // 显示提现
+                // this.GameController.guideScript.showMoneyCard(gameRules.money);
+                this.GameController.guideScript.showPaypalCardFly(gameRules.money, animEndCallback);
+
+            } else {
+                // 显示提现
+                // this.GameController.guideScript.showMoneyCard(gameRules.money);
+                this.GameController.guideScript.showPaypalCardFly(gameRules.money, animEndCallback);
+                this.startCounting();
+            }
+        }.bind(this));
     },
 
     // playEffect: function (effectsQueue) {
@@ -248,9 +334,10 @@ cc.Class({
         showCells.forEach(function (value) {
             this.cellViews[value.y][value.x].getComponent("CellView").setTipHere();
         }, this);
-        if (this.gameModel.curOrder === this.gameModel.ORDER.B) {
-            this.GameController.guideScript.showHand();
-        }
+        this.guideClickCell();
+        // if (this.gameModel.curOrder === this.gameModel.ORDER.B) {
+        //     this.GameController.guideScript.showHand();
+        // }
     },
     /**
      * 停止提示信息
