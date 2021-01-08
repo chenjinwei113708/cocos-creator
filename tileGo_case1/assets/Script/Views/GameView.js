@@ -52,8 +52,14 @@ cc.Class({
 
     addToGroup (node) {
         let type = node.getComponent(cc.Sprite).spriteFrame.name;
+        let index = this.info.putArr.length;
+        if (index >= 7) return;
+        // 将点击的卡置于最上方
+        let grid = node.parent;
+        grid.children.splice(grid.children.indexOf(node), 1);
+        grid.children.push(node);
+        // 将选中类型加入数组
         this.info.putArr.push(type);
-        let index = this.info.putArr.length-1;
         let target = this.put.children[index];
         target.getComponent(cc.Sprite).spriteFrame = node.getComponent(cc.Sprite).spriteFrame;
         let originPos = cc.v2(node.position.x, node.position.y);
@@ -64,9 +70,15 @@ cc.Class({
                 node.position = originPos;
                 node.active = false;
                 target.active = true;
-                this.setStatus(CELL_STATUS.CAN_MOVE);
+                this.checkCombine();
             })
         ));
+    },
+
+    // 检查是否可以合成
+    checkCombine () {
+        console.log('');
+        this.setStatus(CELL_STATUS.CAN_MOVE);
     },
 
     // update (dt) {},

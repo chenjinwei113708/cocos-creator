@@ -5,6 +5,8 @@ export const CELL_TYPE = {
     GOLD : 'cgold',
     CASH : 'cwallet',
     DIAMOND : 'cdiamond',
+    LOT : 'clot',
+    OUT : 'cout',
 }
 
 export const CELL_STATUS = {
