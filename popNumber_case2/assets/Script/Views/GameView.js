@@ -29,7 +29,9 @@ cc.Class({
         flyCards: cc.Node, // 奖励卡
         paypal: cc.Node, // 顶部栏
         // 不同类型的图
+        sprite1: cc.SpriteFrame,
         sprite10: cc.SpriteFrame,
+        sprite20: cc.SpriteFrame,
         sprite50: cc.SpriteFrame,
         sprite100: cc.SpriteFrame,
         sprite200: cc.SpriteFrame,
@@ -51,7 +53,9 @@ cc.Class({
         };
         // 不同类型对应的图片
         this.sprites = {
+            [CELL_TYPE.C1]: this.sprite1,
             [CELL_TYPE.C10]: this.sprite10,
+            [CELL_TYPE.C20]: this.sprite20,
             [CELL_TYPE.C50]: this.sprite50,
             [CELL_TYPE.C100]: this.sprite100,
             [CELL_TYPE.C200]: this.sprite200,
@@ -77,59 +81,56 @@ cc.Class({
         this.actionLevel = [
             [
                 // {type: ACTION_TYPE.SWITCH, start: cc.v2(4,2), end: cc.v2(3,2)},
-                {type: ACTION_TYPE.COMBINE, center: cc.v2(5,3), others: [cc.v2(2,1),
-                    cc.v2(3,1), cc.v2(3,4), cc.v2(4,1), cc.v2(4,2), cc.v2(4,4), cc.v2(5,2), cc.v2(5,4)], newType: CELL_TYPE.CPP},
+                {type: ACTION_TYPE.COMBINE, center: cc.v2(3,4), others: [cc.v2(1,1),
+                    cc.v2(1,4), cc.v2(2,1), cc.v2(2,4), cc.v2(3,1), cc.v2(3,2), cc.v2(3,3)], newType: CELL_TYPE.C50},
                 {type: ACTION_TYPE.DOWN, nodes: [
-                    {start: cc.v2(1,1), end: cc.v2(4,1), newType: undefined},
-                    {start: cc.v2(0,1), end: cc.v2(3,1), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,1), end: cc.v2(2,1), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,1), end: cc.v2(1,1), newType: CELL_TYPE.C200},
-                    {start: cc.v2(3,2), end: cc.v2(5,2), newType: undefined},
-                    {start: cc.v2(2,2), end: cc.v2(4,2), newType: undefined},
-                    {start: cc.v2(1,2), end: cc.v2(3,2), newType: undefined},
-                    {start: cc.v2(0,2), end: cc.v2(2,2), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,2), end: cc.v2(1,2), newType: CELL_TYPE.C200},
-                    {start: cc.v2(2,4), end: cc.v2(5,4), newType: undefined},
-                    {start: cc.v2(1,4), end: cc.v2(4,4), newType: undefined},
-                    {start: cc.v2(0,4), end: cc.v2(3,4), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,4), end: cc.v2(2,4), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,4), end: cc.v2(1,4), newType: CELL_TYPE.C50},
+                    {start: cc.v2(0,1), end: cc.v2(3,1), newType: CELL_TYPE.C20},
+                    {start: cc.v2(2,2), end: cc.v2(3,2), newType: undefined},
+                    {start: cc.v2(2,3), end: cc.v2(3,3), newType: undefined},
+                    {start: cc.v2(0,1), end: cc.v2(2,1), newType: CELL_TYPE.C20},
+                    {start: cc.v2(1,2), end: cc.v2(2,2), newType: undefined},
+                    {start: cc.v2(1,3), end: cc.v2(2,3), newType: undefined},
+                    {start: cc.v2(0,4), end: cc.v2(2,4), newType: CELL_TYPE.C20},
+                    {start: cc.v2(0,1), end: cc.v2(1,1), newType: CELL_TYPE.C20},
+                    {start: cc.v2(0,2), end: cc.v2(1,2), newType: CELL_TYPE.C100},
+                    {start: cc.v2(0,3), end: cc.v2(1,3), newType: CELL_TYPE.C100},
+                    {start: cc.v2(0,4), end: cc.v2(1,4), newType: CELL_TYPE.C20},
                     ]
                 },
             ],
             [
-                {type: ACTION_TYPE.CHANGE, center: cc.v2(5,3), newType: CELL_TYPE.CPP},
+                {type: ACTION_TYPE.CHANGE, center: cc.v2(0,0), newType: CELL_TYPE.CPP},
             ],
             [
                 {type: ACTION_TYPE.BOMB},
                 {type: ACTION_TYPE.DOWN, nodes: [
                     {start: cc.v2(0,1), end: cc.v2(5,1), newType: CELL_TYPE.C10},
-                    {start: cc.v2(0,1), end: cc.v2(5,2), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,1), end: cc.v2(5,3), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,1), end: cc.v2(5,4), newType: CELL_TYPE.C200},
+                    {start: cc.v2(0,1), end: cc.v2(5,2), newType: CELL_TYPE.C20},
+                    {start: cc.v2(0,1), end: cc.v2(5,3), newType: CELL_TYPE.C20},
+                    {start: cc.v2(0,1), end: cc.v2(5,4), newType: CELL_TYPE.C20},
                     {start: cc.v2(0,1), end: cc.v2(5,5), newType: CELL_TYPE.C10},
 
-                    {start: cc.v2(0,1), end: cc.v2(4,1), newType: CELL_TYPE.C200},
+                    {start: cc.v2(0,1), end: cc.v2(4,1), newType: CELL_TYPE.C20},
                     {start: cc.v2(0,1), end: cc.v2(4,2), newType: CELL_TYPE.C100},
-                    {start: cc.v2(0,1), end: cc.v2(4,3), newType: CELL_TYPE.C200},
+                    {start: cc.v2(0,1), end: cc.v2(4,3), newType: CELL_TYPE.C20},
                     {start: cc.v2(0,1), end: cc.v2(4,4), newType: CELL_TYPE.C100},
-                    {start: cc.v2(0,1), end: cc.v2(4,5), newType: CELL_TYPE.C200},
+                    {start: cc.v2(0,1), end: cc.v2(4,5), newType: CELL_TYPE.C20},
 
                     {start: cc.v2(0,1), end: cc.v2(3,1), newType: CELL_TYPE.C100},
                     {start: cc.v2(0,1), end: cc.v2(3,2), newType: CELL_TYPE.C10},
-                    {start: cc.v2(0,1), end: cc.v2(3,3), newType: CELL_TYPE.C200},
+                    {start: cc.v2(0,1), end: cc.v2(3,3), newType: CELL_TYPE.C20},
                     {start: cc.v2(0,1), end: cc.v2(3,4), newType: CELL_TYPE.C50},
                     {start: cc.v2(0,1), end: cc.v2(3,5), newType: CELL_TYPE.C10},
 
                     {start: cc.v2(0,1), end: cc.v2(2,1), newType: CELL_TYPE.C10},
                     {start: cc.v2(0,1), end: cc.v2(2,2), newType: CELL_TYPE.C50},
-                    {start: cc.v2(0,1), end: cc.v2(2,3), newType: CELL_TYPE.C200},
-                    {start: cc.v2(0,1), end: cc.v2(2,4), newType: CELL_TYPE.C200},
+                    {start: cc.v2(0,1), end: cc.v2(2,3), newType: CELL_TYPE.C20},
+                    {start: cc.v2(0,1), end: cc.v2(2,4), newType: CELL_TYPE.C20},
                     {start: cc.v2(0,1), end: cc.v2(2,5), newType: CELL_TYPE.C10},
 
                     {start: cc.v2(0,1), end: cc.v2(1,1), newType: CELL_TYPE.C10},
                     {start: cc.v2(0,1), end: cc.v2(1,2), newType: CELL_TYPE.C10},
-                    {start: cc.v2(0,1), end: cc.v2(1,3), newType: CELL_TYPE.C200},
+                    {start: cc.v2(0,1), end: cc.v2(1,3), newType: CELL_TYPE.C20},
                     {start: cc.v2(0,1), end: cc.v2(1,4), newType: CELL_TYPE.C50},
                     {start: cc.v2(0,1), end: cc.v2(1,5), newType: CELL_TYPE.C10},
                     ]
@@ -375,7 +376,7 @@ cc.Class({
                         this.gameController.getAudioUtils().playEffect('merge', 0.4);
                         // this.gameController.guideView.showFlyCoin(centerPos);
                         this.showFlyCards(7);
-                        setTimeout(() => {this.gameController.addCash(100);}, 300);
+                        setTimeout(() => {this.gameController.addCash(160);}, 300);
                         centerNode.runAction(cc.sequence(
                             cc.scaleTo(0.1, 1.15),
                             cc.scaleTo(0.1, 0.5),
@@ -495,7 +496,7 @@ cc.Class({
                     cc.callFunc(() => {
                         if (i === 5 && j === 5) {
                             this.showFlyCards(11);
-                            setTimeout(() => {this.gameController.addCash(500);}, 300);
+                            setTimeout(() => {this.gameController.addCash(517);}, 300);
                             this.doActions();
                         }
                     })

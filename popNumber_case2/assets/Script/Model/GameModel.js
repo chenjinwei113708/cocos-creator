@@ -117,7 +117,7 @@ export default class GameModel {
                         }
                     },
                     audioBtn: {
-                        position: cc.v2(0, 403.152)
+                        position: cc.v2(-216.841, 286.392)
                     }
                 }
             }

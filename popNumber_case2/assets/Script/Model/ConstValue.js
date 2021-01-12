@@ -8,7 +8,9 @@ export const GAME_LEVEL = {
 };
 
 export const CELL_TYPE = {
+    C1: 'c1',
     C10: 'c10',
+    C20: 'c20',
     C50: 'c50',
     C100: 'c100',
     C200: 'c200',

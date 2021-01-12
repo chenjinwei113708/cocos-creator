@@ -47,6 +47,9 @@ cc.Class({
         this.gameView = this.game.getComponent('GameView');
         this.gameView.setGameController(this);
 
+        // 进度条
+        this.ballView = cc.find('Canvas/center/game/ball').getComponent('ProgressView');
+
         // 现金
         this.cashView = this.cash.getComponent("CashView");
 
@@ -121,6 +124,7 @@ cc.Class({
     /**加钱 */
     addCash (num) {
         this.cashView.addCash(num);
+        this.ballView.setProgress(this.cashView.targetCash/777);
     },
 
 });
