@@ -31,7 +31,7 @@ cc.Class({
     },
 
     start () {
-        // this.setProgress(0.33);
+        this.setProgress(0.1);
     },
 
     /**
