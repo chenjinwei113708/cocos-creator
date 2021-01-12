@@ -44,6 +44,10 @@ cc.Class({
         this.gameView.setGameController(this);
         // 金币相关脚本
         this.cashView = this.cash.getComponent('CashView');
+        // 进度条
+        this.progress = cc.find('Canvas/center/UI/progress');
+        this.progressView = this.progress.getComponent('ProgressView');
+        this.progressTimes = 0;
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
@@ -125,7 +129,10 @@ cc.Class({
 
     /**加钱 */
     addCash (num) {
+        this.progressTimes++;
         this.cashView.addCash(num);
+        let ratio = this.progressTimes / 3;
+        this.progressView.setProgress(ratio);
     },
 
 });
