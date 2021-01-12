@@ -1,5 +1,5 @@
 export const DownloadUrl = {
-    iosUrl: 'https://play.google.com/store/apps/details?id=com.linkgames.link',
+    iosUrl: 'https://apps.apple.com/app/id1546801023',
     androidUrl: 'https://play.google.com/store/apps/details?id=com.linkgames.link',
     
     getUrl: function() {
