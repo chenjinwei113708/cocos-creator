@@ -9,12 +9,12 @@
   "design-resolution-width": 960,
   "excluded-modules": [
     "Graphics",
+    "ParticleSystem",
     "TiledMap",
     "Spine Skeleton",
     "DragonBones",
     "RichText",
     "MotionStreak",
-    "ProgressBar",
     "ScrollBar",
     "ScrollView",
     "Toggle",
@@ -49,13 +49,12 @@
   "group-list": [
     "default"
   ],
-  "last-module-event-record-time": 1606891089552,
+  "last-module-event-record-time": 1610507639140,
   "simulator-orientation": false,
   "simulator-resolution": {
     "height": 640,
     "width": 960
   },
-  "start-scene": "current",
   "use-customize-simulator": true,
   "use-project-simulator-setting": false
 }

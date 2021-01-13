@@ -41,7 +41,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-
+        this.cashoutView = this.node.getChildByName('cashout').getComponent('CashoutView');
         this.gameInfo = {
             nowLevel: GAME_LEVEL.LEVEL1,
             cellStatus: CELL_STATUS.CAN_MOVE,
@@ -148,7 +148,13 @@ cc.Class({
 
     changeToNextLevel () {
         if (this.actionLevel.length === 0){
-            this.gameController.guideView.showCashOutHand();
+            setTimeout(() => {
+                this.cashoutView.showCashout();
+            }, 600);
+            setTimeout(() => {
+                this.gameController.guideView.showCashOutHand();
+            }, 900);
+           
             this.offTouchListener();
             return;
         }

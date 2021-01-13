@@ -9,11 +9,11 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isApplovin = true; // 是不是applovin平台
+        this.isApplovin = false; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
-                position: cc.v2(239.546, 79.659),
-                scale: 0.88,
+                position: cc.v2(200.546, 36.659),
+                scale: 0.76,
                 children: {
                     adsonly: {
                         active: this.isApplovin ? true : false
@@ -39,15 +39,20 @@ export default class GameModel {
                         angle: 90,
                     },
                     paypal: {
-                        position: cc.v2(-283.1, 127.459),
+                        position: cc.v2(-253.1, 205.459),
+                        scale: 0.9,
                         children: {
                             cash: {
                                 position: cc.v2(131.811, 7.251)
                             }
                         }
                     },
+                    fly: {
+                        position: cc.v2(200.546, 36.659),
+                        scale: 0.76,
+                    },
                     banner: {
-                        position: cc.v2(-261.323, -242.363),
+                        position: cc.v2(-261.323, -200.363),
                         children: {
                             icon: {
                                 position: cc.v2(-70.997, 131.491)
@@ -61,7 +66,7 @@ export default class GameModel {
                         }
                     },
                     audioBtn: {
-                        position: cc.v2(-415.577, 212.604)
+                        position: cc.v2(-430.577, 90.604)
                     }
                 }
             }
@@ -96,11 +101,16 @@ export default class GameModel {
                     },
                     paypal: {
                         position: cc.v2(0, 405.745),
+                        scale: 1,
                         children: {
                             cash: {
                                 position: cc.v2(131.811, 7.251)
                             }
                         }
+                    },
+                    fly: {
+                        position: cc.v2(0, 0),
+                        scale: 0,
                     },
                     banner: {
                         position: cc.v2(0, -458.318),
