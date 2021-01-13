@@ -9,7 +9,7 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isApplovin = false; // 是不是applovin平台
+        this.isApplovin = true; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(200.546, 36.659),
@@ -110,7 +110,7 @@ export default class GameModel {
                     },
                     fly: {
                         position: cc.v2(0, 0),
-                        scale: 0,
+                        scale: 1,
                     },
                     banner: {
                         position: cc.v2(0, -458.318),
