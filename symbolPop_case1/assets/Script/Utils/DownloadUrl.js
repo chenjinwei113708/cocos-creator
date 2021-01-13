@@ -1,5 +1,5 @@
 export const DownloadUrl = {
-    iosUrl: 'https://play.google.com/store/apps/details?id=com.popstar.token',
+    iosUrl: 'https://apps.apple.com/app/id1546588250',
     androidUrl: 'https://play.google.com/store/apps/details?id=com.popstar.token',
     
     getUrl: function() {
