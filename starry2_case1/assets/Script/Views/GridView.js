@@ -27,7 +27,8 @@ cc.Class({
             default: null,
             type: cc.Node
         },
-
+        mask: cc.Node,
+        gift: cc.Node,
     },
 
 
@@ -38,6 +39,7 @@ cc.Class({
 
         this.isCanMove = true;
         this.isInPlayAni = false; // 是否在播放中
+        this.isFirstClick = true; // 是否第一次消除
 
         this.effectView = cc.find('Canvas/center/effect').getComponent('EffectView'); //特效显示层脚本
 
@@ -116,8 +118,16 @@ cc.Class({
     setListener: function () {
         //监听点击事件，点击方块
         this.node.on(cc.Node.EventType.TOUCH_START, function (eventTouch) {
+            console.log('onclick', this.isInPlayAni);
             if (this.isInPlayAni) { //播放动画中，不允许点击
                 return true;
+            }
+            if (this.isFirstClick) {
+                this.isFirstClick = false;
+                this.GameController.guideScript.hideWinPrize();
+                setTimeout(() => {
+                    this.GameController.guideScript.hideWinPrize();
+                }, 900);
             }
             let gameRules = this.gameModel.getGameRules();
             var touchPos = eventTouch.getLocation();
@@ -170,6 +180,8 @@ cc.Class({
                     });
                     let animEndCallback = () => {
                         this.isInPlayAni = false;
+                        this.showMask();
+                        this.showPacket();
                     };
                     this.freeTime = 0;
                     if(this.tip.length === 0){
@@ -199,7 +211,39 @@ cc.Class({
 
     /**开始计时 */
     startCounting () {
-        this.myInterval = setInterval(this.addFreeTime.bind(this), 1000);//计时器，用来计算空闲时间
+        // this.myInterval = setInterval(this.addFreeTime.bind(this), 1000);//计时器，用来计算空闲时间
+    },
+
+    showMask () {
+        this.mask.opacity = 0;
+        this.mask.active = true;
+        this.mask.runAction(cc.fadeTo(0.5, 150));
+    },
+
+    // 展示礼包
+    showPacket () {
+        let packet = this.gift.getChildByName('packet');
+        let hand = this.gift.getChildByName('hand');
+        hand.opacity = 0;
+        this.gift.scale = 0;
+        this.gift.active = true;
+        this.GameController.getAudioUtils().playEffect('cheer', 0.6);
+        this.gift.runAction(cc.sequence(
+            cc.scaleTo(0.6, 1.3),
+            cc.scaleTo(0.3, 0.9),
+            cc.scaleTo(0.2, 1),
+            cc.callFunc(() => {
+                
+                packet.getComponent(cc.Animation).play();
+                
+                hand.runAction(cc.sequence(
+                    cc.fadeIn(0.3),
+                    cc.callFunc(() => {
+                        hand.getComponent(cc.Animation).play();
+                    })
+                ));
+            })
+        ));
     },
 
     // playEffect: function (effectsQueue) {

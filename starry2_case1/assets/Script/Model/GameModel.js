@@ -18,6 +18,7 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
+        this.isApplovin = true; // 是不是applovin平台
         this.HorizontalConfig = {
             // // 横屏
             background: {
@@ -33,7 +34,7 @@ export default class GameModel {
                 position: cc.v2(-38, -250),
             },
             audioBtn: {
-                position: cc.v2(-400.3, 215.3)
+                position: cc.v2(-433.948, 46)
             },
             score: {
                 position: cc.v2(-411, -77)
@@ -52,9 +53,12 @@ export default class GameModel {
                         height: 63
                     },
                     logo: {
-                        position: cc.v2(-106, -15.5),
-                        width: 131,
-                        height: 131
+                        position: cc.v2(-104.253, -14.776),
+                        width: 136,
+                        height: 136
+                    },
+                    adsonly: {
+                        active: this.isApplovin ? true : false
                     }
                 }
             },
@@ -84,6 +88,9 @@ export default class GameModel {
                         position: cc.v2(0, 0),
                         angle: 90
                     },
+                    winPrize: {
+                        position: cc.v2(211.312, -81.166)
+                    },
                     congratBlur: {
                         // width: 293,
                         // height: 634.4,
@@ -100,22 +107,18 @@ export default class GameModel {
             },
             wallet: {
                 position: cc.v2(-272, 23),
-                width: 418,
-                height: 515,
-                spriteFrame: 'ppTopH',
+                // spriteFrame: 'ppTopH',
                 children: {
                     paypal: {
-                        position: cc.v2(40.6, 147.8),
-                        width: 130,
-                        height: 138
+                        position: cc.v2(-158.331, 160.816)
                     },
-                    cash: {
-                        position: cc.v2(59.82, 24.2)
+                    pp: {
+                        scale: 0.762,
+                        position: cc.v2(-8.396, 166.53)
                     },
-                    cashout: {
-                        position: cc.v2(-2.7, -55),
-                        width: 198,
-                        height: 72
+                    progress: {
+                        scale: 0.75,
+                        position: cc.v2(-5.577, 84.991)
                     }
                 }
             }
@@ -134,7 +137,7 @@ export default class GameModel {
                 position: cc.v2(-250, -250),
             },
             audioBtn: {
-                position: cc.v2(-18, 345.4)
+                position: cc.v2(0, 269.4)
             },
             score: {
                 position: cc.v2(-197.58, 268.9)
@@ -153,9 +156,12 @@ export default class GameModel {
                         height: 73
                     },
                     logo: {
-                        position: cc.v2(-141, -21.6),
-                        width: 172,
-                        height: 172
+                        position: cc.v2(-140, -21),
+                        width: 173,
+                        height: 173
+                    },
+                    adsonly: {
+                        active: this.isApplovin ? true : false
                     }
                 }
             },
@@ -185,6 +191,9 @@ export default class GameModel {
                         position: cc.v2(0, 0),
                         angle: 0
                     },
+                    winPrize: {
+                        position: cc.v2(0, -81.166)
+                    },
                     congratBlur: {
                         width: 603,
                         height: 1170,
@@ -198,22 +207,18 @@ export default class GameModel {
             },
             wallet: {
                 position: cc.v2(0, 434),
-                width: 588,
-                height: 268,
-                spriteFrame: 'ppTopV',
+                // spriteFrame: 'ppTopV',
                 children: {
                     paypal: {
-                        position: cc.v2(-143.3, -34),
-                        width: 151,
-                        height: 161
+                        position: cc.v2(-208.331, -10.816)
                     },
-                    cash: {
-                        position: cc.v2(123.4, -5.8)
+                    pp: {
+                        scale: 1,
+                        position: cc.v2(0, -27)
                     },
-                    cashout: {
-                        position: cc.v2(121.6, -89.4),
-                        width: 198,
-                        height: 72
+                    progress: {
+                        scale: 1,
+                        position: cc.v2(0, -123)
                     }
                 }
             }
@@ -278,13 +283,13 @@ export default class GameModel {
         // 游戏规则
         this.gameRules = {
             [this.ORDER.A]: {
-                money: 25, // 收获金额
-                limitArea: [ // 只允许点击一下格子
-                    {x: 5, y: 10},
-                    {x: 6, y: 10},
-                    {x: 5, y: 9},
-                    {x: 6, y: 9},
-                ]
+                money: 100, // 收获金额
+                // limitArea: [ // 只允许点击一下格子
+                //     {x: 5, y: 10},
+                //     {x: 6, y: 10},
+                //     {x: 5, y: 9},
+                //     {x: 6, y: 9},
+                // ]
             },
             [this.ORDER.B]: {
                 money: 100
@@ -300,7 +305,10 @@ export default class GameModel {
         this.guideList = [
             (cb) => {
                 // 第零步引导，出现提现卡片
-                this.guideScript.showMoneyCard(25); // 显示金额卡，设置金额为25元
+                // this.guideScript.showMoneyCard(25); // 显示金额卡，设置金额为25元
+                setTimeout(() => {
+                    this.gameController.gridScript.effectView.showClickHand();
+                }, 800);
                 this.curGuideStep++; //1
                 // this.curOrder = this.ORDER.B;
             },
@@ -308,14 +316,14 @@ export default class GameModel {
                 // 第一步引导，显示引导手，开始格子提示
                 // 爆炸区域提示
                 let tipModels = this.getTipArea(this.getLeftBombAreas(), TIP_STRATEGY.AREA, this.guideCellPos[this.curOrder]);
-                this.gridScript.setTipModels(tipModels);
-                this.gridScript.showTip(tipModels);
+                // this.gridScript.setTipModels(tipModels);
+                // this.gridScript.showTip(tipModels);
                 this.HorizontalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].landscape;
                 this.VerticalConfig.guide.children.hand.position = this.guidePosition[this.curOrder].portrait;
                 let orient = this.isLandscape ? 'landscape' : 'portrait';
-                this.guideScript.setHandPos(this.guidePosition[this.curOrder][orient]);
-                this.guideScript.showHand();
-                this.guideScript.showPlay(); // 邀请试玩文字
+                // this.guideScript.setHandPos(this.guidePosition[this.curOrder][orient]);
+                // this.guideScript.showHand();
+                // this.guideScript.showPlay(); // 邀请试玩文字
                 this.curGuideStep++; //2
             },
             (cb) => {
@@ -385,16 +393,16 @@ export default class GameModel {
         // ];// 最左边
         //格子的初始化参数（里面存的是格子的类型type）
         let cellInitConf = [
-            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2], // 最底下的一行
-            [2, 2, 2, 2, 4, 4, 2, 2, 2, 2],
+            [3, 3, 2, 2, 2, 2, 2, 2, 3, 3], // 最底下的一行
+            [3, 2, 2, 2, 4, 4, 2, 2, 2, 3],
             [2, 2, 2, 4, 4, 4, 4, 2, 2, 2],
-            [2, 2, 4, 4, 4, 4, 4, 4, 2, 2],
-            [2, 4, 4, 4, 4, 4, 4, 4, 4, 2],
+            [2, 2, 4, 4, 1, 1, 4, 4, 2, 2],
+            [2, 4, 4, 1, 1, 1, 1, 4, 4, 2],
+            [4, 4, 4, 1, 1, 1, 1, 4, 4, 4],
+            [4, 4, 4, 4, 1, 1, 4, 4, 4, 4],
             [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-            [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-            [4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
-            [2, 4, 4, 4, 2, 2, 4, 4, 4, 2],
-            [2, 2, 4, 4, 2, 2, 4, 4, 2, 2]  // 最顶上的一行
+            [2, 4, 4, 4, 5, 5, 4, 4, 4, 2],
+            [2, 2, 4, 4, 5, 5, 4, 4, 2, 2]  // 最顶上的一行
         ];// 最左边
 
         //格子的初始化金币参数（格子里有没有金币）
@@ -521,6 +529,10 @@ export default class GameModel {
 
     setGuideView(guideScript) {
         this.guideScript = guideScript;
+    }
+
+    setGameController (gameController) {
+        this.gameController = gameController;
     }
 
     /**

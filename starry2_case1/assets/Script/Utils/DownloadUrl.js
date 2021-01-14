@@ -1,6 +1,6 @@
 export const DownloadUrl = {
-    iosUrl: 'https://apps.apple.com/us/app/id1508075700',
-    androidUrl: 'https://play.google.com/store/apps/details?id=com.popstar.shinning.starry',
+    iosUrl: 'https://apps.apple.com/app/id1546687795',
+    androidUrl: 'https://play.google.com/store/apps/details?id=com.popstar.starrry',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;

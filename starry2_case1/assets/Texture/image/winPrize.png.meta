@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "718a3f68-3bf1-4f77-931c-e9095bc8103c",
+  "uuid": "c9d27456-5053-410c-9e9f-15b14213264f",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "logo": {
+    "winPrize": {
       "ver": "1.0.4",
-      "uuid": "4e519e39-5f7b-4dd9-81c7-c416dfefbf62",
-      "rawTextureUuid": "718a3f68-3bf1-4f77-931c-e9095bc8103c",
+      "uuid": "19e10f41-cda9-4775-9e32-75ae558ff1e1",
+      "rawTextureUuid": "c9d27456-5053-410c-9e9f-15b14213264f",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 307,
-      "height": 307,
-      "rawWidth": 307,
-      "rawHeight": 307,
+      "width": 446,
+      "height": 36,
+      "rawWidth": 446,
+      "rawHeight": 36,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

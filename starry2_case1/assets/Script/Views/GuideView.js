@@ -21,6 +21,7 @@ cc.Class({
         hand: cc.Node, // 引导手
         money: cc.Node, // 现金卡片
         play: cc.Node, // 邀请试玩口号
+        winPrize: cc.Node, // 邀请试玩口号2
         notification1: cc.Node, // 通知1
         notification2: cc.Node, // 通知2
         mask: cc.Node, // 遮罩
@@ -212,6 +213,12 @@ cc.Class({
         this.play.active = false;
     },
 
+    // 隐藏玩游戏提示语
+    hideWinPrize () {
+        this.winPrize.active = false;
+        this.gameController.gridScript.effectView.hideClickHand();
+    },
+
     setMoneyCardEnabled (enabled) {
         this.moneyCardEnabled = enabled;
     },
@@ -328,6 +335,7 @@ cc.Class({
                         }
                     })
                 ))
+                if (i === 2) {}
             }, delay*i);
         }
     },

@@ -12,7 +12,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        cash: 0
+        cash: 0,
+        progress: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -21,7 +22,10 @@ cc.Class({
         this.targetCash = 0; // 目标分数
         // this.updateDelay = 0.05; // 更新时间间隔 s
         this.timer = 0; // 计时器
+        this.addTimes = 0;
+        this.totalTimes = 3;
         this.label = this.node.getComponent(cc.Label);
+        this.progressView = this.progress.getComponent(cc.ProgressBar).getComponent('ProgressView');
         // console.log(this.label);
         this.stopUpdate();
         // 更新不同级别
@@ -59,6 +63,8 @@ cc.Class({
      * @param {*} number 
      */
     addCash (number) {
+        this.addTimes++;
+        this.progressView.setProgress(this.addTimes/this.totalTimes);
         this.targetCash = this.targetCash+number;
         // console.log('gradview addCash', number, this.targetCash);
         this.allowUpdate();
@@ -86,8 +92,8 @@ cc.Class({
             // console.log(this.cash, this.targetCash);
             if(delta>0){
                 isPlus ? this.cash+=this.updateUnit[level] : this.cash-=this.updateUnit[level];
-                // this.label.string = icon+this.cash;
-                this.label.string = this.cash;
+                this.label.string = icon+this.cash+".00";
+                // this.label.string = this.cash;
             }else{
                 this.stopUpdate();
             }

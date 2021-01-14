@@ -24,6 +24,7 @@ cc.Class({
         this.controller = cc.find('Canvas').getComponent('GameController');
         this.audioUtils = this.controller.getAudioUtils();
         this.gridView = this.controller.getGridViewScript();
+        this.hand = this.node.getChildByName('hand');
         // 爆炸特效数组
         this.bombEffects = {
             [CELL_TYPE.BLUE]: this.bombBlue,
@@ -36,6 +37,21 @@ cc.Class({
 
     start() {
 
+    },
+
+    showClickHand () {
+        this.hand.opacity = 0;
+        this.hand.active = true;
+        this.hand.runAction(cc.sequence(
+            cc.spawn(cc.fadeIn(0.3), cc.scaleTo(0.3, 0.7)),
+            cc.callFunc(() => {
+                this.hand.getComponent(cc.Animation).play();
+            })
+        ));
+    },
+
+    hideClickHand () {
+        this.hand.active = false;
     },
 
     /**
@@ -63,16 +79,39 @@ cc.Class({
             setTimeout(() => {
                 let gridView = cc.find('Canvas').getComponent('GameController').getGridViewScript();
                 gridView.deleteCell(cell);
-                let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
-                bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
-                bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
-                bombInstance.parent = this.node;
-                this.audioUtils.playBomb(index, 0.8);
-                let flyGrade = cc.instantiate(this.flyGrade);
-                flyGrade.active = true;
-                flyGrade.getComponent('FlyGradeView').init(cc.v2(bombInstance.x, bombInstance.y), TYPE2COLOR[cell.type], 10*(index+1)-5);
-                flyGrade.parent = this.node;
-                flyGrade.getComponent('FlyGradeView').fly();
+                if (cells.length>4) {
+                    if (index % 3 === 0) {
+                        let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
+                        bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
+                        bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
+                        bombInstance.parent = this.node;
+                    }
+                    if ((index+1) % 3 === 0) {
+                        let flyGrade = cc.instantiate(this.flyGrade);
+                        flyGrade.active = true;
+                        flyGrade.getComponent('FlyGradeView').init(cc.v2((cell.y-0.5) * CELL_HEIGHT, (cell.y-0.5) * CELL_HEIGHT), TYPE2COLOR[cell.type], 10*(index+1)-5);
+                        flyGrade.parent = this.node;
+                        flyGrade.getComponent('FlyGradeView').fly();
+                    }
+                    if (index % 2  === 0) {
+                        this.audioUtils.playBomb(index, 0.8);
+                    }
+                } else {
+                    if (index % 2 === 0) {
+                        let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
+                        bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
+                        bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
+                        bombInstance.parent = this.node;
+
+                        let flyGrade = cc.instantiate(this.flyGrade);
+                        flyGrade.active = true;
+                        flyGrade.getComponent('FlyGradeView').init(cc.v2(bombInstance.x, bombInstance.y), TYPE2COLOR[cell.type], 10*(index+1)-5);
+                        flyGrade.parent = this.node;
+                        flyGrade.getComponent('FlyGradeView').fly();
+                    }
+                    this.audioUtils.playBomb(index, 0.8);
+                }
+                
                 if(index === cells.length-1){
                     callback && callback();
                 }

@@ -45,6 +45,7 @@ cc.Class({
 
         this.guideScript = this.guide.getComponent("GuideView");
         this.gameModel.setGuideView(this.guideScript);
+        this.gameModel.setGameController(this);
 
         // this.effectView = this.effectLayer.getComponent('EffectView');
         // //得到GuideView脚本
@@ -53,7 +54,7 @@ cc.Class({
         // 拿到计分脚本 gradeView
         this.GradeView = cc.find('Canvas/center/grade').getComponent('GradeView');
         // 拿到现金余额脚本 gradeView
-        this.CashView = cc.find('Canvas/center/wallet/cash').getComponent('CashView');
+        this.CashView = cc.find('Canvas/center/wallet/pp/cash').getComponent('CashView');
 
         //用centerView脚本来布置整个画面，包括横竖屏的响应方法。
         this.centerScript = this.center.getComponent("CenterView");
@@ -100,6 +101,7 @@ cc.Class({
 
 
     download() {
+        this.endGame();
         PlayformSDK.download();
     },
 
@@ -111,6 +113,11 @@ cc.Class({
     // 获取gridView脚本
     getGridViewScript() {
         return this.gridScript;
+    },
+
+    // 游戏试玩结束
+    endGame () {
+        PlayformSDK.gameFinish();
     },
 
     // 调用View显示操作方法

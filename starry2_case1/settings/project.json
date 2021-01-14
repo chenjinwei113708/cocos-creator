@@ -13,7 +13,6 @@
     "Spine Skeleton",
     "DragonBones",
     "MotionStreak",
-    "ProgressBar",
     "ScrollBar",
     "ScrollView",
     "Toggle",
@@ -48,7 +47,7 @@
   "group-list": [
     "default"
   ],
-  "last-module-event-record-time": 1596704460166,
+  "last-module-event-record-time": 1610615851668,
   "simulator-orientation": false,
   "simulator-resolution": {
     "height": 640,
