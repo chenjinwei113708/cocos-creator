@@ -1,0 +1,151 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "showGold",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1,
+  "sample": 20,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 255
+        },
+        {
+          "frame": 0.75,
+          "value": 255
+        },
+        {
+          "frame": 1,
+          "value": 0
+        }
+      ]
+    },
+    "paths": {
+      "gold": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.15,
+              "value": 255
+            }
+          ],
+          "y": [
+            {
+              "frame": 0,
+              "value": -0.512
+            },
+            {
+              "frame": 0.15,
+              "value": 11.368
+            }
+          ]
+        }
+      },
+      "gold1": {
+        "props": {
+          "y": [
+            {
+              "frame": 0.1,
+              "value": 0.402
+            },
+            {
+              "frame": 0.25,
+              "value": 7.713
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0.1,
+              "value": 0
+            },
+            {
+              "frame": 0.25,
+              "value": 255
+            }
+          ]
+        }
+      },
+      "gold2": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.2,
+              "value": 0
+            },
+            {
+              "frame": 0.35,
+              "value": 255
+            }
+          ],
+          "y": [
+            {
+              "frame": 0.2,
+              "value": -13.306
+            },
+            {
+              "frame": 0.35,
+              "value": -2.339
+            }
+          ]
+        }
+      },
+      "gold3": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.3,
+              "value": 0
+            },
+            {
+              "frame": 0.45,
+              "value": 255
+            }
+          ],
+          "y": [
+            {
+              "frame": 0.3,
+              "value": -16.962
+            },
+            {
+              "frame": 0.45,
+              "value": -6.909
+            }
+          ]
+        }
+      },
+      "gold4": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0.4,
+              "value": 0
+            },
+            {
+              "frame": 0.55,
+              "value": 255
+            }
+          ],
+          "y": [
+            {
+              "frame": 0.4,
+              "value": -34.326
+            },
+            {
+              "frame": 0.55,
+              "value": -20.617
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}
