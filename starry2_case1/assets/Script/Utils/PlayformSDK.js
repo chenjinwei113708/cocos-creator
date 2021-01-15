@@ -46,7 +46,7 @@ export const PlayformSDK = {
         }
         // ===================== Mintegral =====================   
         window.gameStart = () => {
-            cc.find('Canvas').getComponent('GameController').gameInit();
+            // cc.find('Canvas').getComponent('GameController').gameInit();
         }
         window.gameClose = () => {
             cc.audioEngine.stopAll();
