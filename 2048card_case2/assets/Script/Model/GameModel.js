@@ -13,7 +13,8 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.isApplovin = false; // 是不是applovin平台
-        this.lang = 'id'; // id | th | ms (印尼语|泰语|马来语)
+        this.isMintegral = true; // 是不是mtg平台
+        this.lang = ''; // id | th | ms (印尼语|泰语|马来语)
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(239.06, 3.824),
@@ -66,6 +67,9 @@ export default class GameModel {
                             // },
                             btn: {
                                 position: cc.v2(12.213, 70.484)
+                            },
+                            mtg: {
+                                active: this.isMintegral,
                             }
                         }
                     },
@@ -133,6 +137,9 @@ export default class GameModel {
                             btn: {
                                 position: cc.v2(-5.565, 70.484)
                             },
+                            mtg: {
+                                active: this.isMintegral,
+                            }
                         }
                     },
                     notification: {

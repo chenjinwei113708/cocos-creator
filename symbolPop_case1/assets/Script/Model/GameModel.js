@@ -19,7 +19,8 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isApplovin = true; // 是不是applovin平台
+        this.isApplovin = false; // 是不是applovin平台
+        this.isMintegral = true; // 是不是mtg平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(230.752, 59.781),
@@ -29,7 +30,12 @@ export default class GameModel {
                         active: this.isApplovin ? true : false
                     },
                     tool: {
-                        position: cc.v2(-523.187, -231.448)
+                        position: cc.v2(-523.187, -231.448),
+                        children: {
+                            mtg: {
+                                active: this.isMintegral
+                            }
+                        }
                     }
                 }
             },
@@ -58,7 +64,12 @@ export default class GameModel {
                         active: this.isApplovin ? true : false
                     },
                     tool: {
-                        position: cc.v2(0, -393.011)
+                        position: cc.v2(0, -393.011),
+                        children: {
+                            mtg: {
+                                active: this.isMintegral
+                            }
+                        }
                     }
                 }
             },
