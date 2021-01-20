@@ -15,6 +15,8 @@ cc.Class({
         mask: cc.Node,
         award: cc.Node,
         turn: cc.Node, // 整个旋转相关的节点
+        playHand: cc.Node,
+        awardHand: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -37,18 +39,34 @@ cc.Class({
         this.canClick = true;
         this.canReceive = true;
         this.gameController = cc.find('Canvas').getComponent('GameController');
+        this.isGameReceive = false; // 是不是游戏产生的金币
     },
 
     start () {
         // this.spin();
+        this.showHand();
     },
 
     clickSpin () {
         if (this.canClick) {
             this.canClick = false;
+            this.hideHand();
             this.spin();
         }
         
+    },
+
+    showHand () {
+        this.gameController.guideView.myFadeIn(this.playHand, () => {
+            let stop = this.gameController.guideView.myClickHere(this.playHand);
+        });
+    },
+
+    hideHand () {
+        // console.log('this.playHand.stopMyAnimation', this.playHand.stopMyAnimation);
+        this.playHand.stopMyAnimation && this.playHand.stopMyAnimation(() => {
+            this.playHand.runAction(cc.fadeOut(0.2));
+        });
     },
 
     spin (item = 'item4') {
@@ -68,9 +86,16 @@ cc.Class({
         this.award.scale = 0;
         this.award.active = true;
         this.award.runAction(cc.scaleTo(0.4, 1).easing(cc.easeIn(1.5)));
+        this.gameController.guideView.myFadeIn(this.awardHand, () => {
+            this.gameController.guideView.myClickHere(this.awardHand);
+        });
     },
 
     receiveAward () {
+        if (this.isGameReceive) {
+            this.gameController.gameView.receiveGameAward();
+            return;
+        }
         if (!this.canReceive) return;
         this.canReceive = false;
         this.mask.runAction(cc.fadeOut(0.2));
@@ -83,10 +108,9 @@ cc.Class({
                 this.gameController.gameView.hideGameMask();
                 this.gameController.gameView.showPPFly();
             })
-        ))
-
+        ));
+        this.awardHand.stopMyAnimation && this.awardHand.stopMyAnimation();
     },
-
     
 
     // update (dt) {},
