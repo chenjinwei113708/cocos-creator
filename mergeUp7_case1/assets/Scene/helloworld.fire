@@ -156,7 +156,7 @@
       "__type__": "cc.Vec3",
       "x": 0,
       "y": 0,
-      "z": 484.9742261192857
+      "z": 484.10820071550125
     },
     "_scale": {
       "__type__": "cc.Vec3",
@@ -15301,12 +15301,21 @@
     "closeVolumnIcon": {
       "__uuid__": "e0a677d3-1858-4d8a-8ea1-cbc9b3613d80"
     },
-    "bgMusic": null,
-    "bgClick": {
-      "__uuid__": "3348f23f-533e-4af4-8c2a-d2fee93ad3fb"
+    "moneyCard": {
+      "__uuid__": "8d6b9981-0d23-407b-8cc4-c6543231fb5f"
     },
-    "startMusic": null,
-    "endMusic": null,
+    "coin": {
+      "__uuid__": "46956689-ac02-4d15-b44c-c3137680207b"
+    },
+    "cheer": {
+      "__uuid__": "be409e82-caeb-4d22-b2c3-ec649b964770"
+    },
+    "combine": {
+      "__uuid__": "a16b035f-d80a-4288-9b54-ae720105c534"
+    },
+    "spin": {
+      "__uuid__": "4c8d10df-d341-4b74-a173-496c2263eedf"
+    },
     "_id": "b2jON9mUNH5r8Rxo2wtKvx"
   },
   {

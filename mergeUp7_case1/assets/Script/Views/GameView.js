@@ -158,6 +158,7 @@ cc.Class({
                 cc.spawn(cc.scaleTo(0.2, 0.3), cc.fadeOut(0.2), cc.moveBy(0.2, -50, -20)),
                 cc.callFunc(() => {
                     if (index === 0) {
+                        this.gameController.getAudioUtils().playEffect('coin', 0.6);
                         this.gameController.addCash(200);
                     }
                     if (index === this.pps.children.length-1) {
@@ -342,7 +343,7 @@ cc.Class({
                 cc.callFunc(() => {
                     
                     if (index === otherNodes.length-1) {
-                        // this.gameController.getAudioUtils().playEffect('combine', 0.8);
+                        this.gameController.getAudioUtils().playEffect('combine', 0.8);
                         centerNode.getComponent(cc.Sprite).spriteFrame = this.sprites[newType];
                         centerNode.runAction(cc.sequence(
                             cc.scaleTo(0.2, 1.15),
@@ -393,6 +394,7 @@ cc.Class({
     },
 
     showGameAward () {
+        this.gameController.getAudioUtils().playEffect('moneyCard', 0.6);
         this.gameMask.opacity = 0;
         this.gameMask.active = true;
         this.gameMask.runAction(cc.fadeTo(0.3, 130));
@@ -419,6 +421,7 @@ cc.Class({
         this.cashout.position = cc.v2(oriPos.x-this.cashout.width, oriPos.y);
         this.cashout.active = true;
         this.cashout.opacity= 0;
+        this.gameController.getAudioUtils().playEffect('cheer', 0.6);
         this.cashout.runAction(cc.sequence(
             cc.spawn(cc.fadeIn(0.5), cc.moveBy(0.5, this.cashout.width, 0)).easing(cc.easeIn(1.5)),
             cc.callFunc(() => {

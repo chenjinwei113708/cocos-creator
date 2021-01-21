@@ -16,27 +16,32 @@ cc.Class({
             default: null
         },
         // Music
-        bgMusic: {
-            type: cc.AudioClip,
-            default: null
-        },
+        // bgMusic: {
+        //     type: cc.AudioClip,
+        //     default: null
+        // },
 
         // Effect
-        bgClick: {
+        moneyCard: {
             type: cc.AudioClip,
             default: null
         },
-
-        startMusic: {
+        coin: {
             type: cc.AudioClip,
             default: null
         },
-
-        endMusic: {
+        cheer: {
             type: cc.AudioClip,
             default: null
-        }
-
+        },
+        combine: {
+            type: cc.AudioClip,
+            default: null
+        },
+        spin: {
+            type: cc.AudioClip,
+            default: null
+        },
     },
 
     onLoad() {

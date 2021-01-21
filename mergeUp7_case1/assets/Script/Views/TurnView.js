@@ -71,6 +71,7 @@ cc.Class({
 
     spin (item = 'item4') {
         let ang = this.angle[item];
+        this.gameController.getAudioUtils().playEffect('spin', 0.6);
         this.node.runAction(cc.sequence(
             cc.rotateTo(3.3, -360*10-ang).easing(cc.easeInOut(4)),
             cc.callFunc(() => {
@@ -80,6 +81,7 @@ cc.Class({
     },
 
     showAward () {
+        this.gameController.getAudioUtils().playEffect('moneyCard', 0.6);
         this.mask.opacity = 0;
         this.mask.active = true;
         this.mask.runAction(cc.fadeTo(0.3, 150));
