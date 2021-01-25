@@ -16,15 +16,35 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        this.startPhysicEngine();
+    },
 
     start () {
-
+        
     },
 
     setGameController (gameController) {
         this.gameController = gameController;
-    }
+    },
 
+    /**打开物理引擎 */
+    startPhysicEngine () {
+        // 开启物理系统
+        cc.director.getPhysicsManager().enabled = true;
+        // 绘制调试信息  | cc.PhysicsManager.DrawBits.e_aabbBit;
+        // cc.director.getPhysicsManager().debugDrawFlags = cc.PhysicsManager.DrawBits.e_shapeBit;
+
+        // // 关闭绘制
+        // // cc.director.getPhysicsManager().debugDrawFlags = 0;
+        // 设置重力
+        cc.director.getPhysicsManager().gravity = cc.v2(0, -450);
+
+        // 碰撞系统
+        var manager = cc.director.getCollisionManager();
+        manager.enabled = true;
+        // manager.enabledDebugDraw = true;
+        // console.log('开启物理引擎');
+    },
     // update (dt) {},
 });
