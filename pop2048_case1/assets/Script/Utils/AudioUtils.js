@@ -15,27 +15,17 @@ cc.Class({
             type: cc.SpriteFrame,
             default: null
         },
-        // Music
-        bgMusic: {
-            type: cc.AudioClip,
-            default: null
-        },
+        // // Music
+        // bgMusic: {
+        //     type: cc.AudioClip,
+        //     default: null
+        // },
 
         // Effect
-        bgClick: {
+        lightning: {
             type: cc.AudioClip,
             default: null
         },
-
-        startMusic: {
-            type: cc.AudioClip,
-            default: null
-        },
-
-        endMusic: {
-            type: cc.AudioClip,
-            default: null
-        }
 
     },
 

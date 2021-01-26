@@ -1,0 +1,71 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "lightning",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.6,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "55404cd1-7afc-4c7e-94ac-967f9304b308"
+            }
+          },
+          {
+            "frame": 0.1,
+            "value": {
+              "__uuid__": "9c7f0f97-f6a3-4cb9-a87b-634812a0b0f3"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "a641a9ed-422f-4ab8-9eef-521fcc5b97e4"
+            }
+          },
+          {
+            "frame": 0.3,
+            "value": {
+              "__uuid__": "c0e0d33d-4477-4937-b42a-9b9ea2c50259"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "f6489468-2d07-48ae-8441-758fb5054f69"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "ab167fe4-fa95-4f89-a1dd-2104cdc7aa88"
+            }
+          }
+        ]
+      }
+    },
+    "props": {
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 255
+        },
+        {
+          "frame": 0.5,
+          "value": 255
+        },
+        {
+          "frame": 0.6,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "events": []
+}
