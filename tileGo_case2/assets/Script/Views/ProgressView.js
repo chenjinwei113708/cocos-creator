@@ -21,8 +21,10 @@ cc.Class({
         this.pp2 = this.node.getChildByName('pp2');
         this.pp3 = this.node.getChildByName('pp3');
         this.pp4 = this.node.getChildByName('pp4');
+        this.pp5 = this.node.getChildByName('pp5');
+        this.pp6 = this.node.getChildByName('pp6');
         this.progressBar = this.node.getComponent(cc.ProgressBar);
-        this.pps = [this.pp1, this.pp2, this.pp3, this.pp4];
+        this.pps = [this.pp1, this.pp2, this.pp3, this.pp4, this.pp5, this.pp6];
 
         this.info = {
             nowProgress: 0,
@@ -52,10 +54,7 @@ cc.Class({
      */
     setPPShake (progress) {
         // console.log('setPPShake', progress);
-        let shakeNum = progress >= 0.99 ?
-        4 : (progress >= 0.66 ?
-            3: (progress >= 0.33 ?
-                2: 1));
+        let shakeNum = parseInt(progress/0.2)+1;
         this.pps.forEach((node, index) => {
             node.stopAllActions();
             node.runAction(cc.scaleTo(0.1, 1));

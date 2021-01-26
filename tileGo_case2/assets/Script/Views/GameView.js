@@ -9,7 +9,8 @@
 //  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 import {
     CELL_STATUS,
-    CELL_TYPE
+    CELL_TYPE,
+    TYPE_MONEY
 } from '../Model/ConstValue';
 
 cc.Class({
@@ -52,7 +53,7 @@ cc.Class({
 
     setStatus (status) {
         // console.log('--- setStatus', status);
-        if (this.info.bombTimes >= 3) {
+        if (this.info.bombTimes >= 5) {
             setTimeout(() => {
                 this.showPPcard();
             }, 600);
@@ -185,7 +186,7 @@ cc.Class({
                 )
             );
             ids.forEach((id, num) => {
-                this.showPPFly(id, num, this.info.bombTimes, destPos, ()=>{
+                this.showPPFly(id, num, this.info.bombTimes, destPos, okType, ()=>{
                     this.moveCards(moveArrIds, newArr);
                 });
             });
@@ -201,13 +202,14 @@ cc.Class({
      * @param {*} number 此次展示队列中第几个pp卡 (0-2)
      * @param {*} bombTimes 当前总合成次数
      * @param {*} destPos 移动目的地
+     * @param {CELL_TYPE} okType 可以合成的类型
      */
-    showPPFly (index, number, bombTimes, destPos, callback) {
-        const addMoney = {
-            1: 5,
-            2: 15,
-            3: 50,
-        };
+    showPPFly (index, number, bombTimes, destPos, okType, callback) {
+        // const addMoney = {
+        //     1: 5,
+        //     2: 15,
+        //     3: 50,
+        // };
         let card = this.put.children[index];
         let pp = this.pp.children[index];
         // 卡片动画
@@ -223,7 +225,7 @@ cc.Class({
             })
         ));
         // pp修改文字
-        let money = addMoney[bombTimes] || 50;
+        let money = TYPE_MONEY[okType] || 50;
         pp.getChildByName('money').getComponent(cc.Label).string = `$${money}`;
         // pp卡动画
         let ppOri = cc.v2(pp.position.x, pp.position.y);
@@ -305,6 +307,8 @@ cc.Class({
     showPPcard () {
         let mask2 = this.node.getChildByName('mask2');
         let ppcard = this.node.getChildByName('ppcard');
+        let money = ppcard.getChildByName('money');
+        money.getComponent(cc.Label).string = `$${this.gameController.cashView.targetCash}`;
         mask2.opacity = 0;
         mask2.active = true;
         mask2.runAction(cc.fadeTo(0.4, 160));

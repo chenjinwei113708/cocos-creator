@@ -131,7 +131,7 @@ cc.Class({
     addCash (num) {
         this.progressTimes++;
         this.cashView.addCash(num);
-        let ratio = this.progressTimes / 3;
+        let ratio = this.progressTimes / 5;
         this.progressView.setProgress(ratio);
     },
 
