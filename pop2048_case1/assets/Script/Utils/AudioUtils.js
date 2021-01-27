@@ -27,6 +27,26 @@ cc.Class({
             default: null
         },
 
+        moneyCard: {
+            type: cc.AudioClip,
+            default: null
+        },
+
+        coin: {
+            type: cc.AudioClip,
+            default: null
+        },
+
+        cheer: {
+            type: cc.AudioClip,
+            default: null
+        },
+
+        combine: {
+            type: cc.AudioClip,
+            default: null
+        },
+
     },
 
     onLoad() {

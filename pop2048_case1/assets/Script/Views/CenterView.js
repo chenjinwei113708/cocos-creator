@@ -1,3 +1,6 @@
+import {
+    GAME_CAM
+} from '../Model/ConstValue.js';
 
 cc.Class({
     extends: cc.Component,
@@ -26,7 +29,12 @@ cc.Class({
 
 
     orientCb(isLoad) {
+        const gameCamera = cc.find('Canvas/center/game1/GameCamera');
         this.gameModel.isLandscape = this.getLandscape(isLoad);
+        if (!isLoad) {
+            this.gameModel.initOrient = this.gameModel.isLandscape ? 'horizontal' : 'vertical';
+            this.setGameCam(this.gameModel.initOrient);
+        }
         let screen = this.getScreenPixel(isLoad); // 适配不同屏幕所需参数
         let _canvas = cc.find('Canvas');
         // cocos 2.1 的bug，需要手动设置size和position。只靠setDesignResolutionSize方法设置的话，size和position是错误的值
@@ -45,8 +53,26 @@ cc.Class({
 
         // 根据横竖屏绘制元素
         this.drawElements(posObj);
+
+        // 设置摄像机
+        // if (this.gameModel.isLandscape) {
+        //     gameCamera.getComponent(cc.Camera).zoomRatio = 0.925;
+        // } else {
+        //     gameCamera.getComponent(cc.Camera).zoomRatio = 1;
+        // }
         
         
+        
+    },
+
+    /**
+     * 设置摄像机参数
+     * @param {string} orient 横屏还竖屏 / 'horizontal' : 'vertical'
+     */
+    setGameCam (orient) {
+        let config = GAME_CAM[orient];
+        this.gameModel.HorizontalConfig.game1 = config['horizontal'].game1;
+        this.gameModel.VerticalConfig.game1 = config['vertical'].game1;
     },
 
     /**

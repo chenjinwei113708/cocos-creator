@@ -15,7 +15,7 @@ cc.Class({
         game: cc.Node,
         // 金币相关
         cash: cc.Node,
-
+        progress: cc.Node,
     },
 
     onLoad() {
@@ -44,6 +44,9 @@ cc.Class({
         this.gameView.setGameController(this);
         // 金币相关脚本
         this.cashView = this.cash.getComponent('CashView');
+
+        // 进度条
+        this.progressView = this.progress.getComponent('ProgressView');
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
