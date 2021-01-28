@@ -21,6 +21,8 @@ cc.Class({
         paypal: cc.Node,
         ppcard: cc.Node,
         mask: cc.Node,
+        progress: cc.Node,
+        gifts: cc.Node,
     },
 
 
@@ -29,6 +31,7 @@ cc.Class({
         this.controller = cc.find('Canvas').getComponent('GameController');
         this.audioUtils = this.controller.getAudioUtils();
         this.gridView = this.controller.getGridViewScript();
+        this.progressView = this.progress.getComponent('ProgressView');
         // 爆炸特效数组
         this.bombEffects = {
             [CELL_TYPE.BLUE]: this.bombBlue,
@@ -68,7 +71,7 @@ cc.Class({
         let count = 0;
         setTimeout(() => {
             this.showFlyCards(10, ()=>{
-                this.gridView.isInPlayAni = false; // 动画播放完成，允许用户点击
+                // this.gridView.isInPlayAni = false; // 动画播放完成，允许用户点击
                 if (!this.gridView.isCanMove) {
                     this.gridView.isCanMove = true;
                     this.gridView.setListener();
@@ -165,21 +168,23 @@ cc.Class({
                     })
                 ));
                 if (i === 5) {
-                    this.controller.addCash(100);
+                    this.controller.addCash(50);
                     this.controller.getAudioUtils().playEffect('coin', 0.4);
-                    this.ppcard.scale = 0;
-                    this.ppcard.opacity = 0;
-                    this.ppcard.active = true;
-                    this.ppcard.runAction(cc.sequence(
-                        cc.spawn(cc.scaleTo(0.3, 1.05), cc.fadeTo(0.3, 230)),
-                        cc.repeat(cc.sequence(cc.scaleTo(0.2, 0.95), cc.scaleTo(0.2, 1.05)), 2),
-                        cc.spawn(cc.scaleTo(0.3, 0.5), cc.fadeOut(0.3, 0)),
-                        cc.callFunc(() => {
-                            if (this.controller.cashView.targetCash >= 300) {
-                                setTimeout(() => {this.show300Card();}, 200);
-                            }
-                        })
-                    ));
+
+                    this.progressView.setProgress(1);
+                    // this.ppcard.scale = 0;
+                    // this.ppcard.opacity = 0;
+                    // this.ppcard.active = true;
+                    // this.ppcard.runAction(cc.sequence(
+                    //     cc.spawn(cc.scaleTo(0.3, 1.05), cc.fadeTo(0.3, 230)),
+                    //     cc.repeat(cc.sequence(cc.scaleTo(0.2, 0.95), cc.scaleTo(0.2, 1.05)), 2),
+                    //     cc.spawn(cc.scaleTo(0.3, 0.5), cc.fadeOut(0.3, 0)),
+                    //     cc.callFunc(() => {
+                    //         if (this.controller.cashView.targetCash >= 300) {
+                    //             setTimeout(() => {this.show300Card();}, 200);
+                    //         }
+                    //     })
+                    // ));
                 }
             }, i*90);
         }
@@ -207,6 +212,56 @@ cc.Class({
         this.mask.active = true;
         this.mask.runAction(cc.fadeTo(0.5, 190));
         // this.ppcard.runAction(cc.spawn(cc.scaleTo(0.3, 1.05), cc.fadeIn(0.3)));
+    },
+
+    /**展示礼盒飞舞 */
+    showGiftsFly () {
+        this.mask.opacity = 0;
+        this.mask.active = true;
+        this.mask.runAction(cc.fadeTo(0.3, 207));
+        this.controller.gridScript.showGuideGift();
+        this.gifts.children.forEach((node, index) => {
+            setTimeout(() => {
+                this.flowGift(node, index===0);
+            }, index*300+Math.random()*600);
+            
+        });
+    },
+
+    /**礼盒下落 */
+    flowGift (node, isStart=false) {
+        node.active = true;
+        let rand = Math.random();
+        node.position = cc.v2(-100+200*rand, isStart ? 260 : 590);
+        node.opacity = 0;
+        node.stopAllActions();
+        
+        if (rand>0.5) {
+            node.runAction(cc.sequence(
+                cc.delayTime(Math.random()*0.3),
+                cc.fadeIn(0.3),
+                cc.moveBy(1.3+0.5*Math.random(), -180-90*rand, -450+100*rand),
+                cc.moveBy(0.9+1.7*rand, 350-90*Math.random(), -400+50*rand),
+                cc.moveBy(0.9+1.9*Math.random(), -390+60*rand, -450+100*Math.random()),
+                cc.callFunc(() => {
+                    node.opacity = 0;
+                    this.flowGift(node);
+                })
+            ));
+        } else {
+            node.runAction(cc.sequence(
+                cc.delayTime(Math.random()*0.3),
+                cc.fadeIn(0.3),
+                cc.moveBy(0.9+1.6*Math.random(), 190+90*rand, -450+100*Math.random()),
+                cc.moveBy(0.6+1.6*Math.random(), -350+90*Math.random(), -400+50*rand),
+                cc.moveBy(0.9+1.9*Math.random(), 390+60*Math.random(), -450+100*Math.random()),
+                cc.callFunc(() => {
+                    node.opacity = 0;
+                    this.flowGift(node);
+                })
+            ));
+        }
+        
     },
 
     /**

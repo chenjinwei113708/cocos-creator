@@ -19,24 +19,16 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isApplovin = false; // 是不是applovin平台
-        this.isMintegral = true; // 是不是mtg平台
+        this.isApplovin = true; // 是不是applovin平台
+        this.isMintegral = false; // 是不是mtg平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(230.752, 59.781),
                 scale: 0.9,
                 children: {
-                    adsonly: {
-                        active: this.isApplovin ? true : false
-                    },
                     tool: {
                         position: cc.v2(-523.187, -231.448),
-                        children: {
-                            mtg: {
-                                active: this.isMintegral
-                            }
-                        }
-                    }
+                    },
                 }
             },
             UI: {
@@ -51,6 +43,19 @@ export default class GameModel {
                     },
                     audioBtn: {
                         position: cc.v2(-410.189, 52.554)
+                    },
+                    game: {
+                        position: cc.v2(230.752, 59.781),
+                        scale: 0.9,
+                        children: {
+                            adsonly: {
+                                active: this.isApplovin ? true : false
+                            },
+                            mtg: {
+                                active: this.isMintegral,
+                                position: cc.v2(0, -321.374)
+                            }
+                        }
                     }
                 }
             }
@@ -60,16 +65,8 @@ export default class GameModel {
                 position: cc.v2(0, 0),
                 scale: 1,
                 children: {
-                    adsonly: {
-                        active: this.isApplovin ? true : false
-                    },
                     tool: {
                         position: cc.v2(0, -393.011),
-                        children: {
-                            mtg: {
-                                active: this.isMintegral
-                            }
-                        }
                     }
                 }
             },
@@ -85,6 +82,19 @@ export default class GameModel {
                     },
                     audioBtn: {
                         position: cc.v2(-225.524, 275.209)
+                    },
+                    game: {
+                        position: cc.v2(0, 0),
+                        scale: 1,
+                        children: {
+                            adsonly: {
+                                active: this.isApplovin ? true : false
+                            },
+                            mtg: {
+                                active: this.isMintegral,
+                                position: cc.v2(0, -321.374)
+                            }
+                        }
                     }
                 }
             }

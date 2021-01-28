@@ -33,29 +33,36 @@ cc.Class({
         flyStars: cc.Node, // 飞星
         toolHand: cc.Node, // 工具栏的手
         hand: cc.Node,
+        lighty: cc.Node,
+        ppSprite: cc.SpriteFrame,
 
     },
 
 
     onLoad: function () {
-        setTimeout(() => {this.guideClickStar();}, 500);
+        // setTimeout(() => {this.guideClickStar();}, 500); // 引导点击星星
 
         this.lastTouchPos = cc.Vec2(-1, -1);
 
-        this.isCanMove = false;
+        this.isCanMove = true; // 用户是否可以开始消除方块了
         this.isInPlayAni = false; // 是否在播放中
 
         this.effectView = cc.find('Canvas/center/game/effect').getComponent('EffectView'); //特效显示层脚本
 
-        // this.GameController = cc.find('Canvas').getComponent('GameController'); // 游戏控制器脚本
+        // this.gameController = cc.find('Canvas').getComponent('gameController'); // 游戏控制器脚本
 
         this.starTimes = 1; // 可以点击星星的次数
 
         this.freeTime = 0; //空闲时间，用户有多长时间没有触摸屏幕，单位秒
         // this.myInterval = setInterval(this.addFreeTime.bind(this), 1000);//计时器，用来计算空闲时间
         // 计算所有可以爆炸的区域
-        // let tip = this.gameModel.getTipArea(this.gameModel.getLeftBombAreas(), TIP_STRATEGY.MOST_GRADE);
-        // this.tip = tip;//提示信息，里面存了需要提示的cellModel
+        let tip = this.gameModel.getTipArea(this.gameModel.getLeftBombAreas(), TIP_STRATEGY.MOST_GRADE);
+        this.tip = tip;//提示信息，里面存了需要提示的cellModel
+
+        this.giftClicked = false; // 是否点击了礼包
+        
+        this.setListener();
+        this.showTip(this.tip);
     },
     setGameModel: function (gameModel) {
         //传一个gameModel进来
@@ -63,7 +70,7 @@ cc.Class({
     },
     setGameController: function (gameController) {
         // 游戏控制器脚本
-        this.GameController = gameController;
+        this.gameController = gameController;
     },
     setTipModels(tipModels) {
         this.tip = tipModels;
@@ -148,8 +155,80 @@ cc.Class({
         ));
     },
 
+    showGuideGift () {
+        let gift = cc.find('Canvas/center/UI/game/giftGuide/gift');
+        let giftHand = cc.find('Canvas/center/UI/game/giftGuide/hand');
+        let text = cc.find('Canvas/center/UI/game/giftGuide/click');
+        setTimeout(() => {
+            if (this.giftClicked) return;
+            let oriPos = cc.v2(gift.position.x, gift.position.y);
+            gift.position = cc.v2(oriPos.x, oriPos.y+500);
+            gift.opacity = 0;
+            gift.active = true;
+            gift.runAction(cc.sequence(
+                cc.fadeIn(0.2),
+                cc.moveTo(1.2, oriPos),
+                cc.callFunc(() => {
+                    if (this.giftClicked) return;
+                    text.opacity = 0;
+                    text.active = true;
+                    text.runAction(cc.fadeIn(0.2));
+                    this.gameController.guideScript.myFadeIn(giftHand, () => {
+                        this.gameController.guideScript.myClickHere(giftHand)
+                    })
+                })
+            ));
+        }, 3200);
+    },
+
+    onClickGift (event) {
+        // console.log('点击礼包', event.target);
+        if (this.giftClicked) return;
+        this.giftClicked = true;
+
+        const width = 124;
+        const height = 168;
+        let gift = cc.find('Canvas/center/UI/game/giftGuide/gift');
+        let giftHand = cc.find('Canvas/center/UI/game/giftGuide/hand');
+        let text = cc.find('Canvas/center/UI/game/giftGuide/click');
+        let node = event.target;
+
+        node.stopAllActions();
+        gift.stopAllActions();
+        giftHand.active = false;
+        text.active = false;
+
+        gift.position = cc.v2(node.position.x, node.position.y);
+        if (gift !== node) {
+            gift.active = true;
+            node.active = false;
+        }
+
+        gift.runAction(cc.sequence(
+            cc.spawn(cc.moveTo(0.2, cc.v2(0, 0)), cc.scaleTo(0.2, 1.3)),
+            // cc.delayTime(0.5),
+            cc.scaleTo(0.2, 0),
+            cc.callFunc(() => {
+                this.lighty.scale = 0;
+                this.lighty.active = true;
+                this.lighty.runAction(cc.scaleTo(0.2, 1.5));
+                this.lighty.position = cc.v2(gift.position.x, gift.position.y);
+                gift.getComponent(cc.Sprite).spriteFrame = this.ppSprite;
+                gift.width = width;
+                gift.height = height;
+            }),
+            cc.scaleTo(0.2, 1.5),
+            cc.delayTime(0.8),
+            cc.callFunc(() => {
+                this.gameController.download();
+            })
+
+        ))
+    },
+
     /**点击星星消除工具 */
     onClickStar () {
+        return;
         if (this.isInPlayAni || this.starTimes <=0) { //播放动画中，不允许点击
             return true;
         }
@@ -160,7 +239,7 @@ cc.Class({
         this.starTool.getChildByName('num').getComponent(cc.Label).string = `x${this.starTimes}`;
         // 爆炸
         let bombModels = this.gameModel.getMyBombArea();
-        this.GameController.getAudioUtils().playEffect('cheer', 0.4);
+        this.gameController.getAudioUtils().playEffect('cheer', 0.4);
         // 星星飞到爆炸点;
         this.flyStars.children.forEach((node, index) => {
             let model = bombModels[index];
@@ -231,14 +310,14 @@ cc.Class({
         }
         let gameRules = this.gameModel.getGameRules();
         // 隐藏指引手
-        this.GameController.guideScript.hideHand();
+        this.gameController.guideScript.hideHand();
         this.hideGuideHand();
         // 停止提示
         this.stopTip(this.tip);
         clearInterval(this.myInterval);
         // 更新积分显示
         let grade = bombModels.length * bombModels.length * 5;
-        // this.GameController.GradeView.addGrade(grade);
+        // this.gameController.GradeView.addGrade(grade);
         // 计算下移和左移的格子
         let downModels = [];
         let leftModels = [];
@@ -273,14 +352,14 @@ cc.Class({
             if (this.tip.length === 0) {
                 this.noMoreBomb();
                 // 显示提现
-                // this.GameController.guideScript.showMoneyCard(gameRules.money);
-                this.GameController.guideScript.showPaypalCardFly(gameRules.money, animEndCallback);
+                // this.gameController.guideScript.showMoneyCard(gameRules.money);
+                this.gameController.guideScript.showPaypalCardFly(gameRules.money, animEndCallback);
 
             } else {
                 // 显示提现
-                // this.GameController.guideScript.showMoneyCard(gameRules.money);
-                this.GameController.guideScript.showPaypalCardFly(gameRules.money, animEndCallback);
-                this.startCounting();
+                // this.gameController.guideScript.showMoneyCard(gameRules.money);
+                this.gameController.guideScript.showPaypalCardFly(gameRules.money, animEndCallback);
+                // this.startCounting();
             }
         }.bind(this));
     },
@@ -297,8 +376,8 @@ cc.Class({
     convertTouchPosToCell: function (pos) {
         pos = this.node.convertToNodeSpaceAR(pos); //将一个点转换到节点 (局部) 坐标系，并加上锚点的坐标。
         // 在iphoneX等长屏幕设备上，竖屏时，要重新计算坐标
-        // let screen = this.GameController.centerScript.getScreenPixel();
-        // if (!this.GameController.gameModel.isLandscape && screen.ratio>1.78){
+        // let screen = this.gameController.centerScript.getScreenPixel();
+        // if (!this.gameController.gameModel.isLandscape && screen.ratio>1.78){
         //     pos.y = pos.y - (screen.height*(540/screen.width)-960)/2;
         //     console.log('gridview /// convert Pos ',pos);
         // }
@@ -336,7 +415,7 @@ cc.Class({
         }, this);
         this.guideClickCell();
         // if (this.gameModel.curOrder === this.gameModel.ORDER.B) {
-        //     this.GameController.guideScript.showHand();
+        //     this.gameController.guideScript.showHand();
         // }
     },
     /**
