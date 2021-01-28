@@ -9,6 +9,7 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
+        this.isMintegral = true;
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(195.695, 30),
@@ -32,6 +33,11 @@ export default class GameModel {
                                 position: cc.v2(305.292, -67.126)
                             }
                         }
+                    },
+                    mtg: {
+                        active: this.isMintegral,
+                        position: cc.v2(-280, -140),
+                        scale: 0.9,
                     },
                     audioBtn: {
                         position: cc.v2(-385.431, 179.447)
@@ -99,6 +105,11 @@ export default class GameModel {
                     },
                     audioBtn: {
                         position: cc.v2(0, 370.865)
+                    },
+                    mtg: {
+                        active: this.isMintegral,
+                        position: cc.v2(0, 311.322),
+                        scale: 1,
                     },
                     banner: {
                         position: cc.v2(0, -500.697),
