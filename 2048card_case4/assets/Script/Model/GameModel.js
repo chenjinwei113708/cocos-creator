@@ -80,6 +80,10 @@ export default class GameModel {
                             }
                         }
                     },
+                    flycard: {
+                        position: cc.v2(239.06, 3.824),
+                        scale: 0.757,
+                    },
                     paypal: {
                         position: cc.v2(-220, 104.839)
                     },
@@ -161,6 +165,10 @@ export default class GameModel {
                                 position: cc.v2(-5.565, 70.484)
                             },
                         }
+                    },
+                    flycard: {
+                        position: cc.v2(0, -92.552),
+                        scale: 0.75,
                     },
                     paypal: {
                         position: cc.v2(0, 324.839)
@@ -246,8 +254,8 @@ export default class GameModel {
 
         // 用户可以选择的卡牌
         this.userCard = {
-            nowCard: 64,
-            nextCard: 128
+            nowCard: 32,
+            nextCard: 64
         };
         
 

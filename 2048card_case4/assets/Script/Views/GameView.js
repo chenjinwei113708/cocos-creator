@@ -133,29 +133,29 @@ cc.Class({
                 return;
             } else { // 如果放到了卡牌组里面去
                 if (this.gameInfo.isFirstCard) {
-                    // 如果是第一次放，只能放到第一组
-                    if (group !== CARD_GROUP.KONG3) {
+                    // 如果是第一次放，只能放到第二组
+                    if (group !== CARD_GROUP.KONG2) {
                         this.card2.active = true;
                         this.setCardStatus(CARD_STATUS.CAN_MOVE);
                         return
                     };
                     this.gameInfo.isFirstCard = false;
                     this.gameInfo.isSecondCard = true;
-                    // this.changeSwipeHand();
-                    this.hideSwipeHand();
+                    this.changeSwipeHand();
+                    // this.hideSwipeHand();
                 } 
-                // else if (this.gameInfo.isSecondCard) {
-                //     // 如果是第二次放，只能放到第二组
-                //     if (group !== CARD_GROUP.KONG2) {
-                //         this.card2.active = true;
-                //         this.setCardStatus(CARD_STATUS.CAN_MOVE);
-                //         return;
-                //     } else {
-                //         this.hideSwipeHand();
-                //         this.gameInfo.isSecondCard = false;
-                //         this.changeTimeout && clearTimeout(this.changeTimeout);
-                //     }
-                // }
+                else if (this.gameInfo.isSecondCard) {
+                    // 如果是第二次放，只能放到第三组
+                    if (group !== CARD_GROUP.KONG3) {
+                        this.card2.active = true;
+                        this.setCardStatus(CARD_STATUS.CAN_MOVE);
+                        return;
+                    } else {
+                        this.hideSwipeHand();
+                        this.gameInfo.isSecondCard = false;
+                        this.changeTimeout && clearTimeout(this.changeTimeout);
+                    }
+                }
                 this.setCardStatus(CARD_STATUS.DONE_MOVE);
                 let nowCard = this.gameController.gameModel.getNowCard();
                 this.putCardIntoGroup(group, nowCard);
@@ -179,31 +179,35 @@ cc.Class({
             // 消除2048卡
             this.gainCoin();
             this.showExcellent();
-            newCard.runAction(cc.sequence(
-                cc.repeat(cc.sequence(
-                    cc.rotateTo(0.1, 15), cc.rotateTo(0.1,-15)
-                ), 3),
-                cc.spawn(cc.fadeOut(0.1), cc.scaleTo(0.1, 0.5)),
-                cc.callFunc(() => {
-                    newCard.runAction(cc.removeSelf());
-                    let lastCardValue = this.gameController.gameModel.delete2048(groupName);
-                    this.createNewCard();
-                    if (lastCardValue > 0) {
-                        // 如果2048上面还有卡
-                        // console.log(' --- lastCardValue, ', lastCardValue);
-                        let lastCard = this[groupName].children[this[groupName].children.length - 2];
-                        this.gameInfo.inputBox[CARD_GROUP_INDEX[groupName]] =
-                            cc.v2(this[groupName].position.x, this[groupName].position.y + lastCard.position.y);
-                        this.setCardStatus(CARD_STATUS.CAN_MOVE); // 设置用户可以再次放卡
-                    } else {
-                        // 更新(卡牌组)输入框位置
-                        this.gameInfo.inputBox[CARD_GROUP_INDEX[groupName]] =
-                            cc.v2(this[groupName].position.x, this[groupName].position.y);
-                        this.setCardStatus(CARD_STATUS.CAN_MOVE); // 设置用户可以再次放卡
-                    }
-                })
-            ));
-            return;
+            this.stopGame();
+            setTimeout(() => {
+                this.showFlyCard(newCard);
+            }, 500);
+            // newCard.runAction(cc.sequence(
+            //     cc.repeat(cc.sequence(
+            //         cc.rotateTo(0.1, 15), cc.rotateTo(0.1,-15)
+            //     ), 3),
+            //     cc.spawn(cc.fadeOut(0.1), cc.scaleTo(0.1, 0.5)),
+            //     cc.callFunc(() => {
+            //         newCard.runAction(cc.removeSelf());
+            //         let lastCardValue = this.gameController.gameModel.delete2048(groupName);
+            //         this.createNewCard();
+            //         if (lastCardValue > 0) {
+            //             // 如果2048上面还有卡
+            //             // console.log(' --- lastCardValue, ', lastCardValue);
+            //             let lastCard = this[groupName].children[this[groupName].children.length - 2];
+            //             this.gameInfo.inputBox[CARD_GROUP_INDEX[groupName]] =
+            //                 cc.v2(this[groupName].position.x, this[groupName].position.y + lastCard.position.y);
+            //             this.setCardStatus(CARD_STATUS.CAN_MOVE); // 设置用户可以再次放卡
+            //         } else {
+            //             // 更新(卡牌组)输入框位置
+            //             this.gameInfo.inputBox[CARD_GROUP_INDEX[groupName]] =
+            //                 cc.v2(this[groupName].position.x, this[groupName].position.y);
+            //             this.setCardStatus(CARD_STATUS.CAN_MOVE); // 设置用户可以再次放卡
+            //         }
+            //     })
+            // ));
+            // return;
         }
         // 更新(卡牌组)输入框位置
         this.gameInfo.inputBox[CARD_GROUP_INDEX[groupName]] =
@@ -256,6 +260,48 @@ cc.Class({
                 ));
             }
         }
+    },
+
+    /**
+     * 展示2048卡片飞到pp顶部
+     * @param {cc.Node} originNode 原来的2048卡片节点
+     */
+    showFlyCard (originNode) {
+        let lighty = cc.find('Canvas/center/UI/flycard/card/lighty');
+        let card = cc.find('Canvas/center/UI/flycard/card');
+        if (!lighty || !card) return;
+        let originPos = cc.v2(originNode.position.x+64, originNode.position.y+272);
+        let desPos = cc.v2(-150, 200);
+        
+        card.position = originPos;
+        card.active = true;
+        originNode.active = false;
+        lighty.active = true;
+        
+        lighty.scale = 0;
+        lighty.opacity = 0;
+
+        lighty.runAction(cc.sequence(
+            cc.spawn(cc.fadeIn(0.5), cc.scaleTo(0.3, 1)),
+            cc.delayTime(0.6),
+            cc.callFunc(() => {
+                card.runAction(cc.sequence(
+                    cc.moveTo(0.5, desPos).easing(cc.easeIn(1.5)),
+                    cc.spawn(cc.scaleTo(0.2, 0.2), cc.fadeOut(0.4), cc.moveBy(0.3, -25, -25)),
+                    cc.callFunc(() => {
+                        this.gameController.addCash(200);
+                        setTimeout(() => {
+                            this.showCashoutBtn();
+                        }, 300);
+                    })
+                ))
+            })
+        ));
+    },
+
+    /**展示提现按钮 */
+    showCashoutBtn () {
+        console.log('展示提现按钮')
     },
 
     /**生成新的卡 */
@@ -388,7 +434,7 @@ cc.Class({
             this.swipe.opacity = 0;
             this.swipe.active = true;
             this.swipe.getComponent(cc.Animation).play('swipeHand2');
-        }, 2500);
+        }, 1500);
     },
 
     /**获得金币 */
@@ -397,9 +443,9 @@ cc.Class({
         this.gameController.getAudioUtils().playEffect('money', 0.6);
         this.golds.getComponent(cc.Animation).play();
         // this.addProgress();
-        let money = parseInt(Math.random() * 100);
-        // this.gameController.addCash(money);
-        this.gameController.paypalView.addNewMsg(200);
+        let money = parseInt(10);
+        this.gameController.addCash(money);
+        // this.gameController.paypalView.addNewMsg(200);
         // if (this.gameInfo.isSecondCard) this.gameController.addCash(100);
         // else { this.gameController.addCash(50); }
     },

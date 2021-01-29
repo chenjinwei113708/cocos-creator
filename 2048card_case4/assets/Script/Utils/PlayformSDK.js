@@ -130,7 +130,7 @@ export const PlayformSDK = {
                 }
             });
             // adcolony默认初始声音关闭
-            audioUtils.closeVolumn();
+            // audioUtils.closeVolumn();
             cc.find('Canvas').getComponent('GameController').gameInit();
             console.log('mraid ads init')
             return false
