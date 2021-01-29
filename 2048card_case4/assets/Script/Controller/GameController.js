@@ -119,12 +119,12 @@ cc.Class({
 
     addCash (number) {
         let nowMoney = this.cashView.addCash(number);
-        setTimeout(() => {
-            this.gameView.textBling();
-        }, 800);
-        setTimeout(() => {
-            this.gameView.showPPcard();
-        }, 1300)
+        // setTimeout(() => {
+        //     this.gameView.textBling();
+        // }, 800);
+        // setTimeout(() => {
+        //     this.gameView.showPPcard();
+        // }, 1300)
         
         // this.getAudioUtils().playEffect('money', 0.6);
         // console.log('addCash progress,', this.gameView.gameInfo.progress);
