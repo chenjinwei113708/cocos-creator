@@ -140,9 +140,11 @@ cc.Class({
         // }
     },
 
+    // 不知道哪个node绑定了, 留着该方法
     addCash100 () {
-        this.cashView.addCash(100);
-        this.getAudioUtils().playEffect('money', 0.6);
+        // this.cashView.addCash(100);
+        // this.getAudioUtils().playEffect('money', 0.6);
+        // console.log(111)
         this.guideView.hideWelcomePage();
     },
 

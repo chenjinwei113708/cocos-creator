@@ -101,8 +101,11 @@ cc.Class({
         this.canReceive = false;
         this.maskByTurn.runAction(cc.fadeOut(0.2))
         this.mask.runAction(cc.fadeOut(0.2));
-        this.maskByTurn.active = false
-        this.mask.active = false
+        // 延迟过后消让mask消失
+        setTimeout(() => {
+            this.maskByTurn.active = false
+            this.mask.active = false
+        }, 200)
         this.award.runAction(cc.scaleTo(0.3, 0).easing(cc.easeIn(1.5)));
         this.turn.runAction(cc.sequence(
             cc.fadeOut(0.5),
@@ -111,6 +114,9 @@ cc.Class({
                 this.turn.active = false;
                 this.gameController.gameView.hideGameMask();
                 this.gameController.gameView.showPPFly();
+                setTimeout(() => {
+                    this.gameController.addCash(200);
+                }, 300);
             })
         ));
         this.awardHand.stopMyAnimation && this.awardHand.stopMyAnimation();

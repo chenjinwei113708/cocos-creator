@@ -90,22 +90,28 @@ cc.Class({
 
     /**展示提示手 */
     showCashOutHand () {
-        this.cashoutHand.opacity = 0;
-        this.cashoutHand.active = true;
-        this.cashoutHand.runAction(cc.sequence(
-            cc.delayTime(1.2),
-            cc.callFunc(() => {
-                let hereState = this.cashoutHand.getComponent(cc.Animation).play('here');
-                hereState.on('finished', () => {
-                    this.cashoutHand.getComponent(cc.Animation).play('shake');
-                }, this);
-            })
-        ));
+        // this.cashoutHand.opacity = 0;
+        // this.cashoutHand.active = true;
+        // this.cashoutHand.runAction(cc.sequence(
+        //     cc.delayTime(1.2),
+        //     cc.callFunc(() => {
+        //         let hereState = this.cashoutHand.getComponent(cc.Animation).play('here');
+        //         hereState.on('finished', () => {
+        //             this.cashoutHand.getComponent(cc.Animation).play('shake');
+        //         }, this);
+        //     })
+        // ));
+        // 转盘新增
+        this.myFadeIn(this.cashoutHand, () => {
+            this.myClickHere(this.cashoutHand);
+        });
+        // 转盘新增
     },
 
     /**点击提现 */
     clickCashout () {
-        if (this.gameController.cashView.targetCash>=200 && !this.info.isCashout){
+        console.log(this.gameController.cashView.targetCash)
+        if (!this.info.isCashout){
             this.info.isCashout = true;
             this.gameController.download();
             return;

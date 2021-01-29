@@ -54,6 +54,10 @@ export default class GameModel {
                         position: cc.v2(-151.384, 208.493),
                         scale: 1.186
                     },
+                    pps_turn: {
+                        position: cc.v2(239.06, 3.824),
+                        scale: 0.757,
+                    },
                     // 转盘新增 ↑
                     banner: {
                         position: cc.v2(-268.535, -254.925),
@@ -151,6 +155,10 @@ export default class GameModel {
                         position: cc.v2(0, 439.262),
                         scale: 1,
                     },
+                    pps_turn: {
+                        position: cc.v2(0, 0),
+                        scale: 1,
+                    },
                     // 转盘新增↑
                     banner: {
                         position: cc.v2(0, -496.617),
@@ -167,8 +175,8 @@ export default class GameModel {
                         }
                     },
                     flycard: {
-                        position: cc.v2(0, -92.552),
-                        scale: 0.75,
+                        position: cc.v2(0, 0),
+                        scale: 1,
                     },
                     paypal: {
                         position: cc.v2(0, 324.839)

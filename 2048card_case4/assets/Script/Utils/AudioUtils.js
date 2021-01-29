@@ -59,6 +59,10 @@ cc.Class({
             type: cc.AudioClip,
             default: null
         },
+        cheer: {
+            type: cc.AudioClip,
+            default: null
+        }
         // 转盘新增结束
     },
 
