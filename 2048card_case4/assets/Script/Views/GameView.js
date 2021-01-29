@@ -35,6 +35,11 @@ cc.Class({
         progressBar: cc.Node, // 进度条
         cardPrefab: cc.Prefab, // 卡牌预制资源
         cardSprites: [cc.SpriteFrame], // 卡牌图片
+        // 转盘新增
+        gameMask: cc.Node, // pp奖赏遮罩层
+        paypal: cc.Node, // 上方计数板
+        pps: cc.Node // 飞翔计数板的pp图标
+        // 转盘新增结束
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -484,6 +489,55 @@ cc.Class({
         this.enabled = true;
 
     },
+    /* 转盘新增 */
+
+    // 转盘模块新增 --- 隐藏mask
+    hideGameMask () {
+        this.gameMask.runAction(cc.sequence(
+            cc.fadeOut(0.2),
+            cc.callFunc(() => {
+                this.gameMask.active = false;
+            })
+        ));
+    },
+
+    // 奖赏pp飞到上方计数板
+    showPPFly () {
+        let destPos = this.pps.convertToNodeSpaceAR(
+            this.paypal.convertToWorldSpaceAR(this.paypal.getChildByName('topbox').position)
+        );
+        let oriPos = cc.v2(0, 0);
+        this.pps.children.forEach((node, index) => {
+            node.opacity = 0;
+            node.scale = 1;
+            node.active = true;
+            node.position = oriPos;
+            node.runAction(cc.sequence(
+                cc.delayTime(0.1*index),
+                cc.fadeIn(0.2),
+                cc.spawn(cc.moveTo(0.3, destPos), cc.scaleTo(0.3, 0.5)),
+                cc.spawn(cc.scaleTo(0.2, 0.3), cc.fadeOut(0.2), cc.moveBy(0.2, -50, -20)),
+                cc.callFunc(() => {
+                    if (index === 0) {
+                        this.gameController.getAudioUtils().playEffect('coin', 0.6); // 音频
+                        this.gameController.addCash(200);
+                    }
+                    // if (index === this.pps.children.length-1) {
+                    //     if (this.gameLevels.length > 0) {
+                    //         this.setTouchListener();
+                    //         this.showMoveHand();
+                    //     } else {
+                    //         this.showCashout();
+                    //     }
+                        
+                    //     // console.log('finish');
+                    // }
+                })
+            ))
+        });
+        
+    },
+    /* 转盘新增结束 */
 
     start () {
 

@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "a2c9c8fd-bffc-4cbd-910c-f4a8463fef53",
+  "uuid": "2200c4d7-8996-46e4-8a5e-d7607817dfb7",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "ppIcon": {
+    "cardBtn": {
       "ver": "1.0.4",
-      "uuid": "52aa309c-c536-40cb-883a-506d7ca5e39b",
-      "rawTextureUuid": "a2c9c8fd-bffc-4cbd-910c-f4a8463fef53",
+      "uuid": "ffabb627-3890-4baf-bc6b-051e75f8b5c6",
+      "rawTextureUuid": "2200c4d7-8996-46e4-8a5e-d7607817dfb7",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 214,
-      "height": 252,
-      "rawWidth": 214,
-      "rawHeight": 252,
+      "width": 566,
+      "height": 134,
+      "rawWidth": 566,
+      "rawHeight": 134,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

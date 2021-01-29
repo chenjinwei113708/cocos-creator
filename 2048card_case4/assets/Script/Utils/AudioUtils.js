@@ -50,6 +50,16 @@ cc.Class({
             type: cc.AudioClip,
             default: null
         },
+        // 转盘新增
+        spin: { // 转盘旋转音效
+            type: cc.AudioClip,
+            default: null
+        },
+        coin: {
+            type: cc.AudioClip,
+            default: null
+        },
+        // 转盘新增结束
     },
 
     onLoad() {
