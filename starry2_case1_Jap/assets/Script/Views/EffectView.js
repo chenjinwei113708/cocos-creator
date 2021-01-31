@@ -80,13 +80,13 @@ cc.Class({
                 let gridView = cc.find('Canvas').getComponent('GameController').getGridViewScript();
                 gridView.deleteCell(cell);
                 if (cells.length>4) {
-                    if (index % 3 === 0) {
+                    if (index % 5 === 0) {
                         let bombInstance = cc.instantiate(this.bombEffects[cell.type]);
                         bombInstance.x = (cell.x-0.5) * CELL_WIDTH;
                         bombInstance.y = (cell.y-0.5) * CELL_HEIGHT;
                         bombInstance.parent = this.node;
                     }
-                    if ((index+1) % 3 === 0) {
+                    if ((index+1) % 5 === 0) {
                         let flyGrade = cc.instantiate(this.flyGrade);
                         flyGrade.active = true;
                         flyGrade.getComponent('FlyGradeView').init(cc.v2((cell.y-0.5) * CELL_HEIGHT, (cell.y-0.5) * CELL_HEIGHT), TYPE2COLOR[cell.type], 10*(index+1)-5);

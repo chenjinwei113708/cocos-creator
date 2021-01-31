@@ -82,16 +82,13 @@ cc.Class({
     },
 
     update (dt) {
-        console.log(1000*dt)
+        // console.log(1000*dt)
         const icon = '円';
         this.timer += dt;
         let isPlus = this.targetCash>this.cash ? true : false;
         let delta = Math.abs(this.targetCash - this.cash);
-        let level = Object.keys(this.updateLevel).find(key => {
-            console.log(delta, this.updateLevel[key], delta<=this.updateLevel[key])
-            delta<=this.updateLevel[key]
-        }) || 'F';
-        console.log(level);
+        let level = Object.keys(this.updateLevel).find(key => delta<=this.updateLevel[key]) || 'F';
+        // console.log(level);
         // 计时器到达更新时间间隔
         if(this.timer>=this.updateDelay[level]){
             // console.log(this.timer);
