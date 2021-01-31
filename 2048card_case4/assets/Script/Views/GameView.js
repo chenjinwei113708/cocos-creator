@@ -184,6 +184,7 @@ cc.Class({
             this.showPPFly() // pp飞向记分板
             setTimeout(() => {
                 this.gameController.addCash(200);
+                this.showCashoutBtn(); // 出现cashout图标
                 this.showFlyCard(newCard);
             }, 350);
             // newCard.runAction(cc.sequence(
@@ -288,9 +289,9 @@ cc.Class({
             cc.spawn(cc.fadeIn(0.5), cc.scaleTo(0.3, 1)),
             cc.delayTime(0.6),
             cc.callFunc(() => {
-                setTimeout(() => {
-                    this.showCashoutBtn();
-                }, 1000);
+                // setTimeout(() => {
+                    // this.showCashoutBtn();
+                // }, 1000);
                 // card.runAction(cc.sequence(
                 //     cc.moveTo(0.5, desPos).easing(cc.easeIn(1.5)),
                 //     cc.spawn(cc.scaleTo(0.2, 0.2), cc.fadeOut(0.4), cc.moveBy(0.3, -25, -25)),
