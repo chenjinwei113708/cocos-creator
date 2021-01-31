@@ -132,7 +132,7 @@ export const PlayformSDK = {
                 }
             });
             // adcolony默认初始声音关闭
-            // audioUtils.closeVolumn();
+            audioUtils.closeVolumn();
             cc.find('Canvas').getComponent('GameController').gameInit();
             console.log('mraid ads init')
             return false
@@ -173,8 +173,7 @@ export const PlayformSDK = {
             window.gameEnd();
         } else if (window.TJ_API) {
             window.TJ_API.gameplayFinished();
-        }
-        if (typeof parent !== 'undefined') {
+        } else if (typeof parent !== 'undefined') {
             // Vungle
             parent.postMessage('complete','*');
         }
