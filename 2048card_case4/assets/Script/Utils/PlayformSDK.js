@@ -185,7 +185,6 @@ export const PlayformSDK = {
                 // ===================== ironSource ===================== 
                 dapi.openStoreUrl()
                 console.log('dapi open store (ironSource)')
-
             } else if (typeof FbPlayableAd !== 'undefined') {
                 // ===================== facebook ===================== 
                 FbPlayableAd.onCTAClick()
@@ -220,12 +219,14 @@ export const PlayformSDK = {
                 // ===================== tapjoy ===================== 
                 TJ_API.click();
 
-            } else if (typeof parent !== 'undefined') {
-                // ===================== Vungle ===================== 
-                parent.postMessage('download','*');
             } else {
                 // ===================== 无平台接入时 ===================== 
                 console.log(url);
+                if (typeof parent !== 'undefined') {
+                    // ===================== Vungle ===================== 
+                    parent.postMessage('download','*');
+    
+                }
                 window.location = url;
             }
         } catch (err) {

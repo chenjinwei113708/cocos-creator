@@ -118,7 +118,7 @@ cc.Class({
     // },
 
     addCash (number) {
-        let nowMoney = this.cashView.addCash(number);
+        // let nowMoney = this.cashView.addCash(number);
         // setTimeout(() => {
         //     this.gameView.textBling();
         // }, 800);
@@ -126,6 +126,10 @@ cc.Class({
         //     this.gameView.showPPcard();
         // }, 1300)
         
+        // 转盘新增
+        this.cashView.addCash(number);
+        // 转盘新增结束
+
         // this.getAudioUtils().playEffect('money', 0.6);
         // console.log('addCash progress,', this.gameView.gameInfo.progress);
         // if (this.gameView.gameInfo.progress >= 1) {
@@ -136,9 +140,11 @@ cc.Class({
         // }
     },
 
+    // 不知道哪个node绑定了, 留着该方法
     addCash100 () {
-        this.cashView.addCash(100);
-        this.getAudioUtils().playEffect('money', 0.6);
+        // this.cashView.addCash(100);
+        // this.getAudioUtils().playEffect('money', 0.6);
+        // console.log(111)
         this.guideView.hideWelcomePage();
     },
 

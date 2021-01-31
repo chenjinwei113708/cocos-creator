@@ -13,7 +13,7 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.isApplovin = false; // 是不是applovin平台
-        this.isMintegral = false; // 是不是mtg平台
+        this.isMintegral = true; // 是不是mtg平台
         // this.lang = 'id'; // id | th | ms (印尼语|泰语|马来语)
         this.HorizontalConfig = {
             game: {
@@ -49,6 +49,16 @@ export default class GameModel {
                             },
                         }
                     },
+                    // 转盘新增 ↓
+                    pp_turn: {
+                        position: cc.v2(-151.384, 208.493),
+                        scale: 1.186
+                    },
+                    pps_turn: {
+                        position: cc.v2(239.06, 3.824),
+                        scale: 0.757,
+                    },
+                    // 转盘新增 ↑
                     banner: {
                         position: cc.v2(-268.535, -254.925),
                         children: {
@@ -108,8 +118,8 @@ export default class GameModel {
         }
         this.VerticalConfig = {
             game: {
-                position: cc.v2(0, -92.552),
-                scale: 0.75,
+                position: cc.v2(0, 0),
+                scale: 1,
                 children: {
                     bg1: {
                         width: 1250,
@@ -124,7 +134,7 @@ export default class GameModel {
                 children: {
                     mtg: {
                         active: this.isMintegral ? true : false,
-                        position: cc.v2(0, -451)
+                        position: cc.v2(0, -370)
                     },
                     audioBtn: {
                         position: cc.v2(-238.791, -403.322)
@@ -140,6 +150,16 @@ export default class GameModel {
                             },
                         }
                     },
+                    // 转盘新增↓
+                    pp_turn: {
+                        position: cc.v2(0, 410),
+                        scale: 1,
+                    },
+                    pps_turn: {
+                        position: cc.v2(0, 0),
+                        scale: 1,
+                    },
+                    // 转盘新增↑
                     banner: {
                         position: cc.v2(0, -496.617),
                         children: {
@@ -155,8 +175,8 @@ export default class GameModel {
                         }
                     },
                     flycard: {
-                        position: cc.v2(0, -92.552),
-                        scale: 0.75,
+                        position: cc.v2(0, 0),
+                        scale: 1,
                     },
                     paypal: {
                         position: cc.v2(0, 324.839)

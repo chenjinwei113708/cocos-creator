@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "afa99735-7588-4503-b5fd-2f25aa408795",
+  "uuid": "c27371bc-2468-4e2a-adeb-eec27023787d",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "ppcard1": {
+    "iphone-12-pro-max-blue-hero": {
       "ver": "1.0.4",
-      "uuid": "3f6e1b2f-bc73-4f4e-801f-aab795f7fd2b",
-      "rawTextureUuid": "afa99735-7588-4503-b5fd-2f25aa408795",
+      "uuid": "de382969-0753-42ed-99b5-b205740ec38d",
+      "rawTextureUuid": "c27371bc-2468-4e2a-adeb-eec27023787d",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 434,
-      "height": 462,
-      "rawWidth": 434,
-      "rawHeight": 462,
+      "width": 208,
+      "height": 283,
+      "rawWidth": 208,
+      "rawHeight": 283,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

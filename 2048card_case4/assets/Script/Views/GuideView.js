@@ -90,22 +90,28 @@ cc.Class({
 
     /**展示提示手 */
     showCashOutHand () {
-        this.cashoutHand.opacity = 0;
-        this.cashoutHand.active = true;
-        this.cashoutHand.runAction(cc.sequence(
-            cc.delayTime(1.2),
-            cc.callFunc(() => {
-                let hereState = this.cashoutHand.getComponent(cc.Animation).play('here');
-                hereState.on('finished', () => {
-                    this.cashoutHand.getComponent(cc.Animation).play('shake');
-                }, this);
-            })
-        ));
+        // this.cashoutHand.opacity = 0;
+        // this.cashoutHand.active = true;
+        // this.cashoutHand.runAction(cc.sequence(
+        //     cc.delayTime(1.2),
+        //     cc.callFunc(() => {
+        //         let hereState = this.cashoutHand.getComponent(cc.Animation).play('here');
+        //         hereState.on('finished', () => {
+        //             this.cashoutHand.getComponent(cc.Animation).play('shake');
+        //         }, this);
+        //     })
+        // ));
+        // 转盘新增
+        this.myFadeIn(this.cashoutHand, () => {
+            this.myClickHere(this.cashoutHand);
+        });
+        // 转盘新增
     },
 
     /**点击提现 */
     clickCashout () {
-        if (this.gameController.cashView.targetCash>=200 && !this.info.isCashout){
+        console.log(this.gameController.cashView.targetCash)
+        if (!this.info.isCashout){
             this.info.isCashout = true;
             this.gameController.download();
             return;
@@ -220,6 +226,47 @@ cc.Class({
                 }),
             ),
         ));
-    }
+    },
+
+    //
+    myFadeIn (node, callback) {
+        let oriPos = cc.v2(node.position.x, node.position.y);
+        node.opacity = 0;
+        node.position = cc.v2(oriPos.x, oriPos.y-node.height*1.5);
+        node.active = true;
+        node.runAction(cc.sequence(
+            cc.spawn(cc.fadeIn(0.3), cc.moveBy(0.4, 0, node.height*1.5)).easing(cc.easeIn(2)),
+            cc.callFunc(() => {
+                callback && callback();
+            })
+        ));
+    },
+    /**
+     * 提示点击
+     * @param {*} node 
+     */
+    myClickHere (node, callback) {
+        let oriPos = cc.v2(node.position.x, node.position.y);
+        let movePos = cc.v2(oriPos.x+node.width*0.6, oriPos.y-node.height*0.8);
+        node.runAction(cc.repeatForever(
+            cc.sequence(
+                cc.spawn(cc.moveTo(0.5, movePos), cc.scaleTo(0.5, 1.2)),
+                cc.spawn(cc.moveTo(0.3, oriPos), cc.scaleTo(0.3, 1))
+            )
+        ));
+        callback && callback();
+        let stopMyAnimation = (cb) => {
+            node.stopAllActions();
+            node.runAction(cc.sequence(
+                cc.spawn(cc.scaleTo(0.1, 1), cc.moveTo(0.1, oriPos)),
+                cc.callFunc(() => {
+                    node.stopMyAnimation = undefined;
+                    cb && cb();
+                })
+            ));
+        }
+        node.stopMyAnimation = stopMyAnimation;
+        return stopMyAnimation;
+    },
     
 });

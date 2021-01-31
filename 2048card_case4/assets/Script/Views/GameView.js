@@ -35,6 +35,12 @@ cc.Class({
         progressBar: cc.Node, // 进度条
         cardPrefab: cc.Prefab, // 卡牌预制资源
         cardSprites: [cc.SpriteFrame], // 卡牌图片
+        // 转盘新增
+        gameMask: cc.Node, // pp奖赏遮罩层
+        paypal: cc.Node, // 上方计数板
+        pps: cc.Node, // 飞翔计数板的pp图标
+        cashout: cc.Node,
+        // 转盘新增结束
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -171,13 +177,16 @@ cc.Class({
             newCard.parent = this[groupName];
         }
         if (cardValue === 2048) {
-            // 消除2048卡
+            // 2048卡
             this.gainCoin();
             this.showExcellent();
             this.stopGame();
+            this.showPPFly() // pp飞向记分板
             setTimeout(() => {
+                this.gameController.addCash(200);
+                this.showCashoutBtn(); // 出现cashout图标
                 this.showFlyCard(newCard);
-            }, 500);
+            }, 350);
             // newCard.runAction(cc.sequence(
             //     cc.repeat(cc.sequence(
             //         cc.rotateTo(0.1, 15), cc.rotateTo(0.1,-15)
@@ -280,16 +289,19 @@ cc.Class({
             cc.spawn(cc.fadeIn(0.5), cc.scaleTo(0.3, 1)),
             cc.delayTime(0.6),
             cc.callFunc(() => {
-                card.runAction(cc.sequence(
-                    cc.moveTo(0.5, desPos).easing(cc.easeIn(1.5)),
-                    cc.spawn(cc.scaleTo(0.2, 0.2), cc.fadeOut(0.4), cc.moveBy(0.3, -25, -25)),
-                    cc.callFunc(() => {
-                        this.gameController.addCash(200);
-                        setTimeout(() => {
-                            this.showCashoutBtn();
-                        }, 300);
-                    })
-                ))
+                // setTimeout(() => {
+                    // this.showCashoutBtn();
+                // }, 1000);
+                // card.runAction(cc.sequence(
+                //     cc.moveTo(0.5, desPos).easing(cc.easeIn(1.5)),
+                //     cc.spawn(cc.scaleTo(0.2, 0.2), cc.fadeOut(0.4), cc.moveBy(0.3, -25, -25)),
+                //     cc.callFunc(() => {
+                //         this.showPPFly() // pp飞向记分板
+                //         setTimeout(() => {
+                //             this.showCashoutBtn();
+                //         }, 1000);
+                //     })
+                // ))
             })
         ));
     },
@@ -297,6 +309,7 @@ cc.Class({
     /**展示提现按钮 */
     showCashoutBtn () {
         console.log('展示提现按钮')
+        this.showCashout()
     },
 
     /**生成新的卡 */
@@ -438,8 +451,12 @@ cc.Class({
         this.gameController.getAudioUtils().playEffect('money', 0.6);
         this.golds.getComponent(cc.Animation).play();
         // this.addProgress();
-        let money = parseInt(10);
-        this.gameController.addCash(money);
+        if (this.gameInfo.isSecondCard) {
+            this.showPPFly() // pp飞向记分板
+            let money = parseInt(10);
+            this.gameController.addCash(money);
+        }
+        
         // this.gameController.paypalView.addNewMsg(200);
         // if (this.gameInfo.isSecondCard) this.gameController.addCash(100);
         // else { this.gameController.addCash(50); }
@@ -530,6 +547,71 @@ cc.Class({
         this.enabled = true;
 
     },
+    /* 转盘新增 */
+
+    // 转盘模块新增 --- 隐藏mask
+    hideGameMask () {
+        this.gameMask.runAction(cc.sequence(
+            cc.fadeOut(0.2),
+            cc.callFunc(() => {
+                this.gameMask.active = false;
+            })
+        ));
+    },
+
+    // 奖赏pp飞到上方计数板
+    showPPFly () {
+        let destPos = this.pps.convertToNodeSpaceAR(
+            this.paypal.convertToWorldSpaceAR(this.paypal.getChildByName('topbox').position)
+        );
+        let oriPos = cc.v2(0, 0);
+        this.pps.children.forEach((node, index) => {
+            node.opacity = 0;
+            node.scale = 1;
+            node.active = true;
+            node.position = oriPos;
+            node.runAction(cc.sequence(
+                cc.delayTime(0.1*index),
+                cc.fadeIn(0.2),
+                cc.spawn(cc.moveTo(0.3, destPos), cc.scaleTo(0.3, 0.5)),
+                cc.spawn(cc.scaleTo(0.2, 0.3), cc.fadeOut(0.2), cc.moveBy(0.2, -50, -20)),
+                cc.callFunc(() => {
+                    if (index === 0) {
+                        this.gameController.getAudioUtils().playEffect('coin', 0.6);
+                        
+                    }
+                    // if (index === this.pps.children.length-1) {
+                    //     if (this.gameLevels.length > 0) {
+                    //         this.setTouchListener();
+                    //         this.showMoveHand();
+                    //     } else {
+                    //         this.showCashout();
+                    //     }
+                        
+                    //     // console.log('finish');
+                    // }
+                })
+            ))
+        });
+        
+    },
+
+    // 展示cashout
+    showCashout () {
+        let oriPos = cc.v2(this.cashout.position.x, this.cashout.position.y);
+        this.cashout.position = cc.v2(oriPos.x-this.cashout.width, oriPos.y);
+        this.cashout.active = true;
+        this.cashout.opacity= 0;
+        this.gameController.getAudioUtils().playEffect('cheer', 0.6);
+        this.cashout.runAction(cc.sequence(
+            cc.spawn(cc.fadeIn(0.5), cc.moveBy(0.5, this.cashout.width, 0)).easing(cc.easeIn(1.5)),
+            cc.callFunc(() => {
+                this.cashout.getComponent(cc.Animation).play();
+                this.gameController.guideView.showCashOutHand();
+            })
+        ));
+    },
+    /* 转盘新增结束 */
 
     start () {
 
