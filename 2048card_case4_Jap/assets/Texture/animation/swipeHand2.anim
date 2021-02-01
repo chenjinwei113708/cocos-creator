@@ -1,0 +1,59 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "swipeHand2",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.7142857142857142,
+  "sample": 7,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0.2857142857142857,
+          "value": [
+            82,
+            -229
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 1.4285714285714286,
+          "value": [
+            103,
+            80
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 1.7142857142857142,
+          "value": [
+            107.839,
+            106.616,
+            0
+          ]
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.2857142857142857,
+          "value": 255
+        },
+        {
+          "frame": 1.2857142857142858,
+          "value": 255
+        },
+        {
+          "frame": 1.7142857142857142,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "events": []
+}
