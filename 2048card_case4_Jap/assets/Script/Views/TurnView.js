@@ -115,7 +115,7 @@ cc.Class({
                 this.gameController.gameView.hideGameMask();
                 this.gameController.gameView.showPPFly();
                 setTimeout(() => {
-                    this.gameController.addCash(200);
+                    this.gameController.addCash(5000);
                 }, 300);
             })
         ));

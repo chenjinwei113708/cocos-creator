@@ -29,8 +29,8 @@ cc.Class({
             A: 9, // 0-9是A级
             B: 20,
             C: 40,
-            D: 60,
-            E: 150
+            D: 360,
+            E: 550
         };
         // 更新时间间隔 s
         this.updateDelay = {
@@ -45,8 +45,8 @@ cc.Class({
             A: 1,
             B: 7,
             C: 8,
-            D: 9,
-            E: 10
+            D: 29,
+            E: 319
         };
     },
 
@@ -74,7 +74,7 @@ cc.Class({
     },
 
     update (dt) {
-        const icon = '$';
+        const icon = '円';
         this.timer += dt;
         let isPlus = this.targetCash>this.cash ? true : false;
         let delta = Math.abs(this.targetCash - this.cash);
@@ -87,7 +87,7 @@ cc.Class({
             // console.log(this.cash, this.targetCash);
             if(delta>0){
                 isPlus ? this.cash+=this.updateUnit[level] : this.cash-=this.updateUnit[level];
-                this.label.string = icon+this.cash+".00";
+                this.label.string = this.cash+".00"+icon;
             }else{
                 this.stopUpdate();
             }
