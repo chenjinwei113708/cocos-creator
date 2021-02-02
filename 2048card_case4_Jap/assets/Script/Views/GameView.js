@@ -183,7 +183,7 @@ cc.Class({
             this.stopGame();
             this.showPPFly() // pp飞向记分板
             setTimeout(() => {
-                this.gameController.addCash(200);
+                this.gameController.addCash(4900);
                 this.showCashoutBtn(); // 出现cashout图标
                 this.showFlyCard(newCard);
             }, 350);
@@ -453,7 +453,7 @@ cc.Class({
         // this.addProgress();
         if (this.gameInfo.isSecondCard) {
             this.showPPFly() // pp飞向记分板
-            let money = parseInt(10);
+            let money = parseInt(100);
             this.gameController.addCash(money);
         }
         

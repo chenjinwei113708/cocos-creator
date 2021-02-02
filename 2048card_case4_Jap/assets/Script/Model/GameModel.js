@@ -53,6 +53,7 @@ export default class GameModel {
                     pp_turn: {
                         position: cc.v2(-151.384, 208.493),
                         scale: 1.186
+                        // scale: 1.3
                     },
                     pps_turn: {
                         position: cc.v2(239.06, 3.824),
@@ -152,8 +153,9 @@ export default class GameModel {
                     },
                     // 转盘新增↓
                     pp_turn: {
-                        position: cc.v2(0, 410),
-                        scale: 1,
+                        position: cc.v2(45, 420),
+                        // scale: 1,
+                        scale: 1.2,
                     },
                     pps_turn: {
                         position: cc.v2(0, 0),

@@ -1,6 +1,7 @@
 export const DownloadUrl = {
-    iosUrl: 'https://play.google.com/store/apps/details?id=com.solitaire2048.cards.mergecard',
-    androidUrl: 'https://play.google.com/store/apps/details?id=com.solitaire2048.cards.mergecard',
+    iosUrl: 'https://play.google.com/store/apps/details?id=com.solitaire2048.cards.mergecard&hl=ja&gl=jp',
+    // androidUrl: 'https://play.google.com/store/apps/details?id=com.solitaire2048.cards.mergecard',
+    androidUrl: 'https://play.google.com/store/apps/details?id=com.solitaire2048.cards.mergecard&hl=ja&gl=jp',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;
