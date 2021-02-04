@@ -1,5 +1,5 @@
 export const DownloadUrl = {
-    iosUrl: 'https://play.google.com/store/apps/details?id=com.number.block.match.seven',
+    iosUrl: 'https://apps.apple.com/app/id1549516823',
     androidUrl: 'https://play.google.com/store/apps/details?id=com.number.block.match.seven',
     
     getUrl: function() {
