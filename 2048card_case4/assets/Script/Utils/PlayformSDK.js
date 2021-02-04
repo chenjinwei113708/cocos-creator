@@ -171,7 +171,8 @@ export const PlayformSDK = {
             window.gameEnd();
         } else if (window.TJ_API) {
             window.TJ_API.gameplayFinished();
-        } else if (typeof parent !== 'undefined') {
+        } 
+        if (typeof parent !== 'undefined') {
             // Vungle
             parent.postMessage('complete','*');
         }
