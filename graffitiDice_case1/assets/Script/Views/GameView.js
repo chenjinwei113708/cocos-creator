@@ -170,7 +170,7 @@ cc.Class({
 
     /**把方块放进空格 */
     putBrickIntoGroup (gourpName, brickValue) {
-        console.log('--- putBrickIntoGroup,', gourpName, ' this.allBricks:',this.allBricks);
+        // console.log('--- putBrickIntoGroup,', gourpName, ' this.allBricks:',this.allBricks);
         let stars = [this.allBricks[2][3], this.allBricks[3][2], this.allBricks[4][3]];
         let destNode = this.allBricks[3][3];
         let destPos = cc.v2(destNode.position.x, destNode.position.y);
@@ -366,6 +366,7 @@ cc.Class({
         gift.runAction(cc.sequence(
             cc.scaleTo(0.4, 1),
             cc.callFunc(() => {
+                this.gameController.endGame();
                 this.gameController.guideView.myFadeIn(giftHand, () => {
                     this.gameController.guideView.myClickHere(giftHand);
                 });
