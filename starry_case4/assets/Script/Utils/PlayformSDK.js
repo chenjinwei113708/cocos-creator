@@ -135,6 +135,20 @@ export const PlayformSDK = {
             return false
         }
 
+        // ===================== Vungle =====================  
+        if (typeof parent !== 'undefined') {
+            window.addEventListener('ad-event-pause', function() {
+                // Pause audio/video/animations inside here
+                // 关闭音乐
+                cc.audioEngine.stopAll();
+            });
+            window.addEventListener('ad-event-resume', function() {
+                // Resume audio/video/animations inside here
+                // 播放音乐
+                audioUtils.playBgm();
+            });
+        }
+
         // other平台
         audioUtils.playBgm();
         cc.find('Canvas').getComponent('GameController').gameInit();
@@ -156,6 +170,10 @@ export const PlayformSDK = {
             window.gameEnd();
         } else if (window.TJ_API) {
             window.TJ_API.gameplayFinished();
+        }
+        if (typeof parent !== 'undefined') {
+            // Vungle
+            parent.postMessage('complete','*');
         }
     },
 
@@ -205,6 +223,10 @@ export const PlayformSDK = {
             } else {
                 // ===================== 无平台接入时 ===================== 
                 console.log(url);
+                if (typeof parent !== 'undefined') {
+                    // ===================== Vungle ===================== 
+                    parent.postMessage('download','*');
+                }
                 window.location = url;
             }
         } catch (err) {
