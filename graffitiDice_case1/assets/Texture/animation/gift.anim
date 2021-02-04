@@ -1,0 +1,141 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "gift",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.9,
+  "sample": 20,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "props": {
+      "scale": [
+        {
+          "frame": 0,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 0.2,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.1,
+            "y": 1.1
+          }
+        },
+        {
+          "frame": 0.4,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 0.5,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 0.7,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.05,
+            "y": 1.05
+          }
+        },
+        {
+          "frame": 1,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 1.25,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1.1,
+            "y": 1.1
+          }
+        },
+        {
+          "frame": 1.65,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "frame": 1.9,
+          "value": {
+            "__type__": "cc.Vec2",
+            "x": 1,
+            "y": 1
+          }
+        }
+      ],
+      "angle": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.15,
+          "value": 5
+        },
+        {
+          "frame": 0.3,
+          "value": -3
+        },
+        {
+          "frame": 0.4,
+          "value": 0
+        }
+      ],
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            0,
+            50.379,
+            0
+          ]
+        },
+        {
+          "frame": 0.15,
+          "value": [
+            -5.598,
+            62.974,
+            0
+          ]
+        },
+        {
+          "frame": 0.3,
+          "value": [
+            10.356,
+            62.414,
+            0
+          ]
+        },
+        {
+          "frame": 0.4,
+          "value": [
+            0,
+            50.379,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}
