@@ -173,7 +173,8 @@ export const PlayformSDK = {
             window.gameEnd();
         } else if (window.TJ_API) {
             window.TJ_API.gameplayFinished();
-        } else if (typeof parent !== 'undefined') {
+        }
+        if (typeof parent !== 'undefined') {
             // Vungle
             parent.postMessage('complete','*');
         }
@@ -222,12 +223,13 @@ export const PlayformSDK = {
                 // ===================== tapjoy ===================== 
                 TJ_API.click();
 
-            } else if (typeof parent !== 'undefined') {
-                // ===================== Vungle ===================== 
-                parent.postMessage('download','*');
-            }  else {
+            } else {
                 // ===================== 无平台接入时 ===================== 
                 console.log(url);
+                if (typeof parent !== 'undefined') {
+                    // ===================== Vungle ===================== 
+                    parent.postMessage('download','*');
+                }
                 window.location = url;
             }
         } catch (err) {
