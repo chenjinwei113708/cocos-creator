@@ -1,0 +1,379 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "tree2",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.5,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "t2_1": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -19.7,
+                107,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                -24.598,
+                106.02,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -19.7,
+                107,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.5,
+              "value": 4
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t2_2": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                9.3,
+                91.4,
+                0
+              ]
+            },
+            {
+              "frame": 0.9,
+              "value": [
+                8.32,
+                90.91,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                9.3,
+                91.4,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.9,
+              "value": -9
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t2_4": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                46.257,
+                19.135,
+                0
+              ]
+            },
+            {
+              "frame": 0.8,
+              "value": [
+                43.943,
+                17.978,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                45.1,
+                17.4,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.8,
+              "value": 6
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t2_5": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -48.6,
+                -119.7,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -48.6,
+                -119.7,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t2_3": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -48,
+                52.1,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                -51.47,
+                49.786,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -48,
+                52.1,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.7,
+              "value": 2
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t2_6": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                38.2,
+                -118.6,
+                0
+              ]
+            },
+            {
+              "frame": 0.7,
+              "value": [
+                38.2,
+                -119.178,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                38.2,
+                -118.6,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.7,
+              "value": -2
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t2_8": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -8.1,
+                -24.9,
+                0
+              ]
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                -9.079,
+                -24.917,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -8.1,
+                -24.9,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.6,
+              "value": 1
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t2_7": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -1.7,
+                -129,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -1.7,
+                -129,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.6,
+              "value": -5
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t2_9": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -5.2,
+                -101.8,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -5.2,
+                -101.8,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}

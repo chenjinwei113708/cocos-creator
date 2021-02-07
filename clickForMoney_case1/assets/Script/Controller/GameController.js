@@ -11,10 +11,11 @@ cc.Class({
         guide: cc.Node,
         //整个场景结点
         center:cc.Node,
-        // // 游戏相关
-        // game: cc.Node,
-        // // 金币相关
-        // cash: cc.Node,
+        // 游戏相关
+        game: cc.Node,
+        // 金币相关
+        cash: cc.Node,
+        progress: cc.Node,
 
     },
 
@@ -39,11 +40,14 @@ cc.Class({
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
-        // // 主游戏
-        // this.gameView = this.game.getComponent('GameView');
-        // this.gameView.setGameController(this);
-        // // 金币相关脚本
-        // this.cashView = this.cash.getComponent('CashView');
+        // 主游戏
+        this.gameView = this.game.getComponent('GameView');
+        this.gameView.setGameController(this);
+        // 金币相关脚本
+        this.cashView = this.cash.getComponent('CashView');
+        // 进度条相关
+        this.progressView = this.progress.getComponent('ProgressView');
+        this.progressAddTimes = 0; // 进度条增加次数
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
@@ -123,9 +127,11 @@ cc.Class({
         }, this)
     },
 
-    // /**加钱 */
-    // addCash (num) {
-    //     this.cashView.addCash(num);
-    // },
+    /**加钱 */
+    addCash (num) {
+        this.cashView.addCash(num);
+        this.progressAddTimes++;
+        this.progressView.setProgress(this.progressAddTimes / 3);
+    },
 
 });
