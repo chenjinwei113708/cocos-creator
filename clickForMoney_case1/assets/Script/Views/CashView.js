@@ -87,10 +87,10 @@ cc.Class({
             // console.log(this.cash, this.targetCash);
             if(delta>1){
                 isPlus ? this.cash+=this.updateUnit[level] : this.cash-=this.updateUnit[level];
-                this.label.string = icon+this.cash;
+                this.label.string = icon+this.cash.toFixed(2);
             }else if (delta>0) {
                 isPlus ? this.cash+=delta : this.cash-=delta;
-                this.label.string = icon+this.cash;
+                this.label.string = icon+this.cash.toFixed(2);
             }else{
                 this.stopUpdate();
             }

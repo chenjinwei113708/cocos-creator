@@ -72,6 +72,7 @@ cc.Class({
             node.runAction(cc.sequence(
                 cc.spawn(cc.scaleTo(0.1, 1), cc.moveTo(0.1, oriPos)),
                 cc.callFunc(() => {
+                    node.opacity = 0;
                     node.stopMyAnimation = undefined;
                     cb && cb();
                 })

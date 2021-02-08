@@ -42,7 +42,7 @@ cc.Class({
 
     /**
      * 展示加了多少现金
-     * @param {*} number 现金数量
+     * @param {number | string} number 现金数量
      */
     showAddMoney (number = 3.33) {
         const center = cc.v2(0, -153);
