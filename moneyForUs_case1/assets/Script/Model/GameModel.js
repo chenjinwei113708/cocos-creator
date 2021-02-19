@@ -10,7 +10,7 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.isApplovin = false; // 是不是applovin平台
-        this.isMintegral = true;
+        this.isMintegral = false;
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(260, 0),
