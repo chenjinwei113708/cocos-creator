@@ -1,5 +1,5 @@
 export const DownloadUrl = {
-    iosUrl: 'https://play.google.com/store/apps/details?id=com.treegames.taptree',
+    iosUrl: 'https://apps.apple.com/app/id1555179095',
     androidUrl: 'https://play.google.com/store/apps/details?id=com.treegames.taptree',
     
     getUrl: function() {
