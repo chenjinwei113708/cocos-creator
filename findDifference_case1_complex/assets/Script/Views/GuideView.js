@@ -78,35 +78,35 @@ cc.Class({
                 })
             ));
         }
-        node.stopMyAnimation = stopMyAnimation;
+        // node.stopMyAnimation = stopMyAnimation;
         return stopMyAnimation;
     },
 
     /**展示提示手 */
     showCashOutHand () {
-        // this.cashoutHand.opacity = 0;
-        // this.cashoutHand.active = true;
-        // this.cashoutHand.runAction(cc.sequence(
-        //     cc.delayTime(0.1),
-        //     cc.callFunc(() => {
-        //         let hereState = this.cashoutHand.getComponent(cc.Animation).play('here');
-        //         hereState.on('finished', () => {
-        //             this.cashoutHand.getComponent(cc.Animation).play('shake');
-        //         }, this);
-        //     })
-        // ));
-        // 
         this.cashOutHand.opacity = 0;
         this.cashOutHand.active = true;
         this.cashOutHand.runAction(cc.sequence(
             cc.fadeIn(0.4),
             cc.callFunc(() => {
-                    this.cashOutHand.getComponent(cc.Animation).play('shake');
+                this.cashOutHand.getComponent(cc.Animation).play('shake');
             })
         ));
+        // 返回一个停止动画的操作
+        return function () {
+            this.cashOutHand.getComponent(cc.Animation).stop('shake');
+            this.cashOutHand.runAction(cc.spawn(
+                cc.scaleTo(0.2, 1),
+                cc.fadeTo(0.2),
+            ))
+            setTimeout(() => {
+                this.cashOutHand.active = false;
+            }, 200)
+        }
     },
     /**展示开始时候的引导手 */
     showStartHand(callback) {
+        this.startHand.zIndex = 1;
         this.startHand.active = true
         return this.myClickHere(this.startHand, callback)
     },

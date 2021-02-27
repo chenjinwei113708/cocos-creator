@@ -44,6 +44,14 @@ cc.Class({
         good: {
             type: cc.AudioClip,
             default: null
+        },
+        timing: {
+            type: cc.AudioClip,
+            default: null
+        },
+        money: {
+            type: cc.AudioClip,
+            default: null
         }
 
     },
@@ -85,6 +93,7 @@ cc.Class({
      * @param {Number} volumn 音量大小
      */
     playEffect(effectName, volumn) {
+        // console.log('播放了', effectName);
         if ( !this[effectName] ) {
             throw `No audioClip ${effectName}`
         }

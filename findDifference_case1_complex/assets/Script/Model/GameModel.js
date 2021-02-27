@@ -60,9 +60,13 @@ export default class GameModel {
                             }
                         }
                     },
-                    awardPage: {
-                        isLandScape: true,
-                        endScale: 0.8
+                    // awardPage: {
+                    //     isLandScape: true,
+                    //     endScale: 0.8
+                    // },
+                    awardPageBox: {
+                        scale: 0.8,
+                        position: cc.v2(0, -20)
                     },
                     audioBtn: {
                         position: cc.v2(-220, 220)
@@ -94,7 +98,7 @@ export default class GameModel {
             UI: {
                 children: {
                     paypal: {
-                        position: cc.v2(0, 405)
+                        position: cc.v2(10, 405)
                     },
                     banner: {
                         position: cc.v2(0, -410),
@@ -119,15 +123,19 @@ export default class GameModel {
                             }
                         }
                     },
-                    awardPage: {
-                        isLandScape: false,
-                        endScale: 1,
-                        children: {
-                            congratulation: {
-                                position: cc.v2(0, 255)
-                            }
-                        }
+                    awardPageBox: {
+                        scale: 1,
+                        position: cc.v2(0, 0)
                     },
+                    // awardPage: {
+                    //     isLandScape: false,
+                    //     endScale: 1,
+                    //     children: {
+                    //         congratulation: {
+                    //             position: cc.v2(0, 255)
+                    //         }
+                    //     }
+                    // },
                     audioBtn: {
                         position: cc.v2(-220, 405)
                     }

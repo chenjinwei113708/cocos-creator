@@ -10,9 +10,10 @@ const CORRECT_POS = {
 }
 
 const GAME_MODE = {
-    EASY: 1, // 简易模式
-    DIFFICULTY: 2, // 困难模式
-    MODE: 1 // 表示简单模式
+    EASY: 0, // 简易模式
+    DIFFICULTY: 1, // 困难模式
+    MODE: 1, // 表示简单模式
+    PLAY_TIMES: [1, 5]
 }
 
 const GAME_INFO = {
@@ -23,12 +24,20 @@ const GAME_INFO = {
         CORRECT3: { x: 15, y: 15 },
         CORRECT4: { x: 10, y: 30 },
         CORRECT5: { x: 30, y: 8 }
-    }
+    },
+    CASH: [10, 30, 60, 100, 120]
+}
+
+const WIN_TXT = {
+    CONGRAT: 'YOU WIN!',
+    CASH: [10, 30, 60, 100, 120],
+    BUTTON: 'CASH OUT'
 }
 
 export {
     CORRECT_POS,
     GAME_MODE,
-    GAME_INFO
+    GAME_INFO,
+    WIN_TXT
 }
 
