@@ -95,10 +95,14 @@ cc.Class({
         tPic.runAction(cc.sequence(
             cc.spawn(cc.scaleTo(speed, 1), cc.fadeIn(speed*0.6)),
             cc.callFunc(() => {
+                if (target === 2) {
+                    const p3 = this.level[this.levelConfig[`level3`].sprite];
+                    p3.scale = 0.4;
+                }
                 callback && callback();
             })
         ));
-        prePic.runAction(cc.sequence(cc.delayTime(0.4*speed), cc.fadeOut(0.5*speed)));
+        // prePic.runAction(cc.sequence(cc.delayTime(0.4*speed), cc.fadeOut(0.5*speed)));
 
         // 数字变化
         const fspeed =  60; //ms
