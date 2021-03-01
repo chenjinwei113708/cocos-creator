@@ -30,6 +30,9 @@ cc.Class({
         this.book = cc.find('Canvas/center/game/book'); // 场景一：书本
         this.room = cc.find('Canvas/center/game/room'); // 场景二：改造房间
         this.battle = cc.find('Canvas/center/game/battle'); // 场景三：战场
+        this.bookHand = this.book.getChildByName('hand');
+        this.roomView = this.room.getComponent('RoomView');
+        this.battleView = this.room.getComponent('BattleView');
 
         this.leftLevels = [SNAIL_LEVEL.JIUJI, SNAIL_LEVEL.CHAOJIUJI]; // 还未进化的等级
 
@@ -47,7 +50,13 @@ cc.Class({
     },
 
     start () {
+        this.gameController.guideView.myFadeIn(this.bookHand, () => {
+            this.gameController.guideView.myClickHere(this.bookHand);
+        });
+    },
 
+    setGameController (gameController) {
+        this.gameController = gameController;
     },
 
     setGameStatus (status) {
@@ -62,6 +71,7 @@ cc.Class({
     pickSnail () {
         if (this.info.status === GAME_STATUS.CAN_CLICK && this.info.gameScene === GAME_SCENE.BOOK) {
             this.setGameStatus(GAME_STATUS.IS_PLAYING);
+            this.bookHand.stopMyAnimation && this.bookHand.stopMyAnimation();
             this.change2Room();
         }
     },
@@ -124,17 +134,21 @@ cc.Class({
                 cc.callFunc(() => {
                     snail.getComponent(cc.Sprite).spriteFrame = sprite;
                 }),
-                cc.scaleTo(0.1, 1),
+                cc.scaleTo(0.3, 1),
                 cc.callFunc(() => {
-                    if (this.leftLevels.length > 0) {
-                        // 还可以进化
-                        this.setGameStatus(GAME_STATUS.CAN_CLICK);
-                    } else {
-                        // 进化完了
-                        this.showSelection();
-                    }
                 })
             ));
+            this.roomView.updateLevel(() => {
+                if (this.leftLevels.length > 0) {
+                    // 还可以进化
+                    this.setGameStatus(GAME_STATUS.CAN_CLICK);
+                } else {
+                    // 进化完了
+                    setTimeout(() => {
+                        this.showSelection();
+                    }, 200);
+                }
+            })
         }
     },
 
