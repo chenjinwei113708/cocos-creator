@@ -33,11 +33,19 @@ cc.Class({
 
     onLoad () {
         this.gameController = cc.find('Canvas').getComponent('GameController');
+        this.monsterProgressView = this.node.getChildByName('top').getChildByName('progress02').getComponent('ProgressView');
     },
 
     start () {
-
+        setTimeout(() => {
+            this.reduceMonsterBlood();
+        }, 100);
     },
+
+    /**减少怪物的血 */
+    reduceMonsterBlood () {
+        this.monsterProgressView.setProgress(0);
+    }
 
     // update (dt) {},
 });
