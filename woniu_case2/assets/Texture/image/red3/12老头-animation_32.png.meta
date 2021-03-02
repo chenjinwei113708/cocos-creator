@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "dcd84ae1-9cf9-49f0-8464-aa80bcc73319",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "12老头-animation_32": {
+      "ver": "1.0.4",
+      "uuid": "881aff88-25a4-408b-8ab5-1aa7ae2cf860",
+      "rawTextureUuid": "dcd84ae1-9cf9-49f0-8464-aa80bcc73319",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -2.5,
+      "offsetY": -1,
+      "trimX": 2,
+      "trimY": 2,
+      "width": 291,
+      "height": 248,
+      "rawWidth": 300,
+      "rawHeight": 250,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
