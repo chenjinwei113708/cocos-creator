@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "bg_blue",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.15,
+  "sample": 20,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "74a878d4-ecee-491f-8e9d-1e4c75148098"
+            }
+          },
+          {
+            "frame": 0.05,
+            "value": {
+              "__uuid__": "29cbedd1-2bed-452c-9af4-8d87610b3ef8"
+            }
+          },
+          {
+            "frame": 0.1,
+            "value": {
+              "__uuid__": "9eae8c8f-44e6-49a8-9aa4-4daf0e5af827"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

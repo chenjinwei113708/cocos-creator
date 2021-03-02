@@ -12,6 +12,9 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        nowProgress: 1,
+        targerProgress: 0,
+        unit: 0.02,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -23,11 +26,11 @@ cc.Class({
         // this.pp4 = this.node.getChildByName('pp4');
         this.progressBar = this.node.getComponent(cc.ProgressBar);
 
-        this.info = {
-            nowProgress: 1,
-            targerProgress: 0,
-            unit: 0.02,
-        }
+        // this = {
+        //     nowProgress: 1,
+        //     targerProgress: 0,
+        //     unit: 0.02,
+        // }
     },
 
     start () {
@@ -40,21 +43,21 @@ cc.Class({
      */
     setProgress (num) {
         if (num<0 || num>1) return;
-        this.info.targerProgress = num;
-        let distance = num - this.info.nowProgress;
+        this.targerProgress = num;
+        let distance = num - this.nowProgress;
         if (distance === 0) return;
         // 设置加减单位
-        this.info.unit = distance > 0 ? Math.abs(this.info.unit) : -Math.abs(this.info.unit);
+        this.unit = distance > 0 ? Math.abs(this.unit) : -Math.abs(this.unit);
         this.enabled = true;
     },
 
     update (dt) {
-        if (Math.abs(this.info.targerProgress - this.info.nowProgress) > Math.abs(this.info.unit)) {
-            this.info.nowProgress += this.info.unit;
-            this.progressBar.progress = this.info.nowProgress;
+        if (Math.abs(this.targerProgress - this.nowProgress) > Math.abs(this.unit)) {
+            this.nowProgress += this.unit;
+            this.progressBar.progress = this.nowProgress;
         } else {
-            this.info.nowProgress = this.info.targerProgress;
-            this.progressBar.progress = this.info.nowProgress;
+            this.nowProgress = this.targerProgress;
+            this.progressBar.progress = this.nowProgress;
             this.enabled = false;
         }
     },

@@ -1,0 +1,59 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "swordAnim",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5,
+  "sample": 40,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "sword": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": -25
+            },
+            {
+              "frame": 0.125,
+              "value": -35
+            },
+            {
+              "frame": 0.375,
+              "value": -15
+            },
+            {
+              "frame": 0.5,
+              "value": -25
+            }
+          ]
+        }
+      },
+      "sword2": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 25
+            },
+            {
+              "frame": 0.125,
+              "value": 35
+            },
+            {
+              "frame": 0.375,
+              "value": 15
+            },
+            {
+              "frame": 0.5,
+              "value": 25
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}
