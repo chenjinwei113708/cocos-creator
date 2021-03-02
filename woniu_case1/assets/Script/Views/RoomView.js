@@ -12,30 +12,15 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
     },
-
-    // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         // 节点
         this.gameController = cc.find('Canvas').getComponent('GameController');
+        this.countDownView = cc.find('Canvas/center/UI/countDown').getComponent('CountDownView'); // 获取计时器
         this.roomHand = this.node.getChildByName('btn01').getChildByName('hand');
         this.level = this.node.getChildByName('level01');
+        this.select = this.node.getChildByName('select');
         this.levelCenter = this.level.getChildByName('center');
 
         // 节点
@@ -72,15 +57,38 @@ cc.Class({
             },
         }
         this.levelTmp = {t1: 1, t2: 1, t3: 1, t4: 1, t5: 1};
+
+        // 方法
+        this.stopRoomHand = null;
     },
 
     start () {
+        this.showRoomHand();
+    },
+    
+    // 展现提示手
+    showRoomHand() {
         this.gameController.guideView.myFadeIn(this.roomHand, () => {
-            this.gameController.guideView.myClickHere(this.roomHand);
+            this.stopRoomHand = this.gameController.guideView.myClickHere(this.roomHand);
         });
     },
 
     updateLevel (callback) {
+        // 停止手运动
+        this.countDownView.stopCountDown();
+        this.stopRoomHand && this.stopRoomHand();
+        // 设置计时器
+        switch (this.info.currentLevel) {
+            case 1: 
+                // 设置进化点击手
+                this.countDownView.startCountDown(2, this.showRoomHand.bind(this));
+                break;
+            case 2: 
+                this.roomHand = this.select.getChildByName('hand')
+                console.log(this.roomHand)
+                this.countDownView.startCountDown(2, this.showRoomHand.bind(this));
+        }
+
         this.info.currentLevel++;
         const target = this.info.currentLevel;
         if (target<2 || target>3) return;

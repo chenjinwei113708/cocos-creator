@@ -70,7 +70,7 @@ cc.Class({
         let stopMyAnimation = (cb) => {
             node.stopAllActions();
             node.runAction(cc.sequence(
-                cc.spawn(cc.scaleTo(0.1, 1), cc.moveTo(0.1, oriPos)),
+                cc.spawn(cc.scaleTo(0.1, 0), cc.moveTo(0.1, oriPos)),
                 cc.callFunc(() => {
                     node.stopMyAnimation = undefined;
                     cb && cb();

@@ -30,6 +30,7 @@ cc.Class({
         this.book = cc.find('Canvas/center/game/book'); // 场景一：书本
         this.room = cc.find('Canvas/center/game/room'); // 场景二：改造房间
         this.battle = cc.find('Canvas/center/game/battle'); // 场景三：战场
+        this.countDownView = cc.find('Canvas/center/UI/countDown').getComponent('CountDownView'); // 获取计时器
         this.bookHand = this.book.getChildByName('hand');
         this.roomView = this.room.getComponent('RoomView');
         this.battleView = this.room.getComponent('BattleView');
@@ -45,13 +46,21 @@ cc.Class({
                 [SNAIL_LEVEL.CHAOJIUJI]: this.chaojiujiSprite,
             },
             currentSnail: this.bookSnail, // 当前展示的蜗牛节点
+            currentSnailView: null,
             gameScene: GAME_SCENE.BOOK,
         };
+
+        // 变量
+        this.stopBookHand = null; // 存储停止开始执行手的变量
     },
 
     start () {
+        this.countDownView.startCountDown(3, this.showBookHand.bind(this))
+    },
+
+    showBookHand() {
         this.gameController.guideView.myFadeIn(this.bookHand, () => {
-            this.gameController.guideView.myClickHere(this.bookHand);
+            this.stopBookHand = this.gameController.guideView.myClickHere(this.bookHand);
         });
     },
 
@@ -68,16 +77,37 @@ cc.Class({
     },
 
     /**选择蜗牛 */
-    pickSnail () {
+    pickSnail (e) {
         if (this.info.status === GAME_STATUS.CAN_CLICK && this.info.gameScene === GAME_SCENE.BOOK) {
+            // console.log(e)
+            // 把蜗牛切换到room的平台上面
+            this.info.currentSnailView = e.target.getComponent('SnailView');
+            this.currentSnail = this.info.currentSnailView.snail;
+            this.currentSnail.parent = this.node;
+            this.currentSnail.runAction(
+                cc.sequence(
+                    cc.spawn(
+                        cc.scaleTo(1, 1.5),
+                        cc.moveTo(1, cc.v2(130, 0))
+                    ),
+                    cc.callFunc(() => {
+                        this.setGameStatus(GAME_STATUS.CAN_CLICK);
+                    })
+                )
+            );
+
             this.setGameStatus(GAME_STATUS.IS_PLAYING);
-            this.bookHand.stopMyAnimation && this.bookHand.stopMyAnimation();
-            this.change2Room();
+            this.bookHand.stopMyAnimation && this.bookHand.stopMyAnimation(); // 停止指引手
+            this.change2Room(); // 切换到room
         }
     },
 
     /**把场景切换到改造房间 */
     change2Room () {
+        // 关闭book的引导手
+        this.stopBookHand && this.stopBookHand();
+        this.countDownView.stopCountDown();
+        // 关闭书本
         this.book.runAction(cc.sequence(
             cc.fadeOut(1),
             cc.callFunc(() => {
@@ -86,6 +116,7 @@ cc.Class({
                 
             })
         ));
+        // 从右边移到左边
         const oriRoomPos =  cc.v2(this.room.position.x, this.room.position.y);
         this.room.active = true;
         this.room.position = cc.v2(oriRoomPos.x+300, oriRoomPos.y);
@@ -129,19 +160,26 @@ cc.Class({
             const level = this.leftLevels.splice(0, 1)[0];
             const sprite = this.info.levelSprite[level];
             const snail = this.info.currentSnail;
-            snail.runAction(cc.sequence(
-                cc.scaleTo(0.1, 0),
-                cc.callFunc(() => {
-                    snail.getComponent(cc.Sprite).spriteFrame = sprite;
-                }),
-                cc.scaleTo(0.3, 1),
-                cc.callFunc(() => {
-                })
-            ));
+            // 蜗牛变形
+            // snail.runAction(cc.sequence(
+            //     cc.scaleTo(0.1, 0),
+            //     cc.callFunc(() => {
+            //         snail.getComponent(cc.Sprite).spriteFrame = sprite;
+            //     }),
+            //     cc.scaleTo(0.3, 1),
+            //     cc.callFunc(() => {
+            //     })
+            // ));\
+            this.info.currentSnailView.showNextForm()
+
+            this.updateWord(); // 更新文字
+            this.roomView.stopRoomHand(); // 隐藏room提示手
+
+            // 设置可以点击状态 / 出现选择boss页面
             this.roomView.updateLevel(() => {
                 if (this.leftLevels.length > 0) {
                     // 还可以进化
-                    this.setGameStatus(GAME_STATUS.CAN_CLICK);
+                    // this.setGameStatus(GAME_STATUS.CAN_CLICK);
                 } else {
                     // 进化完了
                     setTimeout(() => {
@@ -151,6 +189,32 @@ cc.Class({
             })
         }
     },
+
+    /**更新蜗牛进化时的文字 */
+    updateWord() {
+        const box = this.room.getChildByName('box');
+        let wordIndex = this.leftLevels.length === 0 ? 2 : 1;
+        let prev = box.children[wordIndex - 1];
+        let next = box.children[wordIndex];
+        let oriPos = next.position;
+        next.opacity = 0
+        next.position = cc.v2(next.x, next.y - 40);
+        prev.runAction(cc.sequence(
+            cc.spawn(
+                cc.moveBy(0.3, cc.v2(0, 40)),
+                cc.fadeOut(0.3)
+            ),
+            cc.callFunc(() => {
+                prev.active = false;
+                next.active = true;
+                next.runAction(cc.spawn(
+                    cc.fadeIn(0.1),
+                    cc.moveTo(0.1, oriPos)
+                ))
+            })
+        ))
+    },
+
 
     /**展示选择boss的界面 */
     showSelection () {
