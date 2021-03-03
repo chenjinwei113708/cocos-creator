@@ -11,10 +11,10 @@ cc.Class({
         guide: cc.Node,
         //整个场景结点
         center:cc.Node,
-        // // 游戏相关
-        // game: cc.Node,
-        // // 金币相关
-        // cash: cc.Node,
+        // 游戏相关
+        game: cc.Node,
+        // 金币相关
+        cash: cc.Node,
 
     },
 
@@ -39,11 +39,11 @@ cc.Class({
         this.gameModel.gameInit();
         // this.toolList = this.gameModel.getTools();
 
-        // // 主游戏
-        // this.gameView = this.game.getComponent('GameView');
-        // this.gameView.setGameController(this);
-        // // 金币相关脚本
-        // this.cashView = this.cash.getComponent('CashView');
+        // 主游戏
+        this.gameView = this.game.getComponent('GameView');
+        this.gameView.setGameController(this);
+        // 金币相关脚本
+        this.cashView = this.cash.getComponent('CashView');
 
         //得到GuideView脚本
         this.guideView = this.guide.getComponent('GuideView');
@@ -70,8 +70,8 @@ cc.Class({
             window.addEventListener("resize", this.centerScript.orientCb.bind(this.centerScript, true));
         }
 
-        // // 启动点击音效
-        // this.bindClickEffect();
+        // 启动点击音效
+        this.bindClickEffect();
 
         // 数据加载完毕
         PlayformSDK.gameReady();
@@ -119,13 +119,13 @@ cc.Class({
     /**绑定点击音效 */
     bindClickEffect() {
         this.node.on(cc.Node.EventType.TOUCH_START, function (touchEvent) {
-            this.AudioUtils.getComponent('AudioUtils').playEffect('bgClick', 2)
+            this.AudioUtils.getComponent('AudioUtils').playEffect('click', 1)
         }, this)
     },
 
-    // /**加钱 */
-    // addCash (num) {
-    //     this.cashView.addCash(num);
-    // },
+    /**加钱 */
+    addCash (num) {
+        this.cashView.addCash(num);
+    },
 
 });
