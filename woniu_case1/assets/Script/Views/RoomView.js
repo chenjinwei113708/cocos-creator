@@ -85,7 +85,6 @@ cc.Class({
                 break;
             case 2: 
                 this.roomHand = this.select.getChildByName('hand')
-                console.log(this.roomHand)
                 this.countDownView.startCountDown(2, this.showRoomHand.bind(this));
         }
 
@@ -121,7 +120,6 @@ cc.Class({
         names.forEach(name => {
             this.levelTmp[name] = Math.ceil( ( this.levelConfig[tLevel].number[name] - this.levelConfig[preLevel].number[name] ) / ftimes );
         });
-        // console.log('this.levelTmp:', this.levelTmp);
 
         this.info.levelInterval = setInterval(() => {
             let canClear = true;
@@ -129,7 +127,6 @@ cc.Class({
                 const label = this.level[name].getComponent(cc.Label);
                 const num = Number(label.string);
                 const dis = this.levelConfig[tLevel].number[name] - num;
-                // console.log('name dis::', name, ' ,', dis);
                 if (dis > 0) {
                     if (dis > this.levelTmp[name]) {
                         canClear = false;
@@ -141,7 +138,6 @@ cc.Class({
             });
             if (canClear) {
                 clearInterval(this.info.levelInterval);
-                // console.log('clearInterval---');
             }
         }, 60);
     },

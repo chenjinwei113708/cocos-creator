@@ -1,7 +1,5 @@
 function upAndDown(node, distance = 10, delay = 0, ratio = 1) {
   const oriPos = node.position;
-  console.log(node);
-  // console.log(oriPos);
   setTimeout(() => {
     node.runAction(
       cc.repeatForever(cc.sequence(

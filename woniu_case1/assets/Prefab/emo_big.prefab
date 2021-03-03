@@ -100,7 +100,7 @@
     },
     "_fillStart": 0,
     "_fillRange": 0,
-    "_isTrimmedMode": true,
+    "_isTrimmedMode": false,
     "_atlas": null,
     "_id": ""
   },
@@ -118,6 +118,12 @@
     "_clips": [
       {
         "__uuid__": "ca9ed75e-3c41-4183-9771-4f47815f1c1f"
+      },
+      {
+        "__uuid__": "5f9eae52-d0cb-461e-aef9-daeda6864b6b"
+      },
+      {
+        "__uuid__": "6f9c5661-b2fb-4901-ab57-80f289dc1ea7"
       }
     ],
     "playOnLoad": true,

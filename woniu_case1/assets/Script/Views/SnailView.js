@@ -4,6 +4,8 @@ cc.Class({
 
     properties: {
         snail: cc.Node,
+        avatar: cc.SpriteFrame, // 存放战斗时候的头像
+        type: 'emo',
         nextForm: {
             type: cc.Prefab,
             default: []
@@ -17,6 +19,7 @@ cc.Class({
 
         // 设置粒子节点总在蜗牛之上
         this.bgParticle.zIndex = 1;
+        // console.log(this.type)
     },
 
     // 展示下个形态
@@ -31,6 +34,7 @@ cc.Class({
                 this.snail = form;
                 this.snail.active = true;
                 this.snail.scale = 0;
+                this.snail.snailType = this.type; // 设置当前蜗牛的状态
                 this.snail.runAction(cc.scaleTo(0.5, 1));
             })
         ))
@@ -53,6 +57,22 @@ cc.Class({
                 this.bgParticle.active = false;
             })
         ))
+    },
+
+    /**蜗牛死亡 */
+    snailDeath() {
+        return new Promise((resolve, reject) => {
+            const animation = this.snail.getComponent(cc.Animation);
+            animation.stop(animation.currentClip); // 停止当前动画
+            animation.play('snail_gg'); // 播放死亡动画
+            const deathTime = animation.currentClip.duration; // 记录死亡事件
+            this.snail.runAction(cc.sequence(
+                cc.moveBy(deathTime, cc.v2(-50, 0)),
+                cc.callFunc(() => {
+                    resolve(); // 执行回调
+                })
+            ));
+        })
     }
 
 });

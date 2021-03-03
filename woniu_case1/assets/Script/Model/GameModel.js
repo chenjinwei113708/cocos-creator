@@ -11,15 +11,37 @@ export default class GameModel {
         this.isLandscape = false;
         this.isApplovin = false; // 是不是applovin平台
         this.HorizontalConfig = {
-            // game: {
-            //     position: cc.v2(239.546, 79.659),
-            //     scale: 0.88,
-            //     children: {
-            //         adsonly: {
-            //             active: this.isApplovin ? true : false
-            //         }
-            //     }
-            // },
+            game: {
+                position: cc.v2(240, 0),
+                scale: 0.77,
+                children: {
+                    book: {
+                        position: cc.v2(0, 0)
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    banner: {
+                        position: cc.v2(-240, 0),
+                        children: {
+                            icon: {
+                                active: true,
+                                position: cc.v2(0, 0)
+                            },
+                            logo: {
+                                width: 350,
+                                height: 133,
+                                position: cc.v2(0, 180),
+                            },
+                            button: {
+                                active: true,
+                                position: cc.v2(0, -170)
+                            }
+                        }
+                    }
+                }
+            }
             // UI: {
             //     children: {
             //         congrat: this.isApplovin ? {
@@ -79,15 +101,53 @@ export default class GameModel {
             // }
         }
         this.VerticalConfig = {
-            // game: {
-            //     position: cc.v2(0, 0),
-            //     scale: 1,
+            game: {
+                position: cc.v2(0, 50),
+                scale: 1,
+                children: {
+                    book: {
+                        // position: cc.v2(0, 50)
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    banner: {
+                        position: cc.v2(0, -400),
+                        children: {
+                            icon: {
+                                position: cc.v2(-200, 0)
+                            },
+                            logo: {
+                                width: 150.3,
+                                height: 57.8,
+                                position: cc.v2(-70, 0)
+                            },
+                            button: {
+                                position: cc.v2(130, 0)
+                            }
+                        }
+                    }
+                }
+            }
+            // UI: {
             //     children: {
-            //         adsonly: {
-            //             active: this.isApplovin ? true : false
+            //         banner: {
+            //             position: cc.v2(0, 0),
+            //             children: {
+            //                 icon: {
+            //                     active: false
+            //                 },
+            //                 logo: {
+            //                     position: cc.v2(0, 380)
+            //                 },
+            //                 button: {
+            //                     active: false
+            //                 }
+            //             }
             //         }
             //     }
-            // },
+            // }
             // UI: {
             //     children: {
             //         congrat: this.isApplovin ? {

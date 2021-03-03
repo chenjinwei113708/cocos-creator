@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "964a5103-c193-4712-8b5d-10758007624d",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "小天使_00000": {
+      "ver": "1.0.4",
+      "uuid": "48d17591-119d-4982-a6da-828000cde2d2",
+      "rawTextureUuid": "964a5103-c193-4712-8b5d-10758007624d",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": -12,
+      "offsetY": 2.5,
+      "trimX": 31,
+      "trimY": 25,
+      "width": 214,
+      "height": 245,
+      "rawWidth": 300,
+      "rawHeight": 300,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}

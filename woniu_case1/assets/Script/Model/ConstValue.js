@@ -18,3 +18,8 @@ export const GAME_SCENE = {
     ROOM : 'room',
     BATTLE : 'battle',
 }
+
+export const NEXT_FIGHTER = {
+    SNAIL: 'snail',
+    BOSS: 'boss'
+}

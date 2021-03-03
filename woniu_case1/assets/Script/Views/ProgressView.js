@@ -13,7 +13,7 @@ cc.Class({
 
     properties: {
         nowProgress: 1,
-        targerProgress: 0,
+        targetProgress: 0,
         unit: 0.02,
     },
 
@@ -25,7 +25,7 @@ cc.Class({
         // this.pp3 = this.node.getChildByName('pp3');
         // this.pp4 = this.node.getChildByName('pp4');
         this.progressBar = this.node.getComponent(cc.ProgressBar);
-
+        this.enabled = false;
         // this = {
         //     nowProgress: 1,
         //     targerProgress: 0,
@@ -34,7 +34,6 @@ cc.Class({
     },
 
     start () {
-        // this.setProgress(0.33);
     },
 
     /**
@@ -43,8 +42,8 @@ cc.Class({
      */
     setProgress (num) {
         if (num<0 || num>1) return;
-        this.targerProgress = num;
-        let distance = num - this.nowProgress;
+        this.targetProgress = num;
+        let distance = num - this.nowProgress; // 计算相差
         if (distance === 0) return;
         // 设置加减单位
         this.unit = distance > 0 ? Math.abs(this.unit) : -Math.abs(this.unit);
@@ -52,11 +51,11 @@ cc.Class({
     },
 
     update (dt) {
-        if (Math.abs(this.targerProgress - this.nowProgress) > Math.abs(this.unit)) {
+        if (Math.abs(this.targetProgress - this.nowProgress) > Math.abs(this.unit)) {
             this.nowProgress += this.unit;
             this.progressBar.progress = this.nowProgress;
         } else {
-            this.nowProgress = this.targerProgress;
+            this.nowProgress = this.targetProgress;
             this.progressBar.progress = this.nowProgress;
             this.enabled = false;
         }

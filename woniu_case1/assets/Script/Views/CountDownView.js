@@ -29,7 +29,7 @@ cc.Class({
         cb && (this.callback = cb);
         if (this.canRun) {
             this.timer = setTimeout(() => {
-                console.log('tiktok')
+                // console.log('tiktok')
                 this.time++;
                 this.startCountDown();
                 if (this.time >= this.endTime) {
