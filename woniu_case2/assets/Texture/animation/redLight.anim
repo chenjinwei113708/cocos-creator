@@ -1,0 +1,61 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "redLight",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.7,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "0e87c075-4de6-41bd-8edf-ca667637067f"
+            }
+          },
+          {
+            "frame": 0.1,
+            "value": {
+              "__uuid__": "8f6037a3-fdfe-47c8-b26e-227db6f2a572"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "d802fc63-b7b0-45cb-b913-90de1acbb766"
+            }
+          },
+          {
+            "frame": 0.3,
+            "value": {
+              "__uuid__": "7d590f33-021f-4bc9-b1f5-a125971ea99e"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "b7390bd4-6e52-4cac-8f84-0b8e8230b537"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "a5a9391c-6864-487b-97b7-ae61e8884de5"
+            }
+          },
+          {
+            "frame": 0.6,
+            "value": {
+              "__uuid__": "253141d2-cae6-4367-a392-0523c1e24168"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

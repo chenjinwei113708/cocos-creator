@@ -1,0 +1,61 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "green1snail",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.875,
+  "sample": 8,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "6991382c-0d8d-45f0-82dd-0ad8edb0df08"
+            }
+          },
+          {
+            "frame": 0.125,
+            "value": {
+              "__uuid__": "b411f2ca-a7c4-4509-829c-faee9566e532"
+            }
+          },
+          {
+            "frame": 0.25,
+            "value": {
+              "__uuid__": "643f9c7b-2f2d-405e-b739-7d90f5f1bfff"
+            }
+          },
+          {
+            "frame": 0.375,
+            "value": {
+              "__uuid__": "801b2acb-5791-4cfb-9292-c5250aedc833"
+            }
+          },
+          {
+            "frame": 0.5,
+            "value": {
+              "__uuid__": "d363bec1-6903-47b0-930a-8536b527cc0e"
+            }
+          },
+          {
+            "frame": 0.625,
+            "value": {
+              "__uuid__": "84b39345-0a51-4746-bfcd-6d502bbde6a6"
+            }
+          },
+          {
+            "frame": 0.75,
+            "value": {
+              "__uuid__": "511195c6-abd0-4f94-a06f-31f0c94021d3"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

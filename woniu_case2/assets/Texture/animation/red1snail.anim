@@ -1,0 +1,61 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "red1snail",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.4,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "8c3ee513-ced2-4245-b335-a37e1c894345"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "11ea35b8-a1e6-4ec5-841e-197c25aaa096"
+            }
+          },
+          {
+            "frame": 0.4,
+            "value": {
+              "__uuid__": "c3bd8099-acde-4a30-95b8-34278cc21b9d"
+            }
+          },
+          {
+            "frame": 0.6,
+            "value": {
+              "__uuid__": "6cc89251-a40e-4330-8cce-984353ca20b3"
+            }
+          },
+          {
+            "frame": 0.8,
+            "value": {
+              "__uuid__": "c8d24916-b541-4456-b4ee-13b116e59ae0"
+            }
+          },
+          {
+            "frame": 1,
+            "value": {
+              "__uuid__": "bf57d013-7130-4810-b552-6964b502e9a4"
+            }
+          },
+          {
+            "frame": 1.2,
+            "value": {
+              "__uuid__": "2cc49626-7be3-4504-b942-6e7b9d5f2ae1"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
