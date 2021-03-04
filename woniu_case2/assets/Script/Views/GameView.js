@@ -1,12 +1,3 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
 cc.Class({
     extends: cc.Component,
@@ -48,9 +39,14 @@ cc.Class({
      * 突出显示
      * @param {*} box 需要放大的区域
      * @param {*} light 需要播放动画的光效
+     * @param {*} btn 需要播放动画的光效
      */
-    highlight (box, light) {
+    highlight (box, light, btn) {
         box.runAction(cc.sequence(
+            cc.scaleTo(0.3, 1.1),
+            cc.scaleTo(0.3, 1),
+        ));
+        btn.runAction(cc.sequence(
             cc.scaleTo(0.3, 1.1),
             cc.scaleTo(0.3, 1),
         ));
@@ -84,12 +80,12 @@ cc.Class({
         this.hand.runAction(cc.repeatForever(cc.sequence(
             cc.moveTo(speed, greenBtnPos),
             cc.callFunc(() => {
-                this.highlight(this.greenBox, this.greenLight);
+                this.highlight(this.greenBox, this.greenLight, this.greenBtn);
             }),
             cc.delayTime(delayDuration),
             cc.moveTo(speed, redBtnPos),
             cc.callFunc(() => {
-                this.highlight(this.redBox, this.redLight);
+                this.highlight(this.redBox, this.redLight, this.redBtn);
             }),
             cc.delayTime(delayDuration),
         )));
