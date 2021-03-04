@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "cded48b7-9a34-4127-98d1-6259d2945f24",
+  "uuid": "3aa07dd7-8841-4e1a-9978-d57a9a6a9f90",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -11,8 +11,8 @@
   "subMetas": {
     "恶魔卡": {
       "ver": "1.0.4",
-      "uuid": "ce996d2b-93d2-4700-812e-2e8ca1c78bc9",
-      "rawTextureUuid": "cded48b7-9a34-4127-98d1-6259d2945f24",
+      "uuid": "bd23187c-e5a3-4e5d-a0ab-8b707e534637",
+      "rawTextureUuid": "3aa07dd7-8841-4e1a-9978-d57a9a6a9f90",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

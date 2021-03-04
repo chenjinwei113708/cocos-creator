@@ -4,6 +4,10 @@ import {
     GAME_SCENE
 } from "../Model/ConstValue.js";
 
+import {
+    bigAndSmall
+} from '../Utils/AnimationUtils'
+
 cc.Class({
     extends: cc.Component,
 
@@ -24,10 +28,12 @@ cc.Class({
         this.battle = cc.find('Canvas/center/game/battle'); // 场景三：战场
         this.countDownView = cc.find('Canvas/center/UI/countDown').getComponent('CountDownView'); // 获取计时器
         this.bookHand = this.book.getChildByName('hand');
+        this.handTo = this.book.getChildByName('handTo')
         this.arrows = this.book.getChildByName('arrow').children;
         this.roomView = this.room.getComponent('RoomView');
         this.battleView = this.battle.getComponent('BattleView');
         this.audioUtils = this.audio.getComponent('AudioUtils');
+        this.txt1 = this.book.getChildByName('t_jinhua01');
 
         this.leftLevels = [SNAIL_LEVEL.JIUJI, SNAIL_LEVEL.CHAOJIUJI]; // 还未进化的等级
 
@@ -49,8 +55,9 @@ cc.Class({
     },
 
     start () {
-        this.countDownView.startCountDown(3, this.showBookHand.bind(this));
+        this.countDownView.startCountDown(1, this.showBookHand.bind(this));
         this.arrowShake();
+        this.txt1Scale();
     },
 
     /**箭头摆动 */
@@ -58,16 +65,21 @@ cc.Class({
         this.arrows.forEach((node, index) => {
             const isReserve = index % 2 !== 0;
             node.runAction(cc.repeatForever(cc.sequence(
-                cc.rotateTo(0.3, -1 * (isReserve ? 10 : -10)),
-                cc.rotateTo(0.6, isReserve ? 10 : -10),
+                cc.rotateTo(0.3, -1 * (isReserve ? 8 : -8)),
+                cc.rotateTo(0.6, isReserve ? 8 : -8),
                 cc.rotateTo(0.3, 0)
             )))
         })
     },
 
+    /**txt1放大缩小 */
+    txt1Scale() {
+        bigAndSmall(this.txt1);
+    },
+
     showBookHand() {
         this.gameController.guideView.myFadeIn(this.bookHand, () => {
-            this.stopBookHand = this.gameController.guideView.myClickHere(this.bookHand);
+            this.stopBookHand = this.gameController.guideView.laiHui(this.bookHand, this.handTo);
         });
     },
 
@@ -105,6 +117,7 @@ cc.Class({
                     cc.callFunc(() => {
                         this.setGameStatus(GAME_STATUS.CAN_CLICK);
                         this.info.currentSnailView.showBgParticle(); // 展示粒子效果
+                        cc.audioEngine.playMusic(this.audioUtils.dianLiu, true); // 播放电流背景
                     })
                 )
             );
@@ -121,6 +134,10 @@ cc.Class({
     change2Room () {
         // 判断条件
         if (this.info.gameScene !== GAME_SCENE.BOOK) return;
+
+        // 播放换场声音
+        this.audioUtils.playEffect('changeScene');
+
         this.setGameScene(GAME_SCENE.ROOM);
         // 关闭book的引导手
         this.stopBookHand && this.stopBookHand();
@@ -152,6 +169,8 @@ cc.Class({
         this.setGameScene(GAME_SCENE.BATTLE);
 
         // 播放音效
+        cc.audioEngine.stopMusic(); // 停止声音
+        this.audioUtils.playEffect('changeScene');
         this.audioUtils.playEffect('bgClick');
 
         const model = cc.find('Canvas/center/game/battle/model');
@@ -160,9 +179,9 @@ cc.Class({
         // 隐藏粒子效果
         this.info.currentSnailView.hideBgParticle();
         // 设置反转 并且隐藏到左边
-        const scale = 200 / this.info.currentSnail.width;
+        const scale = 180 / this.info.currentSnail.width;
         this.info.currentSnail.active = false; // 设置不可看
-        this.info.currentSnail.width = 200; // 设置适合放在battle场景的大小
+        this.info.currentSnail.width = 180; // 设置适合放在battle场景的大小
         this.info.currentSnail.height = this.info.currentSnail.height * scale; // 高通同样乘相同比例
         this.info.currentSnail.width = -this.info.currentSnail.width; // 反转
         this.info.currentSnail.position = cc.v2(-600, -250); // 设置隐藏好的位置

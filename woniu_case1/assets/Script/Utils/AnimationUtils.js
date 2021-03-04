@@ -10,6 +10,20 @@ function upAndDown(node, distance = 10, delay = 0, ratio = 1) {
   }, delay)
 }
 
+function bigAndSmall(node, maxScale = 1.1, minScale = 0.9, delay = 0, ratio = 1) {
+  setTimeout(() => {
+    console.log(node)
+    node.runAction(
+      cc.repeatForever(cc.sequence(
+        cc.scaleTo(0.3 * ratio, maxScale),
+        cc.scaleTo(0.6 * ratio, minScale),
+        cc.scaleTo(0.3 * ratio, 1)
+      ))
+    )
+  }, delay)
+}
+
 export {
-  upAndDown
+  upAndDown,
+  bigAndSmall
 }

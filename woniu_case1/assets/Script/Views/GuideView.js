@@ -53,6 +53,39 @@ cc.Class({
         ));
     },
 
+    /**来回移动  */
+    laiHui(node1, node2, callback) {
+        let oriPos1 = cc.v2(node1.position.x, node1.position.y);
+        let oriPos2 = cc.v2(node2.position.x, node2.position.y);
+        // let movePos1 = cc.v2(oriPos1.x + node1.width*0.6, oriPos1.y - node1.height*0.8);
+        // let movePos2 = cc.v2(oriPos2.x + node2.width*0.6, oriPos2.y - node2.height*0.8);
+        // console.log(oriPos2, movePos2)
+        node1.runAction(cc.repeatForever(
+            cc.sequence(
+                cc.scaleTo(0.5, 1.2),
+                cc.scaleTo(0.3, 1),
+                cc.moveTo(0.5, oriPos2),
+                cc.scaleTo(0.5, 1.2),
+                cc.scaleTo(0.3, 1),
+                cc.moveTo(0.5, oriPos1)
+            )
+        ));
+        callback && callback();
+        let stopMyAnimation = (cb) => {
+            node1.stopAllActions();
+            node1.runAction(cc.sequence(
+                cc.spawn(cc.scaleTo(0.2, 0), cc.fadeOut(0.2, oriPos1)),
+                cc.callFunc(() => {
+                    node1.position = oriPos1
+                    node1.stopMyAnimation = undefined;
+                    cb && cb();
+                })
+            ));
+        }
+        node1.stopMyAnimation = stopMyAnimation;
+        return stopMyAnimation;
+    },
+
     /**
      * 提示点击
      * @param {*} node 

@@ -35,8 +35,37 @@ cc.Class({
         endMusic: {
             type: cc.AudioClip,
             default: null
-        }
+        },
+        
+        // 死亡的声音
+        gameOver: {
+            type: cc.AudioClip,
+            default: null
+        },
 
+        // 进化的时候的电流声
+        dianLiu: {
+            type: cc.AudioClip,
+            default: null
+        },
+
+        // 蜗牛攻击的声音
+        snail_attack: {
+            type: cc.AudioClip,
+            default: null
+        },
+
+        // boss攻击的声音
+        boss_attack: {
+            type: cc.AudioClip,
+            default: null
+        },
+
+        // 转场音乐
+        changeScene: {
+            type: cc.AudioClip,
+            default: null
+        }
     },
 
     onLoad() {

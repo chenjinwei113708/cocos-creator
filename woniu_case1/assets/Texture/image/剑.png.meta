@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "87e6631f-3397-45f6-acf9-0e90df729bfb",
+  "uuid": "08f68b1a-105a-4bd8-87e7-0057d1da1291",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -11,8 +11,8 @@
   "subMetas": {
     "剑": {
       "ver": "1.0.4",
-      "uuid": "7f49d1d9-32ff-4b5d-a4c8-8620e15bffa0",
-      "rawTextureUuid": "87e6631f-3397-45f6-acf9-0e90df729bfb",
+      "uuid": "7bb5d7fc-5cb6-404a-9cb3-8ab00fc6e58e",
+      "rawTextureUuid": "08f68b1a-105a-4bd8-87e7-0057d1da1291",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

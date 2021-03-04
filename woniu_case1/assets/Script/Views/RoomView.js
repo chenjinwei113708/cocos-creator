@@ -109,7 +109,7 @@ cc.Class({
                 callback && callback();
             })
         ));
-        // prePic.runAction(cc.sequence(cc.delayTime(0.4*speed), cc.fadeOut(0.5*speed)));
+        prePic.runAction(cc.sequence(cc.delayTime(0.7*speed), cc.fadeOut(0.3*speed)));
 
         // 数字变化
         const fspeed =  60; //ms
