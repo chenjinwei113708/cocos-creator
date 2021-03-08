@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "fc371317-69e8-4e7d-8cb0-6c04877b0378",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "ppLogo": {
+      "ver": "1.0.4",
+      "uuid": "c6890377-31a2-45cd-9606-872dd6e31f47",
+      "rawTextureUuid": "fc371317-69e8-4e7d-8cb0-6c04877b0378",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 117,
+      "height": 119,
+      "rawWidth": 117,
+      "rawHeight": 119,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
