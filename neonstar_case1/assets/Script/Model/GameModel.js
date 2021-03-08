@@ -10,141 +10,129 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.isApplovin = false; // 是不是applovin平台
+        this.isMintegral = true; // 是不是mtg平台
         this.HorizontalConfig = {
-            // game: {
-            //     position: cc.v2(239.546, 79.659),
-            //     scale: 0.88,
-            //     children: {
-            //         adsonly: {
-            //             active: this.isApplovin ? true : false
-            //         }
-            //     }
-            // },
-            // UI: {
-            //     children: {
-            //         congrat: this.isApplovin ? {
-            //             width: 277.38, // applovin
-            //             height: 540,
-            //             opacity: 190
-            //         } : {
-            //             opacity: 255,
-            //             angle: 90,
-            //         },
-            //         congratBlur: this.isApplovin ? {
-            //             width: 277.38, // applovin
-            //             height: 540,
-            //             opacity: 190
-            //         } : {
-            //             opacity: 255,
-            //             angle: 90,
-            //         },
-            //         notification: {},
-            //         paypal: {
-            //             position: cc.v2(-283.1, 127.459),
-            //             children: {
-            //                 laoren: {
-            //                     width: 160,
-            //                     height: 89,
-            //                     position: cc.v2(392.037, 117.86)
-            //                 },
-            //                 icon: {
-            //                     position: cc.v2(-67.054, -7.471)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(137.034, -40.34)
-            //                 },
-            //                 cash: {
-            //                     position: cc.v2(135.994, 31.177)
-            //                 }
-            //             }
-            //         },
-            //         banner: {
-            //             position: cc.v2(-261.323, -242.363),
-            //             children: {
-            //                 icon: {
-            //                     position: cc.v2(-70.997, 131.491)
-            //                 },
-            //                 logo: {
-            //                     position: cc.v2(76.109, 130.311)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(17.395, 25.327)
-            //                 }
-            //             }
-            //         },
-            //         audioBtn: {
-            //             position: cc.v2(-415.577, 212.604)
-            //         }
-            //     }
-            // }
+            game: {
+                position: cc.v2(233.651, 41.087),
+                scale: 0.822,
+                children: {
+                    bg1: {
+                        angle: -90,
+                        position: cc.v2(-162.721, 0)
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    flyIcons: {
+                        position: cc.v2(233.651, 41.087),
+                        scale: 0.822,
+                    },
+                    paypal: {
+                        scale: 0.865,
+                        position: cc.v2(-233.489, 191.992),
+                        children: {
+                            // icon: {
+                            //     position: cc.v2(-67.054, -7.471)
+                            // },
+                            // btn: {
+                            //     position: cc.v2(137.034, -40.34)
+                            // },
+                            // cash: {
+                            //     position: cc.v2(135.994, 31.177)
+                            // }
+                        }
+                    },
+                    banner: {
+                        position: cc.v2(-211.64, -197.735),
+                        children: {
+                            icon: {
+                                position: cc.v2(-180.506, 0)
+                            },
+                            logo: {
+                                position: cc.v2(-132, 111.364)
+                            },
+                            btn: {
+                                position: cc.v2(26.258, -6.772)
+                            },
+                            adsonly: {
+                                active: this.isApplovin,
+                                position: cc.v2(28, 35.45)
+                            },
+                            mtg: {
+                                position: cc.v2(-35.976, 46.492),
+                                scale: 0.82,
+                                active: this.isMintegral
+                                
+                            }
+                        }
+                    },
+                    audioBtn: {
+                        position: cc.v2(-426.667, 93.354)
+                    }
+                }
+            }
         }
         this.VerticalConfig = {
-            // game: {
-            //     position: cc.v2(0, 0),
-            //     scale: 1,
-            //     children: {
-            //         adsonly: {
-            //             active: this.isApplovin ? true : false
-            //         }
-            //     }
-            // },
-            // UI: {
-            //     children: {
-            //         congrat: this.isApplovin ? {
-            //             width: 603, // applovin
-            //             height: 1170,
-            //             opacity: 255
-            //         } : {
-            //             opacity: 255,
-            //             angle: 0,
-            //         },
-            //         congratBlur: this.isApplovin ? {
-            //             width: 603, // applovin
-            //             height: 1170,
-            //             opacity: 255
-            //         } : {
-            //             opacity: 255,
-            //             angle: 0,
-            //         },
-            //         // notification: {},
-            //         paypal: {
-            //             position: cc.v2(0, 396.319),
-            //             children: {
-            //                 laoren: {
-            //                     width: 319.4,
-            //                     height: 177.4,
-            //                     position: cc.v2(-0.75, -186.539)
-            //                 },
-            //                 icon: {
-            //                     position: cc.v2(-155.976, -7.471)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(137.034, -40.34)
-            //                 },
-            //                 cash: {
-            //                     position: cc.v2(135.994, 31.177)
-            //                 }
-            //             }
-            //         },
-            //         banner: {
-            //             position: cc.v2(0, -458.318),
-            //             children: {
-            //                 icon: {
-            //                     position: cc.v2(-197, 27)
-            //                 },
-            //                 logo: {
-            //                     position: cc.v2(-49.894, 28.893)
-            //                 },
-            //                 btn: {
-            //                     position: cc.v2(148.009, 28.4)
-            //                 }
-            //             }
-            //         },
-            //         audioBtn: {
-            //             position: cc.v2(0, 403.152)
-            //         }
-            //     }
-            // }
+            game: {
+                position: cc.v2(0, 0),
+                scale: 1,
+                children: {
+                    bg1: {
+                        angle: 0,
+                        position: cc.v2(0, 0)
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    flyIcons: {
+                        position: cc.v2(0, 0),
+                        scale: 1,
+                    },
+                    paypal: {
+                        scale: 1,
+                        position: cc.v2(5.241, 390.087),
+                        children: {
+                            // icon: {
+                            //     position: cc.v2(-155.976, -7.471)
+                            // },
+                            // btn: {
+                            //     position: cc.v2(137.034, -40.34)
+                            // },
+                            // cash: {
+                            //     position: cc.v2(135.994, 31.177)
+                            // }
+                        }
+                    },
+                    banner: {
+                        position: cc.v2(0, -428),
+                        children: {
+                            icon: {
+                                position: cc.v2(-195.334, 0)
+                            },
+                            logo: {
+                                position: cc.v2(-7.163, 0)
+                            },
+                            btn: {
+                                position: cc.v2(183.089, 0)
+                            },
+                            adsonly: {
+                                active: this.isApplovin,
+                                position: cc.v2(0, 50.45)
+                            },
+                            mtg: {
+                                position: cc.v2(0, 65.672),
+                                scale: 1,
+                                active: this.isMintegral
+                            }
+                        }
+                    },
+                    audioBtn: {
+                        position: cc.v2(0, 306.687)
+                    }
+                }
+            }
         }
 
         //guiding用来记录是否还需要继续进行拖动手势引导

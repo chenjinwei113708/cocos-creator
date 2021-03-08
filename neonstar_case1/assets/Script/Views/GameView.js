@@ -24,6 +24,9 @@ cc.Class({
         paypal: cc.Node,
         clickText: cc.Node,
         hand: cc.Node,
+        mask: cc.Node,
+        chooseText: cc.Node,
+        gifts: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -104,7 +107,8 @@ cc.Class({
     changeToNextLevel () {
         if (this.actionLevel.length === 0){
             // this.gameController.guideView.showCashOutHand();
-            console.log('changeToNextLevel gameFinish');
+            // console.log('changeToNextLevel gameFinish');
+            this.showGift();
             this.offTouchListener();
             return;
         }
@@ -155,7 +159,7 @@ cc.Class({
 
     onTouchStart (touch) {
         if (this.gameInfo.cellStatus === CELL_STATUS.CAN_MOVE) {
-            // this.gameController.getAudioUtils().playEffect('click', 0.5);
+            this.gameController.getAudioUtils().playEffect('click', 0.5);
             const touchPos = this.touch.convertToNodeSpaceAR(touch.touch._point);
             const cellPos = this.convertToCellPos(touchPos);
             const inGroup = this.checkInGroup(cellPos);
@@ -242,14 +246,17 @@ cc.Class({
                     cc.scaleTo(0.2, 0),
                     cc.callFunc(() => {
                         if (ppindex === 20) {
+                            this.gameController.getAudioUtils().playEffect('coin', 0.5);
                             this.gameController.addCash(100);
                         }
                         ppIcon.runAction(cc.sequence(
                             cc.delayTime((0.05*ppindex/2)),
                             cc.moveTo(0.3, destPos),
                             cc.spawn(cc.moveBy(0.1, -50, -50), cc.scaleTo(0.2, 0)),
+                            cc.callFunc(() => {
+                                callback && callback();
+                            })
                         ));
-                        callback && callback();
                     })
                 ))
             }
@@ -267,7 +274,7 @@ cc.Class({
      */
     convertToCellPos (pos) {
         // 棋盘的中心点在正中间才适用,而且每个格子大小必须一致，格子必须是矩形
-        const padding = 5; // 格子内边距
+        const padding = 2; // 格子内边距
         const width = 462; // 棋盘宽度
         const height = 462; // 棋盘高度
         const colNum = 10; // 列数目
@@ -389,6 +396,9 @@ cc.Class({
             }
         }
         let callback = null;
+        setTimeout(() => {
+            this.gameController.getAudioUtils().playEffect('spin', 0.7);
+        }, 400);
         beers.forEach((beer, index) => {
             if (index === beers.length-1) {
                 callback = () => {
@@ -428,6 +438,30 @@ cc.Class({
                 if (isAllDown) {
                     this.doActions();
                 }
+            })
+        ));
+    },
+
+    // 展示礼物
+    showGift () {
+        this.gameController.endGame();
+
+        this.gameController.getAudioUtils().playEffect('cheer', 0.5);
+        this.mask.opacity = 0;
+        this.mask.active = true;
+        this.mask.runAction(cc.fadeTo(0.4, 190));
+
+        this.chooseText.active = true;
+        this.chooseText.scale = 0;
+        this.chooseText.runAction(cc.scaleTo(0.4, 1));
+
+        this.gifts.active = true;
+        this.gifts.scale = 0;
+        this.gifts.runAction(cc.sequence(
+            cc.scaleTo(0.5, 1),
+            cc.callFunc(() => {
+                this.gameController.bindDownloadClick();
+                this.gifts.getComponent(cc.Animation).play();
             })
         ));
     },

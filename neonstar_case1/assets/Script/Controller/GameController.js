@@ -114,6 +114,12 @@ cc.Class({
         // this.GuideView.showEndPage();
     },
 
+    bindDownloadClick () {
+        this.node.on(cc.Node.EventType.TOUCH_START, function (touchEvent) {
+            this.download();
+        }, this)
+    },
+
     // 调用Model数据操作方法
 
     /**绑定点击音效 */
