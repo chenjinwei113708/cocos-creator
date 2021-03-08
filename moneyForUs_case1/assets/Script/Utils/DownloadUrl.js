@@ -1,5 +1,5 @@
 export const DownloadUrl = {
-    iosUrl: 'https://play.google.com/store/apps/details?id=com.skydicegames.sky',
+    iosUrl: 'https://apps.apple.com/app/id1551899074',
     androidUrl: 'https://play.google.com/store/apps/details?id=com.skydicegames.sky',
     
     getUrl: function() {
