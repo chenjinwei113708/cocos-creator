@@ -133,7 +133,6 @@ cc.Class({
         node.runAction(cc.sequence(
             cc.moveTo(speed, endPos),
             cc.callFunc(() => {
-                console.log('移动到了');
                 this.info.hasClickedArr.push(node);
                 // 检查是否结束游戏
                 if (this.info.currentSpaceIndex === this.info.endGameNumber) {
@@ -193,7 +192,7 @@ cc.Class({
         // 时间参数
         const speed1 = 0.3;
         const speed2 = 0.2;
-        const delay = 0.2;
+        const delay = 0.15;
         let isCallback = false;
 
         const endPos = this.pps.convertToNodeSpaceAR(this.paypal.convertToWorldSpaceAR(this.paypal.getChildByName('ppIcon').position))
