@@ -1,0 +1,280 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "tree1",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.5,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "t1_1": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -37.6,
+                71.1,
+                0
+              ]
+            },
+            {
+              "frame": 0.7,
+              "value": [
+                -37.022,
+                72.835,
+                0
+              ]
+            },
+            {
+              "frame": 1.2,
+              "value": [
+                -37.6,
+                69.943,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -37.6,
+                71.1,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.7,
+              "value": -4
+            },
+            {
+              "frame": 1.2,
+              "value": 2.843
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t1_2": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                35.9,
+                50.3,
+                0
+              ]
+            },
+            {
+              "frame": 0.4,
+              "value": [
+                36.768,
+                51.891,
+                0
+              ]
+            },
+            {
+              "frame": 0.9,
+              "value": [
+                31.851,
+                51.746,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                35.9,
+                50.3,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.4,
+              "value": -5
+            },
+            {
+              "frame": 0.9,
+              "value": 3.1109999999999998
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t1_4": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                33,
+                -116.8,
+                0
+              ]
+            },
+            {
+              "frame": 0.4,
+              "value": [
+                33.83,
+                -116.8,
+                0
+              ]
+            },
+            {
+              "frame": 1,
+              "value": [
+                30.059,
+                -117.629,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                33,
+                -116.8,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.5,
+              "value": -2
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t1_6": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -2.9,
+                10.1,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                -1.929,
+                9.593,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -2.9,
+                10.1,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.7,
+              "value": -1
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "t1_5": {
+        "props": {
+          "scale": []
+        }
+      },
+      "t1_3": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -39.9,
+                -120.9,
+                0
+              ]
+            },
+            {
+              "frame": 0.3,
+              "value": [
+                -40.879,
+                -120.9,
+                0
+              ]
+            },
+            {
+              "frame": 0.7,
+              "value": [
+                -41.043,
+                -120.9,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -39.9,
+                -120.9,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.7,
+              "value": 2
+            },
+            {
+              "frame": 1.5,
+              "value": 0
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}
