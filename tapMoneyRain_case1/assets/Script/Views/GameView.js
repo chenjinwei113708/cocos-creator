@@ -34,7 +34,9 @@ cc.Class({
             startTouchTime: 0,
             startTouchPos: null,
             outNumber: 0, // 抽出了几张钱，
-            isGameFinished: false
+            isGameFinished: false,
+            isHandShow: true,
+            showHandTimeout: null,
         };
 
         this.setTouchListener();
@@ -86,8 +88,8 @@ cc.Class({
                 // 播放动画
                 // console.log('播放');
                 this.showMoneyOut();
+                this.hideGuide();
                 if (!this.info.isGameStarted) {
-                    this.hideGuide();
                     this.info.isGameStarted = true;
                 }
                 this.setGameStatus(GAME_STATUS.DONE_PLAYING);
@@ -104,7 +106,36 @@ cc.Class({
         }
     },
 
+    showGuideHand () {
+        // if (this.info.status === GAME_STATUS.IS_PLAYING) return;
+        if (this.info.isGameFinished) return;
+
+        this.info.isHandShow = true;
+
+        this.text.active = true;
+        this.text.opacity = 0;
+        this.text.runAction(cc.sequence(
+            cc.fadeIn(0.3),
+            cc.callFunc(() => {
+                this.text.getComponent(cc.Animation).play();
+            })
+        ));
+
+        this.hand.active = true;
+        this.hand.opacity = 0;
+        this.hand.getComponent(cc.Animation).play();
+        // this.hand.runAction(cc.sequence(
+        //     cc.fadeIn(0.3),
+        //     cc.callFunc(() => {
+                
+        //     })
+        // ));
+        
+    },
+
     hideGuide () {
+        if (!this.info.isHandShow) return;
+        this.info.isHandShow = false;
         this.text.runAction(cc.sequence(
             cc.fadeOut(0.3),
             cc.callFunc(() => {
@@ -154,6 +185,12 @@ cc.Class({
                 cash.opacity = 0;
                 cash.angle = 0;
                 cash.active = false;
+                this.info.showHandTimeout && clearTimeout(this.info.showHandTimeout);
+                this.info.showHandTimeout = setTimeout(() => {
+                    if (!this.info.isGameFinished) {
+                        this.showGuideHand();
+                    }
+                }, 2000);
                 if (this.info.isGameFinished) {
                     endCallback && endCallback();
                 }
