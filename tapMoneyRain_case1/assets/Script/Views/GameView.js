@@ -1,12 +1,4 @@
-// Learn cc.Class:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://docs.cocos2d-x.org/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] https://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+import Tools from '../Utils/utils'
 
 import {
     GAME_STATUS
@@ -21,6 +13,7 @@ cc.Class({
         hand: cc.Node, // 指引手
         ppcard: cc.Node,
         mask: cc.Node,
+        moneyFly: cc.Prefab
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -39,11 +32,12 @@ cc.Class({
             showHandTimeout: null,
         };
 
+        this.moneyFly = this.node.getChildByName('moneyFly')
         this.setTouchListener();
     },
 
     start () {
-
+        // this.handleMoneyFly(this.moneyFly)
     },
 
     setGameController (gameController) {
@@ -92,6 +86,7 @@ cc.Class({
                 if (!this.info.isGameStarted) {
                     this.info.isGameStarted = true;
                 }
+                this.handleMoneyFly()
                 this.setGameStatus(GAME_STATUS.DONE_PLAYING);
             } else {
                 // console.log('没中');
@@ -224,6 +219,27 @@ cc.Class({
             })
         ));
     },
+
+    /**金币落下效果 */
+    handleMoneyFly() {
+        // console.log(this.moneyFly)
+        // const 
+        const moneyFly = cc.instantiate(this.moneyFly)
+        moneyFly.parent = this.node
+        moneyFly.active = true
+        const arr = [...moneyFly.children]
+        // console.log(arr)
+        let delay = 200
+        let index = 0
+        while (arr.length) {
+            const currentMoney = arr.splice(Tools.getRandom(0, arr.length - 1), 1)[0]
+            currentMoney.position = cc.v2(Tools.getRandom(-270, 270), currentMoney.position.y)
+            // console.log(currentMoney)
+            setTimeout(() => {
+                currentMoney.runAction(cc.moveBy(1, cc.v2(0, -1500)))
+            }, delay * index++)
+        }
+    }
 
     // update (dt) {},
 });
