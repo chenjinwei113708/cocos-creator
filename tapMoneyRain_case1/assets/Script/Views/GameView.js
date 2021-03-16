@@ -102,7 +102,7 @@ cc.Class({
     },
 
     showGuideHand () {
-        // if (this.info.status === GAME_STATUS.IS_PLAYING) return;
+        if (this.info.status === GAME_STATUS.IS_PLAYING || this.info.status === GAME_STATUS.DONE_PLAYING) return;
         if (this.info.isGameFinished) return;
 
         this.info.isHandShow = true;
