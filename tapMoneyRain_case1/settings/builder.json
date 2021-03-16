@@ -36,7 +36,7 @@
     "zip": false
   },
   "startScene": "2d2f792f-a40c-49bb-a189-ed176a246e49",
-  "title": "tapMoneyRain_case1",
+  "title": "hello_world",
   "webOrientation": "auto",
   "wechatgame": {
     "REMOTE_SERVER_ROOT": "",
@@ -45,6 +45,6 @@
     "separate_engine": false,
     "subContext": ""
   },
-  "xxteaKey": "239b21b6-5fb6-4b",
+  "xxteaKey": "d6860cad-fb37-43",
   "zipCompressJs": true
 }
