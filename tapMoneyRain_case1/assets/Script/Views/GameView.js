@@ -215,6 +215,7 @@ cc.Class({
             cc.spawn(cc.fadeIn(0.2), cc.scaleTo(0.3, 1.1)),
             cc.callFunc(() => {
                 this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
+                this.gameController.endGame();
             }),
             cc.scaleTo(0.1, 1),
             cc.callFunc(() => {
