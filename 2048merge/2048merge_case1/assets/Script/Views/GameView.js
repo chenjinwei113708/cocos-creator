@@ -37,6 +37,7 @@ cc.Class({
         downloadButton: cc.Node,
         pps: cc.Node,
         pp: cc.Prefab,
+        bombEffect: cc.Prefab,
         ppLogos: cc.Node
     },  
 
@@ -213,12 +214,16 @@ cc.Class({
                 cc.scaleTo(0.2, 0),
                 cc.callFunc(() => {
                     const pp$200 = cc.instantiate(this.pp$200);
+                    const bombEffect = cc.instantiate(this.bombEffect);
                     const pos = this.pps.convertToNodeSpaceAR(node.parent.convertToWorldSpaceAR(node.position))
                     pp$200.scale = 0;
                     pp$200.active = true;
+                    bombEffect.active = true;
                     // pp$200.parent = node.parent
-                    pp$200.parent = this.pps
-                    pp$200.position = pos
+                    pp$200.parent = this.pps;
+                    bombEffect.parent = this.pps;
+                    pp$200.position = pos;
+                    bombEffect.position = pos;
                     pp$200.runAction(cc.sequence(
                         cc.delayTime(0.1),
                         cc.scaleTo(0.4, 1.1),
