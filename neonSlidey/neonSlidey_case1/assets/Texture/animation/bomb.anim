@@ -1,0 +1,97 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "bomb",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.9230769230769231,
+  "sample": 13,
+  "speed": 1,
+  "wrapMode": 0,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "dd49c559-75fc-4d2f-a6df-66ecbad3b182"
+            }
+          },
+          {
+            "frame": 0.07692307692307693,
+            "value": {
+              "__uuid__": "fff5a1cb-2404-40ec-8d84-3e53bb883877"
+            }
+          },
+          {
+            "frame": 0.15384615384615385,
+            "value": {
+              "__uuid__": "2f3d7425-1a03-43a0-a644-29696dbac159"
+            }
+          },
+          {
+            "frame": 0.23076923076923078,
+            "value": {
+              "__uuid__": "aec4bfdc-7243-4022-9f0d-be7c85b3fa59"
+            }
+          },
+          {
+            "frame": 0.3076923076923077,
+            "value": {
+              "__uuid__": "4fe73753-8477-4a2b-932e-65c1ae0b95e1"
+            }
+          },
+          {
+            "frame": 0.38461538461538464,
+            "value": {
+              "__uuid__": "8cd039d7-9fca-44d0-ab30-d35d6e38e092"
+            }
+          },
+          {
+            "frame": 0.46153846153846156,
+            "value": {
+              "__uuid__": "838e110d-6524-4719-9453-65aacd1f8ba0"
+            }
+          },
+          {
+            "frame": 0.5384615384615384,
+            "value": {
+              "__uuid__": "e6d0b35e-dc3c-4d6f-a0e4-634091b49660"
+            }
+          },
+          {
+            "frame": 0.6153846153846154,
+            "value": {
+              "__uuid__": "e150ad16-a8c4-4ccc-804b-f190b96c337d"
+            }
+          },
+          {
+            "frame": 0.6923076923076923,
+            "value": {
+              "__uuid__": "671af3e6-b4fb-4cf3-a70e-8116adfa998a"
+            }
+          },
+          {
+            "frame": 0.7692307692307693,
+            "value": {
+              "__uuid__": "0693a1b0-a84a-45df-80c2-79a109a4b64a"
+            }
+          }
+        ]
+      }
+    },
+    "props": {
+      "opacity": [
+        {
+          "frame": 0.7692307692307693,
+          "value": 255
+        },
+        {
+          "frame": 0.9230769230769231,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "events": []
+}
