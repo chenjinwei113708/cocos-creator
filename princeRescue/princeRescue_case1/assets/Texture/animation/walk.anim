@@ -1,0 +1,710 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "walk",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.4,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "prince_left_hand": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.6,
+              "value": 37
+            },
+            {
+              "frame": 0.8,
+              "value": 49.373
+            },
+            {
+              "frame": 1.4,
+              "value": 0
+            }
+          ],
+          "position": [
+            {
+              "frame": 0.6,
+              "value": [
+                -140.996,
+                -145.004,
+                0
+              ]
+            },
+            {
+              "frame": 0.8,
+              "value": [
+                -130.362,
+                -151.384,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                -140.996,
+                -145.004,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_right_hand": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 20
+            },
+            {
+              "frame": 0.6,
+              "value": -19.208
+            },
+            {
+              "frame": 0.8,
+              "value": -22.084
+            },
+            {
+              "frame": 1.4,
+              "value": 20
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                112.168,
+                -215.735,
+                0
+              ]
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                77.952,
+                -215.735,
+                0
+              ]
+            },
+            {
+              "frame": 0.8,
+              "value": [
+                80.25,
+                -217.536,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                112.168,
+                -215.735,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_cloak": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 90
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -39.991,
+                -321.93,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_left_foot": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.6,
+              "value": 70.621
+            },
+            {
+              "frame": 0.8,
+              "value": 56.355000000000004
+            },
+            {
+              "frame": 1,
+              "value": 38.135999999999996
+            },
+            {
+              "frame": 1.4,
+              "value": 0
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -96.955,
+                -485.383,
+                0
+              ]
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                112.652,
+                -467.801,
+                0
+              ]
+            },
+            {
+              "frame": 0.8,
+              "value": [
+                73.051,
+                -478.435,
+                0
+              ]
+            },
+            {
+              "frame": 1,
+              "value": [
+                15.346,
+                -507.535,
+                0
+              ]
+            },
+            {
+              "frame": 1.2,
+              "value": [
+                -64.507,
+                -505.003,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                -96.955,
+                -485.383,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_right_foot/prince_right_foor_guard": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.6,
+              "value": -40.195
+            },
+            {
+              "frame": 0.8,
+              "value": -39.342
+            },
+            {
+              "frame": 1,
+              "value": -29.136000000000003
+            },
+            {
+              "frame": 1.4,
+              "value": -6.314000000000004
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                32.597,
+                -26.56,
+                0
+              ]
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                7.229,
+                -15.609,
+                0
+              ]
+            },
+            {
+              "frame": 0.8,
+              "value": [
+                -6.505,
+                -7.227,
+                0
+              ]
+            },
+            {
+              "frame": 1,
+              "value": [
+                11.276,
+                -16.038,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                32.597,
+                -26.56,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_left_foot/prince_left_foot_guard": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 97
+            },
+            {
+              "frame": 0.6,
+              "value": 61.833
+            },
+            {
+              "frame": 0.8,
+              "value": 53.515
+            },
+            {
+              "frame": 1,
+              "value": 35.144999999999996
+            },
+            {
+              "frame": 1.4,
+              "value": 97
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -20.4,
+                -19
+              ],
+              "motionPath": []
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                -50.1,
+                -6.7
+              ]
+            },
+            {
+              "frame": 0.8,
+              "value": [
+                -59.9,
+                8.7
+              ]
+            },
+            {
+              "frame": 1,
+              "value": [
+                -54.4,
+                18.2
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                -20.4,
+                -19,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_left_foot/prince_left_foot": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 90
+            },
+            {
+              "frame": 0.6,
+              "value": 25.579
+            },
+            {
+              "frame": 0.8,
+              "value": 22.182000000000002
+            },
+            {
+              "frame": 1,
+              "value": -21.381
+            },
+            {
+              "frame": 1.4,
+              "value": 90
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -51.425,
+                -79.01,
+                0
+              ]
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                -115.488,
+                -25.632,
+                0
+              ]
+            },
+            {
+              "frame": 0.8,
+              "value": [
+                -126.179,
+                -8.166,
+                0
+              ]
+            },
+            {
+              "frame": 1,
+              "value": [
+                -120.964,
+                27.001,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                -51.425,
+                -79.01,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_right_foot": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.6,
+              "value": -26
+            },
+            {
+              "frame": 0.8,
+              "value": -11.645
+            },
+            {
+              "frame": 1.4,
+              "value": 0
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                63.986,
+                -469.897,
+                0
+              ]
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                -109.028,
+                -485.391,
+                0
+              ]
+            },
+            {
+              "frame": 0.8,
+              "value": [
+                -51.605,
+                -500.278,
+                0
+              ]
+            },
+            {
+              "frame": 1,
+              "value": [
+                -9.913,
+                -513.039,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                63.986,
+                -469.897,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_right_foot/prince_right_foot": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 90
+            },
+            {
+              "frame": 0.6,
+              "value": 51.774
+            },
+            {
+              "frame": 0.8,
+              "value": 41.542
+            },
+            {
+              "frame": 1,
+              "value": 60.04900000000001
+            },
+            {
+              "frame": 1.4,
+              "value": 90
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                16.748,
+                -98.346,
+                0
+              ]
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                -29.81,
+                -76.351,
+                0
+              ]
+            },
+            {
+              "frame": 0.8,
+              "value": [
+                -47.841,
+                -60.978,
+                0
+              ]
+            },
+            {
+              "frame": 1,
+              "value": [
+                -19.761,
+                -72.762,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                16.748,
+                -98.346,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_head": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.6,
+              "value": -3
+            },
+            {
+              "frame": 1.4,
+              "value": 0
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -6.866,
+                5.999,
+                0
+              ]
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                0.337,
+                2.397,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                -6.866,
+                5.999,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_suit": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.6,
+              "value": -3
+            },
+            {
+              "frame": 1.4,
+              "value": 0.23099999999999987
+            }
+          ],
+          "position": []
+        }
+      },
+      "prince_pants": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.6,
+              "value": -3
+            },
+            {
+              "frame": 1.4,
+              "value": 0
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -12.32,
+                -377.1,
+                0
+              ]
+            },
+            {
+              "frame": 0.6,
+              "value": [
+                -17.722,
+                -377.1,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                -12.32,
+                -377.1,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_right_foot/prince_joint1": {
+        "props": {
+          "position": [
+            {
+              "frame": 1,
+              "value": [
+                9.998,
+                49.988,
+                0
+              ]
+            },
+            {
+              "frame": 1.4,
+              "value": [
+                9.998,
+                49.988,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_left_hand/prince_left_arm": {
+        "props": {
+          "angle": []
+        }
+      }
+    },
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -72.396,
+            56.69,
+            0
+          ]
+        },
+        {
+          "frame": 0.8,
+          "value": [
+            -72.396,
+            61.156,
+            0
+          ]
+        },
+        {
+          "frame": 1.4,
+          "value": [
+            -72.396,
+            56.69,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}
