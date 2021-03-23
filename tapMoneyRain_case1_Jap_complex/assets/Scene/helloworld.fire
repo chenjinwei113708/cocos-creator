@@ -5241,7 +5241,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 352.7,
+      "width": 378,
       "height": 22.68
     },
     "_anchorPoint": {
@@ -5287,8 +5287,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "RESULT IS NOT GUARANTEED. AMOUNT",
-    "_N$string": "RESULT IS NOT GUARANTEED. AMOUNT",
+    "_string": "最終結果を保証しておりません。実際得られる",
+    "_N$string": "最終結果を保証しておりません。実際得られる",
     "_fontSize": 18,
     "_lineHeight": 18,
     "_enableWrapText": true,
@@ -5329,7 +5329,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 425.77,
+      "width": 396,
       "height": 22.68
     },
     "_anchorPoint": {
@@ -5375,8 +5375,8 @@
       }
     ],
     "_useOriginalSize": false,
-    "_string": "PAID TO YOU IS SUBJECT TO RULES IN THE APP.",
-    "_N$string": "PAID TO YOU IS SUBJECT TO RULES IN THE APP.",
+    "_string": "金額はアプリ内で公表されたルールに従います。",
+    "_N$string": "金額はアプリ内で公表されたルールに従います。",
     "_fontSize": 18,
     "_lineHeight": 18,
     "_enableWrapText": true,
