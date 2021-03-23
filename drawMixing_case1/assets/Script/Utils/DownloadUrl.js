@@ -1,6 +1,6 @@
 export const DownloadUrl = {
-    iosUrl: 'https://apps.apple.com/app/id1539096599',
-    androidUrl: 'https://apps.apple.com/app/id1539096599',
+    iosUrl: 'https://apps.apple.com/app/id1557633633',
+    androidUrl: 'https://apps.apple.com/app/id1557633633',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;

@@ -10,10 +10,11 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.isApplovin = false; // 是不是applovin平台
+        this.isMintegral = true; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
-                position: cc.v2(237.618, 18.533),
-                scale: 0.873,
+                position: cc.v2(242.618, 25.533),
+                scale: 0.83,
                 children: {
                     adsonly: {
                         active: this.isApplovin ? true : false
@@ -40,25 +41,12 @@ export default class GameModel {
                     },
                     // notification: {},
                     paypal: {
-                        position: cc.v2(-266.537, 195.548),
-                        children: {
-                            icon: {
-                                position: cc.v2(-27.626, 3.875)
-                            },
-                            loca: {
-                                position: cc.v2(-131.626, 3.875)
-                            },
-                            btn: {
-                                position: cc.v2(201.369, -16)
-                            },
-                            cash: {
-                                position: cc.v2(-39.892, -0.798)
-                            }
-                        }
+                        scale: 0.87,
+                        position: cc.v2(-240.537, 195.548),
                     },
                     boxEffect: {
-                        position: cc.v2(237.618, 18.533),
-                        scale: 0.873,
+                        position: cc.v2(242.618, 25.533),
+                        scale: 0.83,
                     },
                     banner: {
                         position: cc.v2(-229.401, -186),
@@ -70,11 +58,14 @@ export default class GameModel {
                             },
                             logo: {
                                 position: cc.v2(11, 193),
-                                width: 294,
-                                height: 94
+                                width: 133 ,
+                                height: 66
                             },
                             btn: {
                                 position: cc.v2(84.571, -9)
+                            },
+                            mtg: {
+                                active: this.isMintegral
                             }
                         }
                     },
@@ -114,21 +105,8 @@ export default class GameModel {
                     },
                     // notification: {},
                     paypal: {
+                        scale: 1,
                         position: cc.v2(0, 405),
-                        children: {
-                            icon: {
-                                position: cc.v2(-27.626, 3.875)
-                            },
-                            loca: {
-                                position: cc.v2(-131.626, 3.875)
-                            },
-                            btn: {
-                                position: cc.v2(201.369, -16)
-                            },
-                            cash: {
-                                position: cc.v2(-39.892, -0.798)
-                            }
-                        }
                     },
                     boxEffect: {
                         position: cc.v2(0, 0),
@@ -144,16 +122,19 @@ export default class GameModel {
                             },
                             logo: {
                                 position: cc.v2(-41.893, -3),
-                                width: 206,
+                                width: 133,
                                 height: 66
                             },
                             btn: {
                                 position: cc.v2(159.898, -9)
+                            },
+                            mtg: {
+                                active: this.isMintegral
                             }
                         }
                     },
                     audioBtn: {
-                        position: cc.v2(-233.043, 438.336)
+                        position: cc.v2(-230.043, 400.336)
                     }
                 }
             }
@@ -168,11 +149,11 @@ export default class GameModel {
 
         this.level1Model = [
             [],
-            [undefined, 'C150', 'C50', 'C50', 'C200', 'C200'],
-            [undefined, 'C50', 'C50', 'C50', 'C200', 'C200'],
-            [undefined, 'C150', 'C50', 'C50', 'C50', 'C200'],
-            [undefined, 'C50', 'C50', 'C200', 'C50', 'C50'],
-            [undefined, 'C200', 'C200', 'C200', 'C200', 'C50'],
+            [undefined, 'C2', 'C2', 'C2', 'C2', 'C3'],
+            [undefined, 'C2', 'C2', 'C2', 'C2', 'C1'],
+            [undefined, 'C2', 'C2', 'C2', 'C2', 'C5'],
+            [undefined, 'C4', 'C6', 'C1', 'C1', 'C5'],
+            [undefined, 'C4', 'C4', 'C6', 'C3', 'C4'],
         ];
 
         /**游戏进行顺序*/
