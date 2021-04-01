@@ -5,6 +5,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        mask: { type: cc.Node, default: null }
     },  
 
 // 生命周期回调函数------------------------------------------------------------------------
@@ -44,17 +45,35 @@ cc.Class({
         )
     },
 
-    /**节流函数 */
-    getThrottle (fn, delay = 100) {
-        let timer = null;
-        return function (...args) {
-            const _this = this; // 执行这个函数所在的this
-            if (timer) return false;
-            timer = setTimeout(() => {
-                fn.apply(_this, args);
-                clearTimeout(timer);
-                timer = null;
-            }, delay)
+    /**切换mask的显示状态 
+     * @param type 如果为 in 则表示显示 如果为out 则表示隐藏
+    */
+     toggleMask (type) {
+        const fadeTime = 0.5;
+        const maxOpacity = 125;
+        const isActive = this.mask.active;
+
+        if (type === 'out' || (type === undefined && isActive === true)) {
+            // 隐藏
+            this.mask.stopAllActions();
+            this.mask.runAction(cc.sequence(
+                cc.fadeOut(fadeTime),
+                cc.callFunc(() => {
+                    this.mask.active = false;
+                })
+            ))
+        } else if ( type === 'in' || (type === undefined && isActive === false)) {
+            this.mask.opacity = 0;
+            this.mask.active = true;
+            // 显示
+            console.log('in')
+            this.mask.stopAllActions();
+            this.mask.runAction(cc.sequence(
+                cc.fadeTo(fadeTime, maxOpacity),
+                cc.callFunc(() => {
+                    // this.mask.active = true;
+                })
+            ))
         }
     },
 // 工具函数结束---------------------------------------------------------------------------

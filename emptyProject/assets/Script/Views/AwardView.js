@@ -4,10 +4,7 @@ cc.Class({
     properties: {
         mask: cc.Node,
         downloadMask: cc.Node, // 下载遮罩层
-        ppCard: cc.Node, // 中部pp卡
-        download: cc.Node, // 下载页面
-        downloadButton: cc.Node, // 下载的按钮
-        audio: cc.Node, // 音效
+        awardPage: { type: cc.Node, default: null },
         PPPage: cc.Node,
         PPPageBlur: cc.Node
     },
@@ -19,6 +16,11 @@ cc.Class({
     
     awardViewInit() {
         this.hideAwardPage; // 存储隐藏奖励页的变量
+
+        this.gameController.setScript(this,
+            'gameView',
+            'audioUtils'
+        )
     },
 
     /**展示奖励页面 */
@@ -30,9 +32,9 @@ cc.Class({
     
             // this.toggleMask(); // 展示遮罩层
     
-            this.node.scale = 0; // 默认缩放设置为0
-            this.node.active = true;
-            this.node.runAction(cc.sequence(
+            this.awardPage.scale = 0; // 默认缩放设置为0
+            this.awardPage.active = true;
+            this.awardPage.runAction(cc.sequence(
                 cc.scaleTo(time, maxScale),
                 cc.scaleTo(bufferTime, 1),
                 cc.callFunc(() => {
@@ -40,10 +42,6 @@ cc.Class({
                     resolve();
                 })
             ));
-    
-            console.log('胜利了');
-            // this.audioUtils.playEffect('cheer');
-    
             this.hideAwardPage = () => { this.node.runAction(cc.scaleTo(time, 0)) } // 关闭的动画
         })
     },
@@ -80,9 +78,7 @@ cc.Class({
     },
 
     showDownloadMask (cb) {
-        return new Promise((resolve, reject) => {
-            this.downloadMask.active = true; // 点击任何地方都会进行下载
-        })
+        this.downloadMask.active = true; // 点击任何地方都会进行下载
     },
 
     /**展示pp奖励页面 */

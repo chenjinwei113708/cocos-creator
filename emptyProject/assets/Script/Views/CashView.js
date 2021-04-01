@@ -33,13 +33,18 @@ cc.Class({
      * @param {*} time 达到金额所需要的时间
      */
     addCash(num, addTime = 1) {
-        this.targetCash += num; // 目标金额
-        this.addTime = addTime; // 增加时长
-
-        this.isPlus = this.targetCash > this.currentCash ? true : false;
-        this.eachAdd = Math.abs(this.targetCash - this.currentCash) * (0.0166666666666666) / addTime; // 每dt增加的cash
-
-        this.setUpdatable(true); // 设置为可以加钱状态
+        return new Promise(() => {
+            this.targetCash += num; // 目标金额
+            this.addTime = addTime; // 增加时长
+    
+            this.isPlus = this.targetCash > this.currentCash ? true : false;
+            this.eachAdd = Math.abs(this.targetCash - this.currentCash) * (0.0166666666666666) / addTime; // 每dt增加的cash
+    
+            this.setUpdatable(true); // 设置为可以加钱状态
+            setTimeout(() => {
+                resolve();
+            }, addTime)
+        })
     },
 
     /**设置是否可以增加 */

@@ -54,6 +54,25 @@ function scaleIn (node, cb) {
   })
 }
 
+/**从大到小消失 */
+function scaleOut (node, cb) {
+  return new Promise((resolve, reject) => {
+    const maxScale = 1.05;
+    const sclaeTime1 = 0.3;
+    const scaleTime2 = 0.3;
+
+    node.runAction(cc.sequence(
+      cc.scaleTo(sclaeTime1, maxScale),
+      cc.scaleTo(scaleTime2, 0),
+      cc.callFunc(() => {
+        node.active = false;
+        cb && cb();
+        resolve();
+      })
+    ))
+  })
+}
+
 /**左右摇动 */
 function shake (node) {
     const time = 0.6;
@@ -66,10 +85,47 @@ function shake (node) {
     )))
 }
 
+/**从右边滑入进来 */
+function slideInto (node, cb) {
+  return new Promise((resolve, reject) => {
+    const moveTime = 0.4;
+    const buffer = 15;
+    const bufferTime = 0.3;
+    const canvas = cc.find('Canvas');
+    node.position = cc.v2((canvas.width / 2) + (node.width / 2), 0); // 让其在整个页面的右边
+    node.active = true;
+    node.runAction(cc.sequence(
+        cc.moveTo(moveTime, cc.v2(-buffer, 0)),
+        cc.moveTo(bufferTime, cc.v2(0, 0)),
+        cc.callFunc(() => {
+            resolve();
+            cb && cb();
+        })
+    ))    
+  })
+}
+
+/**从右侧滑出去 */
+function slideOut (node, cb) {
+  return new Promise((resolve, reject) => {
+    const moveTime = 0.4;
+    const canvas = cc.find('Canvas');
+    const endPos  = cc.v2((canvas.width / 2) + (node.width / 2), 0);
+    node.runAction(cc.sequence(
+      cc.moveTo(moveTime, endPos),
+      cc.callFunc(() => {
+        // node.active = false;
+        cb && cb();
+        resolve();
+      })
+    ))
+  })
+}
+
 /**我的moveBy 带有缓冲 */
 function myMoveBy (node, options = { x: 0, y: 0 }, cb) {
   return new Promise((resolve, reject) => {
-    const time = 0.2;
+    const time = 0.23;
     node.runAction(cc.sequence(
       cc.moveBy(time, cc.v2(options.x, options.y)),
       cc.callFunc(() => {
@@ -110,8 +166,11 @@ function blink (node, cb) {
 export {
   flyTo,
   scaleIn,
+  scaleOut,
   shake,
   blink,
   myMoveBy,
+  slideInto,
+  slideOut,
   animInfo
 }
