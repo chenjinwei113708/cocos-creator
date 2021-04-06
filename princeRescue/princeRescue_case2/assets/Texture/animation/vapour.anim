@@ -1,0 +1,55 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "vapour",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.7142857142857143,
+  "sample": 7,
+  "speed": 1,
+  "wrapMode": 0,
+  "curveData": {
+    "props": {
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 255
+        },
+        {
+          "frame": 0.7142857142857143,
+          "value": 0
+        }
+      ]
+    },
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "b1c1560b-5e10-4f27-be7b-e70669e83efa"
+            }
+          },
+          {
+            "frame": 0.14285714285714285,
+            "value": {
+              "__uuid__": "a816ad9d-f400-4e5e-bc5c-3046e048a2f3"
+            }
+          },
+          {
+            "frame": 0.2857142857142857,
+            "value": {
+              "__uuid__": "273bba40-76ab-46e2-8e7b-1725a6fc8a2b"
+            }
+          },
+          {
+            "frame": 0.42857142857142855,
+            "value": {
+              "__uuid__": "e3c16fa8-be4e-4c68-bb3a-18521818871b"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

@@ -1,0 +1,289 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "prince_await",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.5,
+  "sample": 2,
+  "speed": 1,
+  "wrapMode": 22,
+  "curveData": {
+    "props": {
+      "position": [],
+      "angle": []
+    },
+    "paths": {
+      "prince_left_hand": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.5,
+              "value": -5
+            }
+          ]
+        }
+      },
+      "prince_right_hand": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 20
+            },
+            {
+              "frame": 0.5,
+              "value": 10
+            }
+          ]
+        }
+      },
+      "prince_suit": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.5,
+              "value": 2
+            }
+          ]
+        }
+      },
+      "prince_head": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.5,
+              "value": -4
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -6.866,
+                5.999,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                -2.867,
+                5.999,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_pants": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.5,
+              "value": -3
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -12.32,
+                -377.1,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                -14.013,
+                -378.793,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_left_foot": {
+        "props": {
+          "angle": [],
+          "position": []
+        }
+      },
+      "prince_right_foot": {
+        "props": {
+          "angle": [],
+          "position": []
+        }
+      },
+      "prince_right_foot/prince_joint1": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 90
+            },
+            {
+              "frame": 0.5,
+              "value": 100
+            }
+          ]
+        }
+      },
+      "prince_right_foot/prince_right_foor_guard": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                32.597,
+                -26.56,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                39.881,
+                -25.346,
+                0
+              ]
+            }
+          ],
+          "angle": []
+        }
+      },
+      "prince_right_foot/prince_right_foot": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                29.994,
+                -101.941,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                40.919,
+                -100.727,
+                0
+              ]
+            }
+          ],
+          "angle": [
+            {
+              "frame": 0,
+              "value": 90
+            },
+            {
+              "frame": 0.5,
+              "value": 93
+            }
+          ]
+        }
+      },
+      "prince_left_foot/prince_joint2": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 10
+            },
+            {
+              "frame": 0.5,
+              "value": 0
+            }
+          ]
+        }
+      },
+      "prince_left_foot/prince_left_foot_guard": {
+        "props": {
+          "angle": [
+            {
+              "frame": 0,
+              "value": 97
+            },
+            {
+              "frame": 0.5,
+              "value": 90
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -20.384,
+                -18.976,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                -27.579,
+                -17.948,
+                0
+              ]
+            }
+          ]
+        }
+      },
+      "prince_left_foot/prince_left_foot": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -51.425,
+                -79.01,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                -64.788,
+                -75.926,
+                0
+              ]
+            }
+          ],
+          "angle": []
+        }
+      },
+      "prince_cloak": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                -39.991,
+                -321.93,
+                0
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}
