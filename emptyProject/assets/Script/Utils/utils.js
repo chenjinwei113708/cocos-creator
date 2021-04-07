@@ -55,7 +55,20 @@ const Tools = {
   	min = Math.floor(min)
   	max = Math.ceil(max)
   	return Math.floor(Math.random() * (max - min + 1) + min)
-  }
+  },
+  /**节流函数 */
+  getThrottle (fn, delay = 100) {
+    let timer = null;
+    return function (...args) {
+        const _this = this; // 执行这个函数所在的this
+        if (timer) return false;
+        timer = setTimeout(() => {
+            fn.apply(_this, args);
+            clearTimeout(timer);
+            timer = null;
+        }, delay)
+    }
+  },
 }
 
 // export default Tools
