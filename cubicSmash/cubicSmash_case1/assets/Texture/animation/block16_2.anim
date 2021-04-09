@@ -1,0 +1,43 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "block16_2",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.125,
+  "sample": 8,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            172.575,
+            -87.257,
+            0
+          ]
+        },
+        {
+          "frame": 0.125,
+          "value": [
+            176.989,
+            -90.674,
+            0
+          ]
+        }
+      ],
+      "angle": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.125,
+          "value": -5.993022222222223
+        }
+      ]
+    }
+  },
+  "events": []
+}
