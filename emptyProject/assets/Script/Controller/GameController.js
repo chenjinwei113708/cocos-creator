@@ -12,7 +12,8 @@ cc.Class({
         cash: cc.Node, // 金币 / 分数
         award: cc.Node, // 奖励相关
         progress: cc.Node, // 进度条
-        countDown: cc.Node // 倒计时
+        countDown: cc.Node, // 倒计时
+        turn: cc.Node // 转盘
     },
 
     onLoad() {
@@ -37,8 +38,10 @@ cc.Class({
         this.audioUtils = this.audio.getComponent('AudioUtils');
         this.awardView = this.award.getComponent('AwardView');
         this.progressView = this.progress.getComponent('ProgressView');
-        this.countDownView = this.countDown.getComponent('CountDownView')
+        this.countDownView = this.countDown.getComponent('CountDownView');
+        this.turnView = this.turn.getComponent('TurnView');
 
+        console.log(this.turnView)
         // 设置gameController引用
         this.setGameController(
             this.gameView,
@@ -48,7 +51,8 @@ cc.Class({
             this.audioUtils,
             this.awardView,
             this.progressView,
-            this.countDownView
+            this.countDownView,
+            this.turnView
         );
 
         // 根据model渲染各个元素状态 大小 位置等

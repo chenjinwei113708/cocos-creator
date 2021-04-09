@@ -1,4 +1,5 @@
-import { GAME_INFO, GAME_STATUS } from '../Model/ConstValue'
+import { GAME_INFO, GAME_STATUS } from '../Model/ConstValue';
+import { toggleMask } from '../Utils/Animation';
 // import Tools from '../Utils/utils'
 
 cc.Class({
@@ -10,7 +11,7 @@ cc.Class({
 
 // 生命周期回调函数------------------------------------------------------------------------
     /**onLoad会比start快 */
-    onLoad() {
+    onLoad () {
         this.gameViewInit();
     },
 
@@ -26,6 +27,10 @@ cc.Class({
     /**设置游戏状态 */
     setGameStatus (status) {
         this.gameInfo.status = status;
+    },
+
+    getGameStatus () {
+        return this.gameInfo.status;
     },
 
     /**初始化游戏参数 */
@@ -48,33 +53,8 @@ cc.Class({
     /**切换mask的显示状态 
      * @param type 如果为 in 则表示显示 如果为out 则表示隐藏
     */
-     toggleMask (type) {
-        const fadeTime = 0.5;
-        const maxOpacity = 125;
-        const isActive = this.mask.active;
-
-        if (type === 'out' || (type === undefined && isActive === true)) {
-            // 隐藏
-            this.mask.stopAllActions();
-            this.mask.runAction(cc.sequence(
-                cc.fadeOut(fadeTime),
-                cc.callFunc(() => {
-                    this.mask.active = false;
-                })
-            ))
-        } else if ( type === 'in' || (type === undefined && isActive === false)) {
-            this.mask.opacity = 0;
-            this.mask.active = true;
-            // 显示
-            console.log('in')
-            this.mask.stopAllActions();
-            this.mask.runAction(cc.sequence(
-                cc.fadeTo(fadeTime, maxOpacity),
-                cc.callFunc(() => {
-                    // this.mask.active = true;
-                })
-            ))
-        }
+     toggleGameMask (type) {
+        return toggleMask(this.mask, type)
     },
 // 工具函数结束---------------------------------------------------------------------------
 
@@ -93,7 +73,7 @@ cc.Class({
     },
 
     /**点击事件移动 */
-    onTouchStart (e) {
+    onTouchMove (e) {
 
     },
 
@@ -132,15 +112,9 @@ cc.Class({
 
     /**显示拖拽手 */
     showHandDrag (nodeArr, type) {
-        // console.log(111)
         this.guideView.showHandDrag(nodeArr, type);
-        // this.guideView.showHand(nodeArr[0])
     },
 
-    /**隐藏手 */
-    stopHand () {
-        this.guideView.stopHand && this.guideView.stopHand();
-    },
 // guide相关结束---------------------------------------------------------------------------
     
 // award相关--------------------------------------------------------------------------------

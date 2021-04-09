@@ -33,7 +33,7 @@ cc.Class({
      * @param {*} time 达到金额所需要的时间
      */
     addCash(num, addTime = 1) {
-        return new Promise(() => {
+        return new Promise((resolve, reject) => {
             this.targetCash += num; // 目标金额
             this.addTime = addTime; // 增加时长
     

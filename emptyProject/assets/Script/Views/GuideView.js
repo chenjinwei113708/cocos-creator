@@ -1,3 +1,4 @@
+import getType from '../Utils/utils';
 /**
  * 这个脚本是用来播放引导动作的
  */
@@ -10,13 +11,11 @@
     },
     onLoad () {
         // 初始化信息
-        // this.info = {
-        //     isCashout: false, // 是否点击过提现
-        // };
-
-        this.stopHand; // 存放停止动作的变量
         this.currentHand = this.hand1
+        
         // 存放停止动画的变量
+        // this.stopHand = null;
+        this.stopHandActions = undefined;
     },
 
     /**让手的位置与传入节点相同并视为其子节点 */
@@ -42,10 +41,18 @@
      * @param {Function} cb 回调函数
      */
     
+    /** 停止手的运动 */
+    stopHand () {
+        if (!this.stopHandActions) return false;
+        this.stopHandActions();
+        this.stopAllActions = undefined; // 停止之后将其设为null
+    },
+
     // 更新hand的坐标
     showHand(node, type = 'parent') {
-        if (this.stopHand) this.stopHand = undefined; // 用于后面存放停止动画的变量
-
+        // if (this.stopHand) this.stopHand = undefined; // 用于后面存放停止动画的变量
+        this.stopHand();
+        console.log(111)
         // 根据模式更新hand的坐标
         if (type === 'parent') {
             this.updateHandByParent(node);
@@ -85,20 +92,21 @@
                 cc.sequence(cc.fadeOut(0.3), cc.moveTo(0.4, oriPos)),
                 cc.callFunc(() => {
                     this.currentHand.active = false;
-                    this.stopHand = undefined
+                    this.stopHandActions = undefined
                     cb && cb();
                 })
             ))
         }
         // console.log(this)
-        this.stopHand = stopHandAnimation;
+        this.stopHandActions = stopHandAnimation;
         return stopHandAnimation;
     },
 
     /**手部拖动 */
     showHandDrag ([node1, node2], type = 'parent') {
         // console.log('hand drag')
-        if (this.stopHand) this.stopHand = undefined; // 用于后面存放停止动画的变量
+        // if (this.stopHand) this.stopHand = undefined; // 用于后面存放停止动画的变量
+        this.stopHand();
 
         // 根据模式更新hand的坐标
         if (type === 'parent') {
@@ -147,61 +155,94 @@
                 cc.callFunc(() => {
                     this.currentHand.active = false;
                     this.currentHand.position = oriPos;
-                    this.stopHand = undefined
+                    this.stopHandActions = undefined
                     cb && cb();
                 })
             ))
         }
 
-        this.stopHand = stopHandAnimation;
+        this.stopHandActions = stopHandAnimation;
         return stopHandAnimation;
     },
 
     /**
-     * （从下方）渐入
-     * @param {*} node 
+     * 连续在节点里面点击
+     * @param {Array} nodeArr 装有cc.Node的数组
+     * @param {*} type 
+     * @returns 
      */
-    myFadeIn (node, callback) {
-        let oriPos = cc.v2(node.position.x, node.position.y);
-        node.opacity = 0;
-        node.position = cc.v2(oriPos.x, oriPos.y-node.height*1.5);
-        node.active = true;
-        node.runAction(cc.sequence(
-            cc.spawn(cc.fadeIn(0.3), cc.moveBy(0.4, 0, node.height*1.5)).easing(cc.easeIn(2)),
+    showHand2 (nodeArr, type = 'parent') {
+        if (getType(nodeArr) !== 'array') return new Error('请传入一个数组');
+        // if (this.stopHand) this.stopHand = undefined; // 用于后面存放停止动画的变量
+        this.stopHand();
+
+        // 先出现在第一只手
+        if (type === 'parent') {
+            this.updateHandByParent(nodeArr[0]);
+        } else if (type === 'position') {
+            this.updateHandByPos(nodeArr[0]);
+        }
+
+        // 设置hand初始参数
+        this.currentHand.stopAllActions();
+        this.currentHand.opacity = 0;
+        this.currentHand.scale = 2;
+        this.currentHand.active = true;
+
+        // 初始化运动的参数
+        const scaleInTime = 0.3;
+        const maxScale = 1.3;
+        const moveTime = 0.8;
+        const scaleOutTime = 0.5;
+        const fadeOutTime = 0.3;
+
+        const actionArr = [];
+        // 连续点击的动画
+        nodeArr.forEach(node => {
+            const endPos = this.getNodePosByHand(node); // 获取当前需要移动到的位置
+            actionArr.push(
+                cc.moveTo(moveTime, endPos),
+                cc.sequence(
+                    cc.scaleTo(scaleOutTime, maxScale),
+                    cc.scaleTo(scaleInTime, 1)
+                )
+            )
+        })
+
+        this.currentHand.runAction(cc.sequence(
+            // 进入时候的动画
+            cc.spawn(
+                cc.scaleTo(scaleInTime, 1),
+                cc.fadeIn(scaleInTime)
+            ),
             cc.callFunc(() => {
-                callback && callback();
+                this.currentHand.runAction(cc.repeatForever(
+                    cc.sequence(...actionArr)
+                ))
             })
         ));
+
+        let stopHandAnimation = (cb) => {
+            this.currentHand.stopAllActions();
+            this.currentHand.runAction(cc.sequence(
+                cc.spawn(cc.fadeOut(0.3), cc.scaleTo(0.3, maxScale)),
+                cc.callFunc(() => {
+                    this.currentHand.active = false;
+                    this.currentHand.position = oriPos;
+                    this.stopHandActions = undefined
+                    cb && cb();
+                })
+            ))
+        }
+
+        this.stopHandActions = stopHandAnimation;
+        return stopHandAnimation;
     },
 
     /**
-     * 提示点击
-     * @param {*} node 
+     * 设置用哪一个手
+     * @param {*} handName 
      */
-    myClickHere (node, callback) {
-        let oriPos = cc.v2(node.position.x, node.position.y);
-        let movePos = cc.v2(oriPos.x+node.width*0.6, oriPos.y-node.height*0.8);
-        node.runAction(cc.repeatForever(
-            cc.sequence(
-                cc.spawn(cc.moveTo(0.5, movePos), cc.scaleTo(0.5, 1.2)),
-                cc.spawn(cc.moveTo(0.3, oriPos), cc.scaleTo(0.3, 1))
-            )
-        ));
-        callback && callback();
-        let stopMyAnimation = (cb) => {
-            node.stopAllActions();
-            node.runAction(cc.sequence(
-                cc.sequence(cc.fadeOut(0.1), cc.moveTo(0.2, oriPos)),
-                cc.callFunc(() => {
-                    node.stopMyAnimation = undefined;
-                    cb && cb();
-                })
-            ));
-        }
-        // node.stopMyAnimation = stopMyAnimation;
-        return stopMyAnimation;
-    },
-
     setHand (handName) {
         this.currentHand = this[handName];
     }

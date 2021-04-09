@@ -1,3 +1,5 @@
+import { toggleMask } from '../Utils/Animation';
+
 cc.Class({
     extends: cc.Component,
 
@@ -5,6 +7,7 @@ cc.Class({
         mask: cc.Node,
         downloadMask: cc.Node, // 下载遮罩层
         awardPage: { type: cc.Node, default: null },
+        buttonTip: { type: cc.Node, default: null },
         PPPage: cc.Node,
         PPPageBlur: cc.Node
     },
@@ -23,58 +26,31 @@ cc.Class({
         )
     },
 
+    /**切换遮罩层显示 */
+    toggleAwardMask (type) {
+        return toggleMask(this.mask, type);
+    },
+
     /**展示奖励页面 */
-    showAwardPage (cb) {
+    showAwardPage (node) {
         return new Promise((resolve, reject) => {
-            const time = 0.5;
-            const bufferTime = 0.2;
-            const maxScale = 1.2;
-    
-            // this.toggleMask(); // 展示遮罩层
-    
-            this.awardPage.scale = 0; // 默认缩放设置为0
-            this.awardPage.active = true;
-            this.awardPage.runAction(cc.sequence(
-                cc.scaleTo(time, maxScale),
-                cc.scaleTo(bufferTime, 1),
-                cc.callFunc(() => {
-                    cb && cb();
-                    resolve();
-                })
-            ));
-            this.hideAwardPage = () => { this.node.runAction(cc.scaleTo(time, 0)) } // 关闭的动画
+            this.toggleAwardMask('in');
+            scaleIn(node).then(() => {
+                this.guideView.showHand(this.buttonTip)
+                resolve();
+            })
         })
     },
 
-    /**切换遮罩层 */
-    toggleMask (time = 0.5, cb) {
-        // const time = 0.5; // 所需要花费时间
-        const maxOpacity = 125; 
-        this.mask.stopAllActions(); // 首先停止所有动作
-        if (this.mask.active) {
-            // 已经激活 => 变成隐藏
-            this.mask.runAction(
-                cc.sequence(
-                    cc.fadeOut(time),
-                    cc.callFunc(() => {
-                        this.mask.active = false;
-                        cb && cb();
-                    })
-                )
-            )
-        } else {
-            // 没有激活 => 变成激活
-            this.mask.opacity = 0;
-            this.mask.active = true
-            this.mask.runAction(
-                cc.sequence(
-                    cc.fadeTo(time, maxOpacity),
-                    cc.callFunc(() => {
-                        cb && cb();
-                    })
-                )
-            )
-        }
+    hideAwardPage (node) {
+        return new Promise((resolve, reject) => {
+            // 隐藏手
+            this.guideView.stopHand();
+            this.toggleAwardMask('out');
+            scaleOut(this.awardPage1).then(() => {
+                resolve();
+            })
+        })
     },
 
     showDownloadMask (cb) {
@@ -121,7 +97,8 @@ cc.Class({
     showDownload (cb) {
         return new Promise((resolve, reject) => {
             // 打开遮罩层
-            this.toggleMask(fadeInTime);
+            // this.toggleMask(fadeInTime);
+            this.toggleAwardMask();
 
             // 初始化参数
             const fadeInTime = 0.5;
@@ -154,6 +131,4 @@ cc.Class({
             })
         })
     }
-
-
 });

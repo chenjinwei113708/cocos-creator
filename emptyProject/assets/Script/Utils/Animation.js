@@ -9,27 +9,38 @@ const animInfo = {
 function flyTo (node1, node2, cb) {
   return new Promise((resolve, reject) => {
     const flyTime = animInfo.flyTo.time;
-    const minOpacity = 255;
-    const scaleRotio = 4 / 5; // 开始缩放时飞行时间已经过了多少部分
+    const minOpacity = 0;
+    const scaleRatio = 4 / 5; // 开始缩放时飞行时间已经过了多少部分
+    const minScale = 0.6;
     const endPos = node1.parent.convertToNodeSpaceAR(node2.parent.convertToWorldSpaceAR(node2));
-    node1.runAction(cc.spawn(
-      cc.moveTo(flyTime, endPos),
+    node1.runAction(cc.sequence(
+      cc.moveTo(flyTime * scaleRatio, endPos),
       cc.sequence(
-        cc.delayTime(flyTime * scaleRotio),
-        // 开始缩小并变透明
         cc.spawn(
-          cc.scaleTo(flyTime * (1 - scaleRotio), 0),
-          cc.fadeOut(flyTime * (1 - scaleRotio), minOpacity),
-          cc.sequence(
-            cc.delayTime(flyTime * (1 - scaleRotio)),
-            cc.callFunc(() => {
-              node1.active = false;
-              cb && cb();
-              resolve();
-            })
-          )
-        )
-      )
+          cc.scaleTo(flyTime * (1 - scaleRatio), minScale),
+          cc.fadeTo(flyTime * (1 - scaleRatio), minOpacity),
+        ),
+        cc.callFunc(() => {
+          node1.active = false;
+            cb && cb();
+            resolve();
+        })
+      ),
+      // cc.sequence(
+      //   cc.delayTime(flyTime * scaleRatio),
+      //   // 开始缩小并变透明
+      //   cc.sequence(
+      //     cc.spawn(
+      //       cc.scaleTo(flyTime * (1 - scaleRatio), minScale),
+      //       cc.fadeTo(flyTime * (1 - scaleRatio), minOpacity),
+      //     ),
+      //     cc.callFunc(() => {
+      //       node1.active = false;
+      //         cb && cb();
+      //         resolve();
+      //     })
+      //   )
+      // )
     ))
   })
 }
@@ -114,7 +125,7 @@ function slideOut (node, cb) {
     node.runAction(cc.sequence(
       cc.moveTo(moveTime, endPos),
       cc.callFunc(() => {
-        // node.active = false;
+        node.active = false;
         cb && cb();
         resolve();
       })
@@ -163,6 +174,49 @@ function blink (node, cb) {
   })
 }
 
+/**
+ * 切换显示隐藏遮罩层 
+ * @param {cc.Node} node cc节点
+ * @param {String} type 为 in 的话为显示，为 out 的话为隐藏
+ */
+function toggleMask (node, type) {
+  return new Promise((resolve, reject) => {
+    const fadeTime = 0.5;
+    const maxOpacity = 125;
+    const isActive = node.active;
+  
+    // 包含了opacity不为125的情况
+    if ( (node.opacity !== 0) && (type === 'out' || (type === undefined && isActive === true))) {
+      // 隐藏
+      node.stopAllActions();
+      node.runAction(cc.sequence(
+          cc.fadeOut(fadeTime),
+          cc.callFunc(() => {
+              node.active = false;
+              resolve();
+          })
+      ))
+      // 如果active 为 false则直接显示
+    } else {
+      node.stopAllActions();
+      if (type === undefined && isActive === false) {
+        node.opacity = 0;
+        node.active = true;
+        // 如果为in
+      } else if (type === 'in' && node.opacity !== maxOpacity) {
+        node.stopAllActions();
+      }
+      node.runAction(cc.sequence(
+        cc.fadeTo(fadeTime, maxOpacity),
+        cc.callFunc(() => {
+            // this.mask.active = true;
+            resolve();
+        })
+      ))
+    }
+  })
+}
+
 export {
   flyTo,
   scaleIn,
@@ -172,5 +226,6 @@ export {
   myMoveBy,
   slideInto,
   slideOut,
+  toggleMask,
   animInfo
 }
