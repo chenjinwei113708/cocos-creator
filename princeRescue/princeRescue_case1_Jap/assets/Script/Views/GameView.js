@@ -198,7 +198,7 @@ cc.Class({
                             this.showPPs(this.heart).then(() => {
                                 this.lightPPNodes(GAME_INFO.ADD_CASH_TIME);
                                 this.handleLittlePrinceWalk();
-                                this.cashView.addCash(777, GAME_INFO.ADD_CASH_TIME).then(() => {
+                                this.cashView.addCash(77777, GAME_INFO.ADD_CASH_TIME).then(() => {
                                     this.audioUtils.playEffect('cheer');
                                     this.showAwardPage().then(() => {
                                         // 结束游戏

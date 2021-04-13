@@ -10,7 +10,7 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.isMintegral = false; // 检测是不是isMintegral平台
-        this.isApplovin = true; // 是不是applovin平台
+        this.isApplovin = false; // 是不是applovin平台
         this.HorizontalConfig = {
             background: {
                 scale: 0.75,
