@@ -10,7 +10,7 @@ export default class GameModel {
         // 横竖屏参数
         this.initOrient = undefined; // 初始化的时候是横屏还是竖屏 'horizontal' : 'vertical'
         this.isLandscape = false;
-        this.isApplovin = true; // 是不是applovin平台
+        this.isApplovin = false; // 是不是applovin平台
         this.isMintegral = false; // 是不是mtg平台
         this.HorizontalConfig = {
             game1: {
