@@ -28,6 +28,8 @@ cc.Class({
         touch2: cc.Node, // 触碰区域
         flyCards: cc.Node, // 奖励卡
         paypal: cc.Node, // 顶部栏
+        lian1: cc.Node, // 果冻连接区1
+        lian2: cc.Node, // 果冻连接区2
         // 不同类型的图
         sprite1: cc.SpriteFrame,
         sprite10: cc.SpriteFrame,
@@ -224,8 +226,8 @@ cc.Class({
                         this.gameInfo.lastCheckTime = Date.now();
                         this.gameInfo.nowTouchPos = touchPos;
                         this.setCellStatus(CELL_STATUS.IS_MOVE);
+                        this.hideJelly(this.doActions);
                         // console.log('onTouchStart, doActions');
-                        this.doActions();
                         this.offTouchListener();
                 }
             } else if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
@@ -284,6 +286,24 @@ cc.Class({
     
     setCellStatus (status) {
         this.gameInfo.cellStatus = status;
+    },
+
+    hideJelly (cb) {
+        this.lian1.active = false;
+        for (let i = 1; i<=5; i++) {
+            for (let j=1; j<=5; j++) {
+                let card = this.cells[i][j];
+                card.runAction(cc.sequence(
+                    cc.scaleTo(0.2, 1.1),
+                    cc.scaleTo(0.2, 1),
+                    cc.callFunc(() => {
+                        if (i===5 && j===5) {
+                            cb && cb.apply(this);
+                        }
+                    })
+                ));
+            }
+        }
     },
 
     /**执行动作序列 */
@@ -433,6 +453,9 @@ cc.Class({
             cc.moveTo(moveTime, endPos),
             cc.delayTime(0.1),
             cc.callFunc(() => {
+                if (this.gameInfo.nowLevel === GAME_LEVEL.LEVEL3) {
+                    this.lian2.active = true;
+                }
                 if (isAllDown) {
                     this.doActions();
                 }
