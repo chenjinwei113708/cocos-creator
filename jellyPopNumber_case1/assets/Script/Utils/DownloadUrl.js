@@ -1,6 +1,6 @@
 export const DownloadUrl = {
     iosUrl: 'https://apps.apple.com/app/id1559049436',
-    androidUrl: 'https://apps.apple.com/us/app/id1559049436',
+    androidUrl: 'https://play.google.com/store/apps/details?id=com.jellypop.number',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;
