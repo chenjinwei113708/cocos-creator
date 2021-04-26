@@ -35,6 +35,16 @@ cc.Class({
         cheer: {
             type: cc.AudioClip,
             default: null
+        },
+
+        merge: {
+            type: cc.AudioClip,
+            default: null
+        },
+        
+        coin: {
+            type: cc.AudioClip,
+            default: null
         }
 
     },

@@ -13,7 +13,10 @@ cc.Class({
         hand: cc.Node, // 指引手
         ppcard: cc.Node,
         mask: cc.Node,
-        moneyFly: cc.Prefab
+        moneyFly: cc.Prefab,
+        board: cc.Node,
+        UI: cc.Node,
+        paypal: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -31,7 +34,7 @@ cc.Class({
             isHandShow: true,
             showHandTimeout: null,
         };
-
+        this.boardView = this.board.getComponent('BoardView');
         this.moneyFly = this.node.getChildByName('moneyFly')
         this.setTouchListener();
     },
@@ -156,11 +159,12 @@ cc.Class({
         let cash = this.cashes.children[this.info.outNumber%cashNum];
         this.info.outNumber++;
         let endCallback = null;
-        if (this.info.outNumber >= 10) {
+        if (this.info.outNumber >= 2) {
             this.info.isGameFinished = true;
             this.offTouchListener();
             endCallback = () => {
-                this.showEndPage();
+                // this.showEndPage();
+                this.boardView.comeShow();
             };
         }
 
@@ -172,7 +176,7 @@ cc.Class({
         let rand1 = Math.random(); // rand1<0.5左边， angle>0.5右边
         let randAngle = rand1 < 0.5 ? -30 : 30; // angle>0左边， angle<0右边
         let randX = rand1 < 0.5 ? -100-Math.random()*50: 100+Math.random()*50;
-        this.gameController.addCash(10);
+        // this.gameController.addCash(10);
         cash.runAction(cc.sequence(
             cc.moveBy(0.1, 0, 400),
             cc.spawn(cc.moveBy(0.2, randX, 700), cc.rotateTo(0.3, randAngle)),
@@ -206,8 +210,12 @@ cc.Class({
         this.ppcard.active = true;
         this.ppcard.scale = 0;
         this.ppcard.opacity = 0;
+        let ppPos = this.UI.convertToNodeSpaceAR(
+            this.paypal.convertToWorldSpaceAR(this.paypal.getChildByName('ppicon').position)
+        );
+        this.ppcard.position = ppPos;
         this.ppcard.runAction(cc.sequence(
-            cc.spawn(cc.fadeIn(0.2), cc.scaleTo(0.3, 1.1)),
+            cc.spawn(cc.fadeIn(0.2), cc.scaleTo(0.4, 1.1), cc.moveTo(0.4, cc.v2(0, 0)).easing(cc.easeIn(1.9))),
             cc.callFunc(() => {
                 this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
                 this.gameController.endGame();
