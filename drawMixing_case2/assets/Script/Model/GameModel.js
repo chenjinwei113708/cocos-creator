@@ -10,7 +10,7 @@ export default class GameModel {
         // 横竖屏参数
         this.isLandscape = false;
         this.isApplovin = false; // 是不是applovin平台
-        this.isMintegral = false; // 是不是applovin平台
+        this.isMintegral = true; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
                 position: cc.v2(242.618, 25.533),
@@ -45,6 +45,10 @@ export default class GameModel {
                         position: cc.v2(-240.537, 195.548),
                     },
                     boxEffect: {
+                        position: cc.v2(242.618, 25.533),
+                        scale: 0.83,
+                    },
+                    pps: {
                         position: cc.v2(242.618, 25.533),
                         scale: 0.83,
                     },
@@ -112,6 +116,10 @@ export default class GameModel {
                         position: cc.v2(0, 0),
                         scale: 1,
                     },
+                    pps: {
+                        position: cc.v2(0, 0),
+                        scale: 1,
+                    },
                     banner: {
                         position: cc.v2(0, -413.371),
                         width: 525,
@@ -150,9 +158,9 @@ export default class GameModel {
         this.level1Model = [
             [],
             [undefined, 'C2', 'C2', 'C2', 'C2', 'C3'],
-            [undefined, 'C2', 'C2', 'C2', 'C2', 'C1'],
-            [undefined, 'C2', 'C2', 'C2', 'C2', 'C5'],
-            [undefined, 'C4', 'C6', 'C1', 'C1', 'C5'],
+            [undefined, 'C1', 'C5', 'C6', 'C2', 'C1'],
+            [undefined, 'C5', 'C3', 'C5', 'C2', 'C5'],
+            [undefined, 'C4', 'C6', 'C1', 'C2', 'C5'],
             [undefined, 'C4', 'C4', 'C6', 'C3', 'C4'],
         ];
 

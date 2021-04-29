@@ -98,7 +98,7 @@ cc.Class({
 
     /**点击提现 */
     clickCashout () {
-        if (this.gameController.cashView.cash>=700 && !this.info.isCashout){
+        if (this.gameController.cashView.cash>=1000 && !this.info.isCashout){
             this.info.isCashout = true;
             this.cashoutHand.active = false;
             // this.showNotification();

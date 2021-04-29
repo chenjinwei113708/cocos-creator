@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "77889929-2426-49ca-b3b6-50d363e9b4fc",
+  "uuid": "8beb0626-9fad-40e2-9ac1-df1f7ff09a42",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "adsonly": {
+    "iphone-12-pro-max-blue-hero": {
       "ver": "1.0.4",
-      "uuid": "aa6c863d-9c13-44f6-8893-dd0766708f03",
-      "rawTextureUuid": "77889929-2426-49ca-b3b6-50d363e9b4fc",
+      "uuid": "61450c28-8b17-42ec-bc99-ef474e1a6f5a",
+      "rawTextureUuid": "8beb0626-9fad-40e2-9ac1-df1f7ff09a42",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 122,
-      "height": 33,
-      "rawWidth": 122,
-      "rawHeight": 33,
+      "width": 208,
+      "height": 283,
+      "rawWidth": 208,
+      "rawHeight": 283,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

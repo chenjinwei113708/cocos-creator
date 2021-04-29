@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "77889929-2426-49ca-b3b6-50d363e9b4fc",
+  "uuid": "659399d8-910b-4dde-8d8f-18d53ad6af80",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "adsonly": {
+    "ppcard2": {
       "ver": "1.0.4",
-      "uuid": "aa6c863d-9c13-44f6-8893-dd0766708f03",
-      "rawTextureUuid": "77889929-2426-49ca-b3b6-50d363e9b4fc",
+      "uuid": "489b76db-8c54-4db4-831c-9352a93b82fb",
+      "rawTextureUuid": "659399d8-910b-4dde-8d8f-18d53ad6af80",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
@@ -20,10 +20,10 @@
       "offsetY": 0,
       "trimX": 0,
       "trimY": 0,
-      "width": 122,
-      "height": 33,
-      "rawWidth": 122,
-      "rawHeight": 33,
+      "width": 433,
+      "height": 609,
+      "rawWidth": 433,
+      "rawHeight": 609,
       "borderTop": 0,
       "borderBottom": 0,
       "borderLeft": 0,

@@ -20,8 +20,11 @@ cc.Class({
     touchPP: cc.Node, // 用户pp卡触碰点
     box: cc.Node, // 棋盘
     boxEffect: cc.Node, // 棋盘效果层
-    arrow: cc.Node, // 光线引导
     ppcard: cc.Node, // pp卡
+    pps: cc.Node, // pp卡飞向顶部
+    mask: cc.Node, // 遮罩
+    arrow: cc.Node, // 指引箭头
+    turn: cc.Node, // 整个旋转相关的节点
     spriteC1: cc.SpriteFrame,
     spriteC2: cc.SpriteFrame,
     spriteC3: cc.SpriteFrame,
@@ -42,9 +45,12 @@ cc.Class({
     // 实际连接线
     this.path = cc.find('Canvas/center/game/path').getComponent(cc.Graphics);
     this.payapl = cc.find('Canvas/center/UI/paypal');
+    this.turnView = this.turn.getChildByName('turnBox').getComponent('TurnView');
+    this.canReceiveCash = false; // 能否点击金币卡
     // 游戏参数
     this.gameInfo = {
       status: CELL_STATUS.CAN_MOVE,
+      canLink: false, // 能否开始连线
       nowType: null, // 正在移动的方块类型
       nowBoxPos: null, // 目前选中的方块的棋盘坐标
       nowGamePos: null, // 目前选中的方块的游戏坐标
@@ -52,6 +58,8 @@ cc.Class({
       isGuidePlaying: true, // 光线引导中
       isFirstClick: true, // 是第一次点击
       isPPclickable: false, // 顶部pp卡是否可以点击了
+      ppcardNum: 0, // 金币卡金额
+      handGuideLink1Pos: cc.v2(-109, 207), // 第一次连接指引，开始的位置
     }
     /**棋盘坐标从左上角开始，x代表行，y代表列
      * 左上角坐标为(1,1)，代表第一行的第一列, 0下标不要 */
@@ -104,7 +112,7 @@ cc.Class({
     manager.enabled = true;
     // manager.enabledDebugDraw = true; // 碰撞debug
     this.initBoxCells();
-    this.showGuideHand();
+    this.showTurn();
   },
 
   initBoxCells () {
@@ -142,6 +150,7 @@ cc.Class({
 
   // 监听：开始触碰
   onTouchStart (eventTouch) {
+    if (!this.gameInfo.canLink) return;
     if (this.gameInfo.status === CELL_STATUS.CAN_MOVE) {
       // this.setCellStatus(CELL_STATUS.IS_MOVE);
       var touchPos = this.node.convertToNodeSpaceAR(eventTouch.getLocation());
@@ -193,6 +202,7 @@ cc.Class({
    * @param {cc.v2} gamePos 方块的游戏坐标
    */
   pickCell (boxPos, cellType, gamePos, callback) {
+    if (!this.gameInfo.canLink) return;
     if (this.gameInfo.isPPclickable) {
       if (boxPos.x === 1 && boxPos.y === 1) {
         this.gameInfo.isPPclickable = false;
@@ -246,10 +256,12 @@ cc.Class({
    */
   checkInRightArea (boxPos) {
     if (this.gameInfo.isFirstClick) {
-      if (boxPos.x > 3 || boxPos.y > 4) {
-        return false;
-      } else {
+      const areas = [{x:1, y:1}, {x:1, y:2}, {x:1, y:3}, {x:1, y:4},
+        {x:2, y:4}, {x:3, y:4}, {x:4, y:4}];
+      if (areas.some(a => a.x===boxPos.x&&a.y===boxPos.y)) {
         return true;
+      } else {
+        return false;
       }
     }
     return true;
@@ -337,7 +349,7 @@ cc.Class({
   cellFlyToTop(arr) {
     let iconloca = this.payapl.getChildByName('loca');
     let destPos = this.node.convertToNodeSpaceAR(this.payapl.convertToWorldSpaceAR(iconloca.position));
-    
+    this.arrow.active && (this.arrow.active = false);
     arr.forEach((boxPos, index) => {
       let cell = this.boxEffectCells[boxPos.x][boxPos.y];
       let cellbtm = this.boxCells[boxPos.x][boxPos.y];
@@ -364,7 +376,7 @@ cc.Class({
           cell.active = false;
           // cellbtm.active = true;
           // cellbtm.position = originPos;
-          let num = arr.length >= 25 ? 500 : 200; // 如果连接个数大于等于25个
+          let num = arr.length >= 1 ? 500 : 200; // 如果连接个数大于等于25个
           if (index === (arr.length - 1)) {
             // this.setCellStatus(CELL_STATUS.CAN_MOVE); // 允许用户进行下一次消除
             this.setCellStatus(CELL_STATUS.DONE_MOVE);
@@ -372,8 +384,7 @@ cc.Class({
               setTimeout(() => {
                 let newArr = [
                   {x:1, y:1},{x:1, y:2},{x:1, y:3},{x:1, y:4},
-                  {x:2, y:1},{x:2, y:2},{x:2, y:3},{x:2, y:4},
-                  {x:3, y:1},{x:3, y:2},{x:3, y:3},{x:3, y:4},
+                  {x:2, y:4},{x:3, y:4},{x:4, y:4}
                 ];
                 this.createSomeCards(newArr);
               }, 0);
@@ -392,7 +403,7 @@ cc.Class({
   },
 
   // 展示pp卡
-  showPPCard (num = 100) {
+  showPPCard (num = 100, auto = true) {
     const pp = this.ppcard;
     this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
     pp.getChildByName('text').getComponent(cc.Label).string = '$ '+ num + '.00';
@@ -403,20 +414,112 @@ cc.Class({
       cc.spawn(cc.scaleTo(0.3, 1.1), cc.fadeIn(0.3)),
       cc.scaleTo(0.1, 0.9),
       cc.scaleTo(0.1, 1),
+      cc.callFunc(() => {
+        if (auto) {
+          // 如果是自动收钱
+          pp.runAction(cc.sequence(
+            cc.delayTime(0.4),
+            cc.scaleTo(0.3, 0),
+            cc.callFunc(() => {
+              this.gameController.addCash(Number(num));
+              this.gameController.getAudioUtils().playEffect('coin', 0.5);
+              if (num === 100) {
+                // this.changeAllToCPP();
+              } else if (num === 500) {
+                this.gameController.endGame();
+                // this.gameController.guideView.showCashOutHand();
+                this.showCongrat();
+              }
+            })
+          ));
+        } else {
+          // 如果要用户手动收钱
+          const hand = cc.find('Canvas/center/game/hand');
+          const handPos = cc.v2(26.253, -120.41);
+          hand.position = handPos;
+          this.gameInfo.ppcardNum = Number(num);
+          this.gameController.guideView.myFadeIn(hand, () => {
+            this.gameController.guideView.myClickHere(hand);
+            this.canReceiveCash = true;
+          });
+        }
+      }),
+      
+    ));
+  },
+
+  // 出现提现卡
+  showCongrat () {
+    const award = cc.find('Canvas/center/game/award');
+    award.scale = 0;
+    award.active = true;
+    award.runAction(cc.sequence(
+      cc.scaleTo(0.3, 1).easing(cc.easeOut(1.9)),
+      cc.callFunc(() => {
+        const hand = cc.find('Canvas/center/game/hand');
+        const handPos = cc.v2(24.2, -251);
+        hand.position = handPos;
+        this.gameController.guideView.myFadeIn(hand, () => {
+          this.gameController.guideView.myClickHere(hand);
+        });
+      })
+    ));
+    this.mask.opacity= 0;
+    this.mask.active= true;
+    this.mask.runAction(cc.fadeTo(0.4, 150));
+  },
+
+  clickReceiveCash () {
+    if (!this.canReceiveCash) return;
+    this.canReceiveCash = false;
+    const hand = cc.find('Canvas/center/game/hand');
+    hand.stopMyAnimation && hand.stopMyAnimation(() => {
+      hand.active = false;
+    });
+    const pp = this.ppcard;
+    pp.runAction(cc.sequence(
       cc.delayTime(0.4),
       cc.scaleTo(0.3, 0),
       cc.callFunc(() => {
-        this.gameController.addCash(Number(num));
-        this.gameController.getAudioUtils().playEffect('coin', 0.5);
-        if (num === 100) {
-          // this.changeAllToCPP();
-        } else if (num === 500) {
-          this.gameController.endGame();
-          this.gameController.guideView.showCashOutHand();
-        }
       })
     ));
+    this.showPPFly();
   },
+
+  /**展示几张pp卡从一个地方飞到指定位置，最后缩小消失 */
+  showPPFly () {
+    let iconloca = this.payapl.getChildByName('loca');
+    let destPos = this.node.convertToNodeSpaceAR(this.payapl.convertToWorldSpaceAR(iconloca.position));
+    let oriPos = cc.v2(0, 0);
+    const num = this.gameInfo.ppcardNum;
+    this.pps.children.forEach((node, index) => {
+        node.opacity = 0;
+        node.scale = 1;
+        node.active = true;
+        node.position = oriPos;
+        node.runAction(cc.sequence(
+            cc.delayTime(0.1*index),
+            cc.fadeIn(0.2),
+            cc.spawn(cc.moveTo(0.3, destPos), cc.scaleTo(0.3, 0.5)),
+            cc.spawn(cc.scaleTo(0.2, 0.3), cc.fadeOut(0.2), cc.moveBy(0.2, -50, -20)),
+            cc.callFunc(() => {
+                if (index === 0) {
+                  this.gameController.addCash(num);
+                  this.gameController.getAudioUtils().playEffect('coin', 0.5);
+                }
+                if (index === this.pps.children.length-1) {
+                  // console.log('finish');
+                  this.mask.runAction(cc.fadeOut(0.3));
+                  this.arrow.active = true;
+                  this.showGuideHand();
+                  this.gameInfo.canLink = true; // 允许连线
+                }
+            })
+        ))
+    });
+  },
+
+
 
   /**
    * 创造部分新方块
@@ -565,16 +668,8 @@ cc.Class({
 
   // 隐藏引导光线
   hideGuideLine () {
-    if (this.gameInfo.isGuidePlaying) {
-      this.arrow.getComponent(cc.Animation).stop();
-      this.arrow.runAction(cc.sequence(
-        cc.fadeOut(0.1), 
-        cc.callFunc(() => {
-          this.gameInfo.isGuidePlaying = false;
-          this.arrow.active = false;
-        })
-      ));
-    }
+    this.gameInfo.isGuidePlaying = false;
+    return;
   },
 
   // 展示指引手点击pp
@@ -598,7 +693,23 @@ cc.Class({
 
       this.changeAllToCPP();
     }
-  }
+  },
+
+  // 展示转盘
+  showTurn () {
+    const hand = cc.find('Canvas/center/game/hand');
+    this.turn.scale = 0;
+    this.turn.active =true;
+    this.turn.runAction(cc.sequence(
+      cc.scaleTo(0.6, 1).easing(cc.easeOut(1.9)),
+      cc.callFunc(() => {
+        this.gameController.guideView.myFadeIn(hand, () => {
+          this.gameController.guideView.myClickHere(hand);
+          this.turnView.setIfCanSpin(true);
+        });
+      })
+    ));
+  },
 
 
 });
