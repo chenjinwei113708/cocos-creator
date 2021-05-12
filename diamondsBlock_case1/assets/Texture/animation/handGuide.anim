@@ -1,0 +1,181 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "handGuide",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 2.4,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {
+      "hand": {
+        "props": {
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                85.293,
+                -362.52,
+                0
+              ]
+            },
+            {
+              "frame": 0.5,
+              "value": [
+                41.155,
+                -318.383,
+                0
+              ]
+            },
+            {
+              "frame": 0.7,
+              "value": [
+                41.155,
+                -329.417,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -2.983,
+                60.468,
+                0
+              ]
+            },
+            {
+              "frame": 2,
+              "value": [
+                -2.983,
+                60.468,
+                0
+              ]
+            },
+            {
+              "frame": 2.4,
+              "value": [
+                41.155,
+                -329.417,
+                0
+              ]
+            }
+          ],
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.5,
+              "value": 255
+            },
+            {
+              "frame": 0.7,
+              "value": 255
+            },
+            {
+              "frame": 1.5,
+              "value": 255
+            },
+            {
+              "frame": 1.7,
+              "value": 255
+            },
+            {
+              "frame": 2,
+              "value": 0
+            }
+          ],
+          "scale": [
+            {
+              "frame": 0,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 1.2,
+                "y": 1.2
+              }
+            },
+            {
+              "frame": 0.5,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 1.1,
+                "y": 1.1
+              }
+            },
+            {
+              "frame": 0.7,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 1,
+                "y": 1
+              }
+            },
+            {
+              "frame": 2,
+              "value": {
+                "__type__": "cc.Vec2",
+                "x": 1.1,
+                "y": 1.1
+              }
+            }
+          ]
+        }
+      },
+      "waitBlock": {
+        "props": {
+          "opacity": [
+            {
+              "frame": 0,
+              "value": 0
+            },
+            {
+              "frame": 0.5,
+              "value": 0
+            },
+            {
+              "frame": 0.7,
+              "value": 180
+            },
+            {
+              "frame": 1.5,
+              "value": 180
+            },
+            {
+              "frame": 2,
+              "value": 0
+            }
+          ],
+          "position": [
+            {
+              "frame": 0,
+              "value": [
+                22.8,
+                -337.201,
+                0
+              ]
+            },
+            {
+              "frame": 0.7,
+              "value": [
+                22.8,
+                -337.201,
+                0
+              ]
+            },
+            {
+              "frame": 1.5,
+              "value": [
+                -27.577,
+                61.222,
+                0
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "events": []
+}
