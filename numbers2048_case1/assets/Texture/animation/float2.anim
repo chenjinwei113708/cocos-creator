@@ -1,0 +1,49 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "float2",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 2.4,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 22,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            13.04,
+            36.07,
+            0
+          ]
+        },
+        {
+          "frame": 0.8,
+          "value": [
+            20.879,
+            37.279,
+            0
+          ]
+        },
+        {
+          "frame": 1.6,
+          "value": [
+            23.874,
+            33.039,
+            0
+          ]
+        },
+        {
+          "frame": 2.4,
+          "value": [
+            15.166,
+            35.113,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "events": []
+}
