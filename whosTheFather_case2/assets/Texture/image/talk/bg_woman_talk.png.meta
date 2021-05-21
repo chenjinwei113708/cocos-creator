@@ -1,0 +1,34 @@
+{
+  "ver": "2.3.3",
+  "uuid": "3127f572-64df-430c-9a06-096a2f76cbaf",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "platformSettings": {},
+  "subMetas": {
+    "bg_woman_talk": {
+      "ver": "1.0.4",
+      "uuid": "f8ae4c76-a468-42d5-a10e-aace0a8c642c",
+      "rawTextureUuid": "3127f572-64df-430c-9a06-096a2f76cbaf",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 992,
+      "height": 182,
+      "rawWidth": 992,
+      "rawHeight": 182,
+      "borderTop": 66,
+      "borderBottom": 66,
+      "borderLeft": 74,
+      "borderRight": 76,
+      "subMetas": {}
+    }
+  }
+}
