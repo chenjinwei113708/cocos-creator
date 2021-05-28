@@ -17,9 +17,16 @@ export default class GameModel {
                 scale: 0.748,
                 children: {
                     bg: {
-                        angle: 90,
-                        position: cc.v2(-302.282, -64.421),
-                        scale: 1.209
+                        // angle: 90,
+                        position: cc.v2(10, 0),
+
+                        scale: 1.04
+                    },
+                    cashbg: {
+                        position: cc.v2(0, -103.778 - 70)
+                    },
+                    cashes: {
+                        position: cc.v2(0, -112.778 - 70)
                     }
                 }
             },
@@ -37,23 +44,29 @@ export default class GameModel {
                             // cash: {
                             //     position: cc.v2(135.994, 31.177)
                             // }
+                            dollar: {
+                                position: cc.v2(54.034 - 30, 28.874)
+                            },
+                            cash: {
+                                position: cc.v2(120.269 - 30, 30.562)
+                            }
                         }
                     },
                     banner: {
                         position: cc.v2(-300.261, -195.509),
                         children: {
                             icon: {
-                                position: cc.v2(-98.626, -5.764)
+                                position: cc.v2(60, 200)
                             },
                             logo: {
-                                position: cc.v2(13.475, 189.723),
-                                width: 169,
-                                height: 172
+                                position: cc.v2(-30, -30),
                             },
                             btn: {
-                                position: cc.v2(140.036, -13.287)
+                                position: cc.v2(130, -30),
+                                scale: 1
                             },
                             adsonly: {
+                                position: cc.v2(60, 20),
                                 active: this.isApplovin
                             },
                             mtg: {
@@ -77,6 +90,12 @@ export default class GameModel {
                         angle: 0,
                         position: cc.v2(0, 0),
                         scale: 1
+                    },
+                    cashbg: {
+                        position: cc.v2(0, -103.778)
+                    },
+                    cashes: {
+                        position: cc.v2(0, -112.778)
                     }
                 }
             },
@@ -94,23 +113,29 @@ export default class GameModel {
                             // cash: {
                             //     position: cc.v2(135.994, 31.177)
                             // }
+                            dollar: {
+                                position: cc.v2(54.034, 28.874)
+                            },
+                            cash: {
+                                position: cc.v2(120.269, 30.562)
+                            }
                         }
                     },
                     banner: {
                         position: cc.v2(0, -425.301),
                         children: {
                             icon: {
-                                position: cc.v2(-194.354, -5.764)
+                                position: cc.v2(-143.225, -10.042)
                             },
                             logo: {
-                                position: cc.v2(-45.804, 1.091),
-                                width: 116.1,
-                                height: 117.5
+                                position: cc.v2(-6.512, -10),
+
                             },
                             btn: {
-                                position: cc.v2(140.036, -13.287)
+                                position: cc.v2(155.7, -9)
                             },
                             adsonly: {
+                                position: cc.v2(150.341, 27.44),
                                 active: this.isApplovin
                             },
                             mtg: {
