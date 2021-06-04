@@ -1,6 +1,6 @@
 export const DownloadUrl = {
     iosUrl: 'https://apps.apple.com/app/id1529086044',
-    androidUrl: 'https://play.google.com/store/apps/details?hl=en&id=com.zoomplay.whosfather',
+    androidUrl: 'https://play.google.com/store/apps/details?id=com.zoomplay.whosfather',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;
