@@ -126,6 +126,14 @@ cc.Class({
             ],
         ];
 
+        // 计时器
+        this.countInfo = {
+            startTime: 5,
+            icon: '0.0',
+            current: 5,
+            endTime: 0
+        }
+
         this.changeToNextLevel();
     },
 
@@ -286,12 +294,30 @@ cc.Class({
                     }
                 } else {
                     let anim = this.ppcard.getComponent(cc.Animation).play();
+                    // 启用计时器
+                    this.countInfo.current = this.countInfo.startTime;
+                    const count = cc.find('Canvas/center/game/paycard/count/txt');
+                    console.log(count);
+                    const countTxt = cc.find('Canvas/center/game/paycard/count/txt').getComponent(cc.Label);
+                    const cb = () => {
+                        this.receivePPcard()
+                    }
+                    this.countTimer = setInterval(() => {
+                        if (this.countInfo.current < this.countInfo.endTime) {
+                            clearInterval(this.countTimer);
+                            cb ? cb() : this.receivePPcard();
+                            return false;
+                        }
+                        countTxt.string = `${this.countInfo.icon}${this.countInfo.current}`;
+                        this.countInfo.current--;
+                    }, 1000)
+                    // 播放手的动画
                     anim.on('finished', () => {
                         if (this.gameInfo.isPPcardReceived) return;
                         let hand = this.hand;
                         hand.opacity = 0;
                         hand.active = true;
-                        hand.position = cc.v2(154.978, -64.918);
+                        hand.position = cc.v2(30, -75);
                         hand.runAction(cc.fadeIn(0.2));
                         hand.getComponent(cc.Animation).play();
                     });

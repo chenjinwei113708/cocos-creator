@@ -180,23 +180,23 @@ export default class GameModel {
                         }
                     },
                     playnow: {
-                        position: cc.v2(-179.304, -434.999),
+                        position: cc.v2(-180, -427.5),
                     },
                     an_logo: {
                         active: this.isIos ? false : true,
-                        position: cc.v2(-181.234, -280.597),
+                        position: cc.v2(190, -370),
                     },
                     ios_logo: {
                         active: this.isIos ? true : false,
-                        position: cc.v2(-181.234, -280.597),
+                        position: cc.v2(190, -370),
                     },
                     an_icon: {
                         active: this.isIos ? false : true,
-                        position: cc.v2(-180.18, -353.071),
+                        position: cc.v2(-180, -320),
                     },
                     ios_icon: {
                         active: this.isIos ? true : false,
-                        position: cc.v2(-180.18, -353.071),
+                        position: cc.v2(-180, -320),
                     },
                     modal: {
                         children: {

@@ -1,6 +1,6 @@
 export const DownloadUrl = {
-    iosUrl: 'https://apps.apple.com/app/id1538402482',
-    androidUrl: 'https://play.google.com/store/apps/details?id=com.dicegames.dicebox',
+    iosUrl: 'https://play.google.com/store/apps/details?id=com.piper.dicemaster',
+    androidUrl: 'https://play.google.com/store/apps/details?id=com.piper.dicemaster',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;
