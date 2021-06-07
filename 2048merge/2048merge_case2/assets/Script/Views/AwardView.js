@@ -22,28 +22,31 @@ cc.Class({
 
     /**展示奖励页面 */
     showAwardPage(cb) {
-        const time = 0.5;
-        const bufferTime = 0.2;
-        const maxScale = 1.2;
-
-        this.toggleMask(); // 展示遮罩层
-
-        this.node.scale = 0; // 默认缩放设置为0
-        this.node.active = true;
-        this.node.runAction(cc.sequence(
-            cc.scaleTo(time, maxScale),
-            cc.scaleTo(bufferTime, 1),
-            cc.callFunc(() => {
-                this.gameController.endGame(); // 结束游戏方法
-                this.downloadMask.active = true; // 点击任何地方都会进行下载
-                cb && cb();
-            })
-        ));
-
-        console.log('胜利了');
-        // this.audioUtils.playEffect('cheer');
-
-        this.hideAwardPage = () => { this.node.runAction(cc.scaleTo(time, 0)) } // 关闭的动画
+        return new Promise((resolve, reject) => {
+            const time = 0.5;
+            const bufferTime = 0.2;
+            const maxScale = 1.2;
+    
+            this.toggleMask(); // 展示遮罩层
+    
+            this.node.scale = 0; // 默认缩放设置为0
+            this.node.active = true;
+            this.node.runAction(cc.sequence(
+                cc.scaleTo(time, maxScale),
+                cc.scaleTo(bufferTime, 1),
+                cc.callFunc(() => {
+                    // this.gameController.endGame(); // 结束游戏方法
+                    this.downloadMask.active = true; // 点击任何地方都会进行下载
+                    cb && cb();
+                    resolve();
+                })
+            ));
+    
+            console.log('胜利了');
+            // this.audioUtils.playEffect('cheer');
+    
+            this.hideAwardPage = () => { this.node.runAction(cc.scaleTo(time, 0)) } // 关闭的动画
+        })
     },
 
     /**切换遮罩层 */

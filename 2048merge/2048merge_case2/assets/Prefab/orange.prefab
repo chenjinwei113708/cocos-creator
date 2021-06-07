@@ -13,12 +13,12 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "yellow_32",
+    "_name": "orange",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
     "_active": true,
-    "_level": 5,
+    "_level": 4,
     "_components": [
       {
         "__id__": 2
@@ -47,8 +47,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 146,
-      "y": 146,
+      "x": 5.322,
+      "y": -134,
       "z": 0
     },
     "_scale": {
@@ -100,9 +100,9 @@
     "lifeVar": 0,
     "_startColor": {
       "__type__": "cc.Color",
-      "r": 252,
-      "g": 250,
-      "b": 104,
+      "r": 255,
+      "g": 170,
+      "b": 0,
       "a": 255
     },
     "_startColorVar": {
@@ -114,9 +114,9 @@
     },
     "_endColor": {
       "__type__": "cc.Color",
-      "r": 252,
-      "g": 250,
-      "b": 104,
+      "r": 255,
+      "g": 170,
+      "b": 0,
       "a": 255
     },
     "_endColorVar": {
@@ -178,7 +178,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "cejdAbGANIRb5f7SmXFgVS",
+    "fileId": "a5hnZ9YNJDZ5q3wWnqq8TE",
     "sync": false
   }
 ]

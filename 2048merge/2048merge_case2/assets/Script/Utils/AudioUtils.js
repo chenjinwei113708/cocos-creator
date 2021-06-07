@@ -60,6 +60,10 @@ cc.Class({
         bomb: {
             type: cc.AudioClip,
             default: null
+        },
+        clear: {
+            type: cc.AudioClip,
+            default: null
         }
     },
 

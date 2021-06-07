@@ -11,12 +11,17 @@ cc.Class({
         // 初始化参数
         this.currentCash = this.cash
         this.targetCash = 0; // 目标金额 初始为0
-        this.icon = '$ '; // 金额符号
+        // this.icon = '$ '; // 金额符号
         this.iconType = 'head'; // 符号所在位置
         this.eachAdd = 100; // 每次增加的金额
-
+        
         this.updatable = false; // 是否可以更新
         this.isPlus = true; // 表示为增加或者减少金额
+
+        this.iconInfo = {
+            'head': undefined,
+            'end': undefined
+        }
 
         // 获取节点
         this.label = this.node.getComponent(cc.Label);
@@ -26,9 +31,9 @@ cc.Class({
      * @param {String} icon 设置金额的字符
      * @param {Boolean} iconType 设置字符在金额的哪个位置 有head和behind
      */
-    setIcon(icon = '$ ', iconType) {
-        this.icon = icon;
-        this.iconType = iconType;
+    setIcon(iconConfigs = {}) {
+        this.iconInfo['head'] = iconConfigs.head ? iconConfigs.head : undefined;
+        this.iconInfo['end'] = iconConfigs.end ? iconConfigs.end : undefined;
     },
 
     /**
@@ -37,6 +42,16 @@ cc.Class({
      */
     addCash(num, addTime = 1) {
         this.targetCash += num; // 目标金额
+        this.addTime = addTime; // 增加时长
+
+        this.isPlus = this.targetCash > this.currentCash ? true : false;
+        this.eachAdd = Math.abs(this.targetCash - this.currentCash) * (0.0166666666666666) / addTime; // 每dt增加的cash
+
+        this.setUpdatable(true); // 设置为可以加钱状态
+    },
+
+    addCashTo(num, addTime = 1) {
+        this.targetCash = num; // 目标金额
         this.addTime = addTime; // 增加时长
 
         this.isPlus = this.targetCash > this.currentCash ? true : false;
@@ -63,10 +78,11 @@ cc.Class({
         }
 
         // 判断符号在前面还是后面
-        if (this.iconType) {
-            this.label.string = this.icon + this.cash;
-        } else {
-            this.label.string = this.cash + this.icon;
-        }
+        // if (this.iconType) {
+        //     this.label.string = this.icon + this.cash;
+        // } else {
+        //     this.label.string = this.cash + this.icon;
+        // }
+        this.label.string = `${ this.iconInfo.head || '' }${ this.cash }${ this.iconInfo.end || '' }`;
     },
 });
