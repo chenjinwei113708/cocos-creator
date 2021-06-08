@@ -9,12 +9,18 @@ export default class GameModel {
         // 初始化state
         // 横竖屏参数
         this.isLandscape = false;
-        this.isMintegral = true; // 检测是不是isMintegral平台
-        this.isApplovin = false; // 是不是applovin平台
+        this.isMintegral = false; // 检测是不是isMintegral平台
+        this.isApplovin = true; // 是不是applovin平台
         this.HorizontalConfig = {
             game: {
                 scale: 0.89,
-                position: cc.v2(240, 50)
+                position: cc.v2(240, 50),
+                children: {
+                    mask_tip: {
+                        position: cc.v2(0, 0),
+                        scale: 1
+                    }
+                }
             },
             UI: {
                 scale: 0.89,
@@ -22,11 +28,11 @@ export default class GameModel {
                 children: {
                     paypal: {
                         scale: 1,
-                        position: cc.v2(-240, 220)
+                        position: cc.v2(-270, 220)
                     },
                     banner: {
                         scale: 1,
-                        position: cc.v2(-240, -230),
+                        position: cc.v2(-270, -230),
                         children: {
                             adsonly: {
                                 active: this.isApplovin
@@ -59,7 +65,12 @@ export default class GameModel {
             game: {
                 scale: 1,
                 position: cc.v2(0, 0),
-                
+                children: {
+                    mask_tip: {
+                        position: cc.v2(0, 0),
+                        scale: 1
+                    }
+                }
             },
             UI: {
                 scale: 1,
