@@ -1,0 +1,205 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "camera",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 6,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -144,
+            -300
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 0.4,
+          "value": [
+            -187,
+            -275
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 0.8,
+          "value": [
+            -222,
+            -242
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 1.2,
+          "value": [
+            -202,
+            -219
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 1.6,
+          "value": [
+            -177,
+            -198
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 2,
+          "value": [
+            -149,
+            -158
+          ],
+          "motionPath": []
+        },
+        {
+          "frame": 2.6,
+          "value": [
+            -149,
+            -158
+          ],
+          "motionPath": [
+            [
+              -167,
+              -97,
+              -162,
+              -128,
+              -171,
+              -68
+            ]
+          ]
+        },
+        {
+          "frame": 2.8,
+          "value": [
+            -168,
+            -37
+          ],
+          "motionPath": [
+            [
+              -158,
+              30,
+              -166,
+              -2,
+              -151,
+              61
+            ]
+          ]
+        },
+        {
+          "frame": 3.2,
+          "value": [
+            -143,
+            78
+          ],
+          "motionPath": [
+            [
+              -114,
+              132,
+              -129,
+              112,
+              -100,
+              150
+            ]
+          ]
+        },
+        {
+          "frame": 3.8,
+          "value": [
+            -73,
+            166
+          ],
+          "motionPath": [
+            [
+              -39,
+              193,
+              -60,
+              182,
+              -18,
+              205
+            ]
+          ]
+        },
+        {
+          "frame": 4.4,
+          "value": [
+            5.7,
+            210
+          ],
+          "motionPath": [
+            [
+              50,
+              220,
+              29,
+              216,
+              71,
+              223
+            ]
+          ]
+        },
+        {
+          "frame": 4.8,
+          "value": [
+            104.6,
+            224.4
+          ],
+          "motionPath": [
+            [
+              140,
+              224,
+              116,
+              225,
+              162,
+              223
+            ]
+          ]
+        },
+        {
+          "frame": 5.4,
+          "value": [
+            182,
+            219
+          ],
+          "motionPath": []
+        }
+      ]
+    },
+    "comps": {
+      "cc.Camera": {
+        "zoomRatio": [
+          {
+            "frame": 0,
+            "value": 3
+          },
+          {
+            "frame": 0.8,
+            "value": 2.8
+          },
+          {
+            "frame": 2,
+            "value": 2.8
+          },
+          {
+            "frame": 2.6,
+            "value": 3
+          },
+          {
+            "frame": 4.4,
+            "value": 2.5
+          },
+          {
+            "frame": 6,
+            "value": 4
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
