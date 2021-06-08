@@ -62,7 +62,8 @@ cc.Class({
          * 1: tip2 点击炸弹的引导
          */
         tips: { type: cc.Node, default: [] },
-        dash: { type: cc.Node, default: null }
+        dash: { type: cc.Node, default: null },
+        maskTip: { type: cc.Node, default: null }
     },  
 
     onLoad() {
@@ -288,6 +289,7 @@ cc.Class({
         this.stopHand();
         this.dash.getComponent(cc.Animation).pause();
         this.dash.runAction(cc.fadeOut(0.1));
+        this.maskTip.runAction(cc.fadeOut(0.1));
         this.audioUtils.playEffect('clear');
         this.click1Nodes.forEach(node => {
             node.active = false;
@@ -355,7 +357,7 @@ cc.Class({
                         return Promise.resolve();
                     })
                 }),
-                this.cashView.addCash(75.64, 1),
+                this.cashView.addCash(75, 1),
                 this.showPPFly()
             ])
         }).then(() => {

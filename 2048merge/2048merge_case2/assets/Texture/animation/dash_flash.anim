@@ -3,7 +3,7 @@
   "_name": "dash_flash",
   "_objFlags": 0,
   "_native": "",
-  "_duration": 2.5,
+  "_duration": 3.5,
   "sample": 2,
   "speed": 1,
   "wrapMode": 2,
@@ -20,6 +20,14 @@
         },
         {
           "frame": 2.5,
+          "value": 255
+        },
+        {
+          "frame": 3,
+          "value": 255
+        },
+        {
+          "frame": 3.5,
           "value": 255
         }
       ]
