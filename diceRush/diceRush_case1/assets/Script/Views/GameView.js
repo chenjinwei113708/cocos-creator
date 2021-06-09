@@ -1,12 +1,21 @@
 import { GAME_INFO, GAME_STATUS } from '../Model/ConstValue';
-import { toggleMask } from '../Utils/Animation';
-// import Tools from '../Utils/utils'
+import { animInfo, toggleMask, foreverMoveBy } from '../Utils/Animation';
+import { getRandom } from '../Utils/utils'
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        mask: { type: cc.Node, default: null }
+        mask: { type: cc.Node, default: null },
+        camera: { type: cc.Node, default: null },
+        person1: { type: cc.Node, default: null },
+        dices: { type: cc.Node, default: [] }, // 0: 一开始的紫色骰子，1: 后面掉出去的5
+        treasureBoxPos1: { type: cc.Node, default: null },
+        treasureBoxPos2: { type: cc.Node, default: null },
+        treasureBox1: { type: cc.Prefab, default: null },
+        treasureBox2: { type: cc.Prefab, default: null },
+        treasureBoxLight: { type: cc.Prefab, default: null },
+        treasureBoxs: { type: cc.Node, default: null }, // 存放宝箱的节点
     },  
 
 // 生命周期回调函数------------------------------------------------------------------------
@@ -18,8 +27,9 @@ cc.Class({
     start () {
         this.cashView.setIcon('$ ', 'head');
         // this.showHandDrag();
-        this.addEventListener();
-        // this.setGameStatus(GAME_STATUS);
+        // this.addEventListener();
+        this.setGameStatus(GAME_STATUS.CAN_CLICK2);
+        this.initTreasureBox();
     },
 // 生命周期函数结束---------------------------------------------------------------------
     
@@ -37,8 +47,35 @@ cc.Class({
     gameViewInit() {
         // 初始化参数
         this.gameInfo = {
-            status: GAME_STATUS.DISABLED // 初始设置为不可点击状态
+            status: GAME_STATUS.DISABLED, // 初始设置为不可点击状态
         }
+
+        this.animInfo = {
+            dice1ScaleOutTime: 0.5,
+            dice2ScaleInTime: 0.6,
+            dice2MoveByPos: cc.v2(0, -20),
+        }
+
+        // 渲染宝箱的数据 根据传入的pos坐标 特效渲染的位置  11, 13
+        this.treasureBox1Info = [
+            // 缩放
+            { scale: 0.14, effectPos: { x: 11, y: 13 } },
+            { scale: 0.15, effectPos: { x: 11, y: 13 } },
+            { scale: 0.16, effectPos: { x: 11, y: 13 } },
+        ]
+
+        this.treasureBox2Info = [
+            // 缩放
+            { scale: 0.04, effectPos: { x: -25, y: 16 }, animRatio: 1 },
+            { scale: 0.038, effectPos: { x: -25, y: 16 }, animRatio: 0.95 },
+            { scale: 0.036, effectPos: { x: -25, y: 16 }, animRatio: 0.9 },
+            { scale: 0.034, effectPos: { x: -25, y: 16 }, animRatio: 0.85 },
+            { scale: 0.032, effectPos: { x: -25, y: 16 }, animRatio: 0.8 },
+            { scale: 0.025, effectPos: { x: -25, y: 16 }, animRatio: 0.55 },
+            { scale: 0.02, effectPos: { x: -25, y: 16 }, animRatio: 0.45 },
+            { scale: 0.017, effectPos: { x: -25, y: 16 }, animRatio: 0.45 },
+            { scale: 0.015, effectPos: { x: -25, y: 16 }, animRatio: 0.3 },
+        ]
 
         // 获得脚本
         this.gameController.setScript(this, 
@@ -48,6 +85,54 @@ cc.Class({
             'progressView',
             'cashView'
         )
+    },
+
+    initTreasureBox () {
+        // 初始化宝箱1
+        this.treasureBox1Info.forEach((info, index) => {
+            const treasureBox = cc.instantiate(this.treasureBox1);
+            const treasureBoxLight = cc.instantiate(this.treasureBoxLight);
+            treasureBox.parent = this.treasureBoxs;
+            treasureBoxLight.parent = treasureBox;
+            treasureBoxLight.position = cc.v2(info.effectPos.x, info.effectPos.y);
+            treasureBox.scale = info.scale;
+            // console.log(this.treasureBoxPos1.children[index].position);
+            this.updatePos(treasureBox, this.treasureBoxPos1.children[index]);
+
+            // 宝箱动画
+            setTimeout(() => {
+                foreverMoveBy(treasureBox, [ cc.v2(0, 15), cc.v2(0, -15) ]);
+            }, getRandom(0, 600));
+        });
+
+        this.treasureBox2Info.forEach((info, index) => {
+            const treasureBox = cc.instantiate(this.treasureBox2);
+            const treasureBoxLight = cc.instantiate(this.treasureBoxLight);
+            treasureBox.parent = this.treasureBoxs;
+            treasureBoxLight.parent = treasureBox;
+            treasureBoxLight.position = cc.v2(info.effectPos.x, info.effectPos.y);
+            treasureBox.scale = info.scale;
+            // console.log(this.treasureBoxPos1.children[index].position);
+            this.updatePos(treasureBox, this.treasureBoxPos2.children[index]);
+
+            // 宝箱动画
+            setTimeout(() => {
+                foreverMoveBy(treasureBox, [ cc.v2(0, 5 * info.animRatio), cc.v2(0, -5 * info.animRatio) ]);
+            }, getRandom(0, 1500));
+        })
+    },
+
+    /**
+     * 
+     * @param {cc.Node} node1 需要改变坐标的
+     * @param {cc.Node} node2 作为参照坐标的
+     */
+    updatePos (node1, node2) {
+        // console.log(node1, node1.parent);
+        // console.log(node2, node2.parent);
+        const endPos = node1.parent.convertToNodeSpaceAR(node2.parent.convertToWorldSpaceAR(node2));
+        node1.position = endPos
+        return endPos;
     },
 
     /**切换mask的显示状态 
@@ -71,16 +156,60 @@ cc.Class({
     onTouchStart (e) {
         // this.gameController.getAudioUtils().playEffect('bgClick', 0.8);
     },
-
     /**点击事件移动 */
     onTouchMove (e) {
 
     },
-
     /**点击事件结束 */
     onTouchEnd (e) {
 
     },
+
+    /**点击之后骰子调出 固定为5 */
+    handleClick2 () {
+        if (this.getGameStatus() !== GAME_STATUS.CAN_CLICK2) return false;
+        this.setGameStatus(GAME_STATUS.DISABLED);
+        console.log('click2');
+
+        const [ dice1, dice2 ] = this.dices;
+        dice2.scale = 0;
+        console.log(dice1, dice2);
+        // 点击后原有骰子消失
+        // 骰子掉出动画
+        new Promise((resolve, reject) => {
+            dice1.runAction(cc.sequence(
+                cc.spawn(
+                    cc.scaleTo(this.animInfo.dice1ScaleOutTime, 0),
+                    cc.fadeOut(this.animInfo.dice1ScaleOutTime),
+                    cc.callFunc(() => {
+                        // console.log('dice2!!')
+                        dice2.active = true;
+                        dice2.runAction(cc.spawn(
+                            cc.scaleTo(this.animInfo.dice2ScaleInTime, 1),
+                            cc.moveBy(this.animInfo.dice2ScaleInTime, this.animInfo.dice2MoveByPos)
+                        ))
+                    })
+                ),
+                cc.delayTime(0.5),
+                cc.callFunc(() => {
+                    resolve();
+                })
+            ))
+
+        }).then(() => {
+            return new Promise((resolve, reject) => {
+                // 人物行走动画
+                const cameraAnim = this.camera.getComponent(cc.Animation);
+                const personAnim = this.person1.getComponent(cc.Animation);
+
+                cameraAnim.play();
+                personAnim.play();
+            })
+        })
+
+    },
+
+
 
     /**
      * 判断点击是否在node里面

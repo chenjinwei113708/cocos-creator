@@ -45,6 +45,17 @@ function flyTo (node1, node2, cb) {
   })
 }
 
+function foreverMoveBy (node, options = []) {
+  const time = 1.1;
+
+  node.runAction(cc.repeatForever(
+    cc.sequence(
+      cc.moveBy(time, options[0]),
+      cc.moveBy(time, options[1])
+    )
+  ))
+}
+
 /**从小到大 */
 function scaleIn (node, cb) {
   return new Promise((resolve, reject) => {
@@ -227,5 +238,6 @@ export {
   slideInto,
   slideOut,
   toggleMask,
+  foreverMoveBy, // 传入node，options。options里面放两个cc.v2() 表示两次moveBy的相对距离
   animInfo
 }
