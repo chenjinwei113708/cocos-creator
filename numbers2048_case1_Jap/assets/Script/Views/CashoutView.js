@@ -24,6 +24,8 @@ cc.Class({
             seconds: 30,
             countInterval: null,
         };
+
+        this.left.getComponent(cc.Animation).play();
     },
 
     start () {
@@ -47,10 +49,12 @@ cc.Class({
         this.info.countInterval = setInterval(() => {
             this.info.seconds--;
             this.time.string = `0:${this.info.seconds<10 ? '0'+this.info.seconds : this.info.seconds}`;
-            this.left.runAction(cc.sequence(
-                cc.scaleTo(0.05, 0.9),
-                cc.scaleTo(0.05, 1),
-            ));
+            // this.left.runAction(cc.sequence(
+            //     cc.scaleTo(0.04, 1.2),
+            //     cc.scaleTo(0.02, 0.8),
+            //     cc.scaleTo(0.04, 1),
+            // ));
+            
             if (this.info.seconds <= 0) {
                 this.time.string = '';
                 this.info.countInterval && clearInterval(this.info.countInterval);

@@ -59,8 +59,9 @@ cc.Class({
             this.cashoutHand.active = false;
             this.gameController.getAudioUtils().playEffect('moneyCard', 0.5);
             // this.showNotification();
-            this.showEndPage();
-            this.gameController.cashView.addCash(-700);
+            // this.showEndPage();
+            this.gameController.download();
+            // this.gameController.cashView.addCash(-700);
         }
     },
 
