@@ -12,124 +12,102 @@ export default class GameModel {
         this.isMintegral = true; // 检测是不是isMintegral平台
         this.isApplovin = false; // 是不是applovin平台
         this.HorizontalConfig = {
-            // background: {
-            //     scale: 0.89,
-            //     position: cc.v2(240, 0)
-            // },
-            // game: {
-            //     scale: 0.89,
-            //     position: cc.v2(240, 0),
-            //     children: {
-            //     }
-            // },
-            // UI: {
-            //     children: {
-            //         paypal: {
-            //             scale: 0.89,
-            //             position: cc.v2(-240, 220)
-            //         },
-            //         banner: {
-            //             scale: 0.89,
-            //             position: cc.v2(-240, -210),
-            //             children: {
-            //                 icon: {
-            //                     position: cc.v2(-130, 0)
-            //                 },
-            //                 logo: {
-            //                     scale: 1.5,
-            //                     position: cc.v2(0, 230)
-            //                 },
-            //                 playNow: {
-            //                     position: cc.v2(90, 0)
-            //                 },
-            //                 adsonly: {
-            //                     active: this.isApplovin
-            //                 },
-            //                 mtg: {
-            //                     active: this.isMintegral
-            //                 }
-            //             }
-            //         },
-            //         awardPageBox: {
-            //             scale: 0.65,
-            //             position: cc.v2(240, 0),
-            //             children: {
-            //                 bg_iphone: {
-            //                     scale: 0.89 / 0.65
-            //                 }
-            //             }
-            //         },
-            //         // turn_box: {
-            //         //     scale: 0.65,
-            //         //     position: cc.v2(240, 30),
-            //         //     children: {
-            //         //         bg_turn: {
-            //         //             scale: 0.89 / 0.65
-            //         //         }
-            //         //     }
-            //         // }
-            //     }
-            // }
+            background: {
+                scale: 0.75,
+                position: cc.v2(240, 0)
+            },
+            graphics: {
+                // scale: 0.75,
+                _ballRadiusRatio: 0.75
+            },
+            game: {
+                scale: 0.75,
+                position: cc.v2(240, 0),
+                children: {
+                    grid: {
+                        children: {
+                            // wall: { physicsBoxColliderScale: 0.75 },
+                            // underwall: { physicsBoxColliderScale: 0.75 },
+                            // brick5: { physicsBoxColliderScale: 0.75 },
+                            // brick4: { physicsBoxColliderScale: 0.75 },
+                            // brick3: { physicsBoxColliderScale: 0.75 },
+                            // brick2: { physicsBoxColliderScale: 0.75 },
+                            // brick1: { physicsBoxColliderScale: 0.75 }
+                            wall: { hasPhysicsBoxCollider: true },
+                            underwall: { hasPhysicsBoxCollider: true },
+                            brick5: { hasPhysicsBoxCollider: true },
+                            brick4: { hasPhysicsBoxCollider: true },
+                            brick3: { hasPhysicsBoxCollider: true },
+                            brick2: { hasPhysicsBoxCollider: true },
+                            brick1: { hasPhysicsBoxCollider: true }
+                        }
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    paypal: {
+                        scale: 0.89,
+                        position: cc.v2(-220, 210)
+                    },
+                    banner: {
+                        scale: 0.89,
+                        position: cc.v2(-220, -210),
+                    },
+                    awardPageBox: {
+                        scale: 0.75,
+                    },
+                    pps: {
+                        scale: 0.75,
+                        position: cc.v2(240, 0)
+                    }
+                }
+            }
         }
         this.VerticalConfig = {
-            // background: {
-            //     scale: 1,
-            //     position: cc.v2(0, 0)
-            // },
-            // game: {
-            //     scale: 1,
-            //     position: cc.v2(0, 0),
-            // },
-            // UI: {
-            //     children: {
-            //         paypal: {
-            //             scale: 1,
-            //             position: cc.v2(0, 438.821)
-            //         },
-            //         banner: {
-            //             scale: 1,
-            //             position: cc.v2(0, -420),
-            //             children: {
-            //                 icon: {
-            //                     position: cc.v2(-210, 0)
-            //                 },
-            //                 logo: {
-            //                     scale: 1,
-            //                     position: cc.v2(-58.035, 0)
-            //                 },
-            //                 playNow: {
-            //                     position: cc.v2(146.469, 0)
-            //                 },
-            //                 adsonly: {
-            //                     active: this.isApplovin
-            //                 },
-            //                 mtg: {
-            //                     active: this.isMintegral
-            //                 }
-            //             }
-            //         },
-            //         pps: {
-            //         },
-            //         awardPageBox: {
-            //             scale: 1,
-            //             position: cc.v2(0, 0),
-            //             children: {
-            //                 bg_iphone: {
-            //                     scale: 1
-            //                 }
-            //             }
-            //         },
-            //         // turn_box: {
-            //         //     scale: 1,
-            //         //     position: cc.v2(0, 0),
-            //         //     children: {
-            //         //         bg_turn: {
-            //         //             scale: 1
-            //         //         }
-            //         //     }
-            //         // }
-            //     }
-            // }
+            background: {
+                scale: 1,
+                position: cc.v2(0, 0)
+            },
+            graphics: {
+                _ballRadiusRatio: 1
+            }, 
+            game: {
+                scale: 1,
+                position: cc.v2(0, 0),
+                children: {
+                    grid: {
+                        children: {
+                            wall: { hasPhysicsBoxCollider: true },
+                            underwall: { hasPhysicsBoxCollider: true },
+                            brick5: { hasPhysicsBoxCollider: true },
+                            brick4: { hasPhysicsBoxCollider: true },
+                            brick3: { hasPhysicsBoxCollider: true },
+                            brick2: { hasPhysicsBoxCollider: true },
+                            brick1: { hasPhysicsBoxCollider: true }
+                        }
+                    }
+                }
+            },
+            UI: {
+                children: {
+                    paypal: {
+                        scale: 1,
+                        position: cc.v2(0, 405)
+                    },
+                    banner: {
+                        scale: 1,
+                        position: cc.v2(0, -410),
+                    },
+                    awardPageBox: {
+                        scale: 1,
+                    },
+                    pps: {
+                        scale: 1,
+                        position: cc.v2(0, 0)
+                    }
+                }
+            }
         }
 
         //guiding用来记录是否还需要继续进行拖动手势引导

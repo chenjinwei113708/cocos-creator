@@ -27,6 +27,7 @@ cc.Class({
      */
     setProgress(num, addTime = 1, cb) {
         if (num > 1 || num < 0) return false;
+        console.log(num)
         return new Promise((resolve, reject) => {
             this.currentProgress = this.progressBar.progress;
             this.targetProgress = num; // 设置目标进度条
@@ -37,15 +38,21 @@ cc.Class({
             this.eachAdd = Math.abs(this.targetProgress - this.currentProgress) * (0.0166666666666666) / addTime; // 每dt增加的cash
 
             setTimeout(() => {
+                console.log('[progressend]');
                 // 过了之间直接到最终点
-                this.setFillable(false);
-                this.currentProgress = this.targetProgress;
-                this.progressBar.progress = this.targetProgress;
+                // this.setFillable(false);
+                // this.currentProgress = this.targetProgress;
+                // this.progressBar.progress = this.targetProgress;
                 // 回调与promise
                 cb && cb();
                 resolve();
             }, addTime * 1000)
         })
+    },
+
+    addProgress(num, addTime, cb) {
+        const targetProgress = num + this.targetProgress;
+        return this.setProgress(targetProgress, addTime, cb);
     },
 
     setFillable(status) {

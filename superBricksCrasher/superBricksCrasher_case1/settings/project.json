@@ -10,25 +10,25 @@
     [
       false,
       false,
+      true,
+      true,
+      true
+    ],
+    [
       false,
+      true,
       false,
       false
     ],
     [
       false,
-      false,
-      false,
-      false
-    ],
-    [
-      false,
-      false,
+      true,
       false,
       false
     ],
     [
       false,
-      false,
+      true,
       false,
       false,
       false
@@ -91,5 +91,6 @@
     "width": 960
   },
   "use-customize-simulator": true,
-  "use-project-simulator-setting": false
+  "use-project-simulator-setting": false,
+  "start-scene": "current"
 }

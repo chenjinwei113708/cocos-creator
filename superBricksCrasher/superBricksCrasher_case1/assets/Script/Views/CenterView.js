@@ -37,7 +37,7 @@ cc.Class({
         let posObj = this.gameModel.isLandscape ? this.gameModel.HorizontalConfig : this.gameModel.VerticalConfig;
 
         // 根据横竖屏绘制元素
-        this.drawElements(posObj);
+        this.drawElements(posObj, isLoad);
     },
 
     /**
@@ -124,34 +124,44 @@ cc.Class({
      * 遍历渲染对象内元素的位置
      * @param {Object} elemConf 元素的属性对象
      */
-    drawElements (posObj) {
+    drawElements (posObj, isLoad) {
+        // console.log('[isLoad]', isLoad);
         Object.keys(posObj).forEach((item) => {
             let path = 'Canvas/center/' + item
-            this.drawElem(posObj[item], path)
+            this.drawElem(posObj[item], path, isLoad)
         })
     },
 
     // 递归方法
-    drawElem (elemConf, path) {
+    drawElem (elemConf, path, isLoad) {
+        const node = cc.find(path);
+        // 判断是否存在该节点
+        if (!node) return false;
+        // 遍历gameModel的属性
         Object.keys(elemConf).forEach((key) => {
             switch (key) {
                 case 'children':
                     Object.keys(elemConf.children).forEach((item)=>{
                         let nextPath = path + '/' + item;
-                        this.drawElem(elemConf.children[item], nextPath)
+                        this.drawElem(elemConf.children[item], nextPath, isLoad)
                     })
                     break;
                 case 'scale':
-                    // console.log(path, elemConf[key])
-                    cc.find(path).setScale(elemConf[key]);
+                    node.setScale(elemConf[key]);
                     break;
-                // case 'progressBarDirection':
-                //     cc.find(path).getComponent('cc.ProgressBar').reverse = elemConf[key];
+                case 'hasPhysicsBoxCollider':
+                    if (!elemConf[key]) return;
+                    // syncPosition不知为何不能在第一次更改横竖配置前生效
+                    const rigidBody = node.getComponent(cc.RigidBody);
+                    rigidBody && rigidBody.syncPosition(true);
+                    node.scale = 1.0001;
+                    node.scale = 1 / 1.0001;
+                    break;
                 default: 
-                    cc.find(path)[key] = elemConf[key];
+                    node[key] = elemConf[key];
                     break
             }
-        })
+        });
     },
 
     // update (dt) {},

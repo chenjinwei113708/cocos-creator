@@ -1,3 +1,5 @@
+import { GAME_INFO, GAME_STATUS } from '../Model/ConstValue';
+
 cc.Class({
   extends: cc.Component,
 
@@ -5,103 +7,90 @@ cc.Class({
   },
 
   onLoad() {
-    this.isUp = true;
+    // this.isUp = true;
+    this.ballViewInit();
   },
 
-  // 检测到碰撞的处理函数 只要碰撞了他就会运行
-  onCollisionEnter: function (other, self) {
-    if (other.node._name === 'underwall') return self.isLaunch = true;
-    // 碰撞之后将小球回收到对象池中
-    if (self.tag == 11) {
-      // 由于无法用传统的方法来进行回弹 直接记录该坐标, 生成新的小球回弹即可
-      // GraphView.createSpringbackBall(self.node);
-      // 消除小球
-      // GraphView.onBallKilled(self.node);
-      this.isUp = false;
-    }
-    // cnosole.log()
-    // 调用碰撞事件
-    this.nodeCollision(other);
-  },
+  ballViewInit () {
+    // 获取gameConteoller
+    cc.$getGameController().setScript(
+      this,
+      'gameView'
+    );
 
-  /**
-   * 碰撞事件 碰撞之后的动作
-   * @param {Node} other
-   */
-  nodeCollision(other) {
-    // console.log('碰撞')
-    // 识别砖块 并得到其第一个孩子节点
-    var children = other.node.children;
-    var label = children[0].getComponent(cc.Label);
-    // 获取节点的坐标
-    var startPosition = other.node.getPosition();
-    // 控制结束后小球停止生成
-    if (other.tag == 5) {
-      if (label.string <= 0) {
-        GraphView.gameType = 0;
-        GraphView.removeAllBall();
-      }
+    this.ballInfo = {
+      // isLaunch: false,
+      colsWallTimes: 0, // 撞到墙的次数, 超过10次则消除
+      maxColsWall: 10
     }
-    if (label.string > 0) {
-      // 节点递减
-      label.string--;
-      this.changeBg(other, label.string);
-      GameView.playCorrectMusicByThrottle();
-      // 每一次增加的幅度
-      GameView.timeBegin += 0.0067;
-      GameView.progressView.setProgress(GameView.timeBegin, 0.1);
-    } else {
-      // 开始播放 pp卡收取的动作
-      GameView.showPps(startPosition)
-        .then(() => {
-          // 开始增加cash金额
-          return GameView.cashView.addCash(other.tag * 20, 0.5);
-        })
-        .then(() => {
-          if (other.tag == 5) {
-            console.log("游戏结束");
-            GraphView.removeAllBall();
-            // 设置延迟
-            setTimeout(() => {
-              GameView.audioUtils.playEffect("cheer");
-              return GameView.awardView
-                .showAwardPage()
-                .then(() => GameView.gameController.endGame());
-            }, 1000);
-          }
-        });
-
-      other.node.active = false;
-    }
-    // 用来控制砖块背景的变化
-    // this.changeBg(other, label.string);
   },
 
   /**
-   *
-   * @param {*} other 被碰撞的砖块
-   * @param {*} string 内部的数字
+   * 检测碰撞
+   * @param {*} contact 
+   * @param {*} self 
+   * @param {*} other 
+   * @returns 
    */
-  changeBg(other, string) {
-    var sprite = other.node.getComponent(cc.Sprite);
-    if (string > 30 && string <= 40 && sprite.spriteFrame !== GraphView.img30to40) {
-      sprite.spriteFrame = GraphView.img30to40;
-    } else if (string > 20 && string <= 30 && sprite.spriteFrame !== GraphView.img20to30) {
-      sprite.spriteFrame = GraphView.img20to30;
-    } else if (string > 10 && string <= 20 && sprite.spriteFrame !== GraphView.img10to20) {
-      sprite.spriteFrame = GraphView.img10to20;
-    } else if (string <= 10 && sprite.spriteFrame !== GraphView.img0to10) {
-      sprite.spriteFrame = GraphView.img0to10;
+  onPostSolve (contact, self, other) {
+    const tag = other.tag || 0;
+    if (tag === undefined) return;
+    switch (tag) {
+      case GAME_INFO.BRICKS_TAG:
+        this.handleColsBrick(other);
+        break;
+      case GAME_INFO.CLEAR_WALL_TAG:
+        this.handleColsClearWall(self);
+        break;
+      case GAME_INFO.WALL_TAG:
+        this.handleColsWall();
+        break;
+      default:
+        break;
     }
   },
 
-  update(dt) {
-    if (GraphView.gameType == 1) {
-      // 控制子弹位置的变化 即在y轴方向的速度
-      this.node.y += this.isUp ? 20 : -20;
+  handleColsBrick (other) {
+    this.ballInfo.colsWallTimes = 0;
+    // 处理brick被撞击的方法
+    const sprite = other.node.getComponent(cc.Sprite);
+    const label = other.node.getChildByName('word').getComponent(cc.Label);
+    if (label.string > 30 && label.string <= 40 && sprite.spriteFrame !== this.gameView.img30to40) {
+      sprite.spriteFrame = this.gameView.img30to40;
+    } else if (label.string > 20 && label.string <= 30 && sprite.spriteFrame !== this.gameView.img20to30) {
+      sprite.spriteFrame = this.gameView.img20to30;
+    } else if (label.string > 10 && label.string <= 20 && sprite.spriteFrame !== this.gameView.img10to20) {
+      sprite.spriteFrame = this.gameView.img10to20;
+    } else if (label.string > 1 && label.string <= 10 && sprite.spriteFrame !== this.gameView.img0to10) {
+      sprite.spriteFrame = this.gameView.img0to10;
+    } else if (label.string === '1') {
+      this.gameView.clearBrick(other.node);
     }
-    if (this.node.y >= 580) {
-      GraphView.onBallKilled(this.node);
+    label.string--;
+  },
+
+  handleColsClearWall () {
+    // 消除的操作
+    const rigidBody = this.node.getComponent(cc.RigidBody);
+    rigidBody.enabledContactListener = false;
+    rigidBody.linearVelocity = cc.v2(0, 0);
+    this.node.active = false;
+    this.checkClearOne();
+  },
+
+  checkClearOne() {
+    ;(--this.gameView.gameInfo.currentBallNum === 0) && (this.gameView.isClearAll()
+    ? this.gameView.handleClearAll()
+    : this.gameView.setGameStatus(GAME_STATUS.CAN_CLICK));
+  },
+
+  handleColsWall () {
+    if (this.ballInfo.colsWallTimes > this.ballInfo.maxColsWall) {
+      this.node.active = false;
+      this.checkClearOne();
+    } {
+      this.ballInfo.colsWallTimes++;
     }
   },
+
 });

@@ -22,6 +22,7 @@ cc.Class({
     pps: { type: cc.Node, default: null },
     launchPoint: { type: cc.Node, default: null },
     img0to10: { type: cc.SpriteFrame, default: null },
+    // img10to20: { type: cc.SpriteFrame, efault: null },
     img10to20: { type: cc.SpriteFrame, default: null },
     img20to30: { type: cc.SpriteFrame, default: null },
     img30to40: { type: cc.SpriteFrame, default: null },
@@ -61,6 +62,7 @@ cc.Class({
   /**设置游戏状态 */
   setGameStatus(status) {
     this.gameInfo.status = status;
+    // console.log('[status]', status);
   },
 
   getGameStatus() {
@@ -109,18 +111,17 @@ cc.Class({
     // 初始化参数
     this.gameInfo = {
       status: GAME_STATUS.DISABLED, // 初始设置为不可点击状态
+      isClear: GAME_INFO.BRICKS_NAME,
       isClear50: false,
       isClear40: false,
       isClear30: false,
       isClear20: false,
       isClear10: false,
-      ballNum: 30, // 生成小球的数量
-      initV: cc.v2(1000, 1000)
+      ballNum: 25, // 生成小球的数量
+      // initV: 1000, // 初始速度
+      initV: 1000,
+      currentBallNum: 0, // 存在且没有被消除的ball的个数
     };
-  },
-
-  isClearAll () {
-    return this.gameInfo.isClear50 && this.gameInfo.isClear40 && this.gameInfo.isClear30 && this.gameInfo.isClear20 && this.gameInfo.isClear10;
   },
 
   /**切换mask的显示状态
@@ -188,10 +189,8 @@ cc.Class({
       touchPos.y <= pos.y + offsetY &&
       touchPos.y >= pos.y - offsetY
     ) {
-      // console.log('在里面')
       return true;
     } else {
-      // console.log('不在里面');
       return false;
     }
   },
@@ -200,21 +199,63 @@ cc.Class({
    * 生成小球
    */
   createBalls (e) {
-    console.log('生成小球');
+    const delay = 80;
     // console.log(e);
     const diffPos = this.getDiffByNode(this.launchPoint.parent.convertToNodeSpaceAR(e.touch._point), this.launchPoint.position);
-    // 计算向量, x为1 并转换为初始速度
-    console.log(diffPos)
-    const { x: initX, y: initY } = this.gameInfo.initV;
-    const vector = { x: (diffPos.x > 0 ? 1 : -1), y: Math.abs(diffPos.y / diffPos.x) * (diffPos.y > 0 ? 1 : -1) }
-    console.log('[vector]', vector);
-    const calcV = cc.v2(initX * vector.x, initY * vector.y);
-    console.log('[calcV]', calcV);
-    // for (let i = 0; i < this.gameInfo.ballNum; i++) {
+    // 避免无限接近于0的数
+    const calcV = {};
+    if (Math.abs(diffPos.x) < 1) {
+      calcV.x = 0;
+      calcV.y = this.gameInfo.initV * (diffPos.y > 0 ? 1 : -1);
+    } else {
+      // 获取xy的比例
+      const radio = Math.abs(diffPos.y / diffPos.x);
+      // console.log('[radio]', radio);
+      calcV.x = (this.gameInfo.initV / Math.sqrt(1 + Math.pow(radio, 2))) * (diffPos.x > 0 ? 1 : -1);
+      calcV.y = Math.abs(radio * calcV.x) * (diffPos.y > 0 ? 1 : -1);
+    }
+    // console.log('[calcV]', calcV)
 
-    // }
+    // 发射
+    for (let i = 0; i < this.gameInfo.ballNum; i++) {
+      setTimeout(() => {
+        const ball = cc.instantiate(this.ballPrefab);
+        ball.parent = this.launchPoint;
+        ball.position = cc.v2(0, 0);
+        const RigidBody = ball.getComponent(cc.RigidBody);
+        RigidBody.linearVelocity = cc.v2(calcV.x, calcV.y);
+        this.gameInfo.currentBallNum++;
+      }, i * delay)
+    }
   },
 
+  /**
+   * @param {*} brick 要被消除的brick
+   */
+  clearBrick (brickNode) {
+    console.log('[brickNode._name]', brickNode._name)
+    brickNode.active = false;
+    this.gameInfo.isClear[brickNode._name] = true;
+    this.showPps(brickNode.position);
+    return Promise.all([
+      this.progressView.addProgress(1 / 5, 1),
+      this.cashView.addCash(60, 1)
+    ]);
+  },
+
+  /**
+   * @returns 是否完全被删除的布尔值
+   */
+  isClearAll () {
+    return Object.keys(this.gameInfo.isClear).every(key => this.gameInfo.isClear[key])
+  },
+
+  handleClearAll () {
+    // console.log('[handleClearAll]');
+    this.awardView.showAwardPage().then(() => {
+      this.gameController.endGame();
+    });
+  },
 
   // 点击事件相关结束---------------------------------------------------------------------
 

@@ -15,11 +15,8 @@ cc.Class({
   onLoad() {
     // 开启碰撞检测系统，未开启时无法检测
     cc.director.getCollisionManager().enabled = true;
-    // cc.director.getCollisionManager().enabledDebugDraw = true;
     // 开启绘图
     cc.director.getPhysicsManager().enabled = true;
-    // cc.director.getPhysicsManager().debugDrawFlags = 1;
-
     // 设置瞄准线的长度
     this.maxLength = 800;
 
@@ -112,12 +109,13 @@ cc.Class({
     const total_count = Math.round(vector_dir.mag() / delta);
     // 每次间隔向量​
     vector_dir.normalizeSelf().mulSelf(delta);
+    // console.log(this.graphic_line.node._ballDiaRatio);
     for (let index = 0; index < total_count; index++) {
       graphic_startLocation.addSelf(vector_dir);
       this.graphic_line.circle(
         graphic_startLocation.x,
         graphic_startLocation.y,
-        2
+        this.graphic_line.node._ballRadiusRatio
       );
     }
   },
