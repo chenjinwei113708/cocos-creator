@@ -121,7 +121,7 @@ cc.Class({
     /**展示奖励页 */
     showAwardPage () {
         // console.log('展示奖励页~')
-        this.awardView.showAwardPage()
+        this.awardView.showAwardPage();
     },
 // award相关结束-----------------------------------------------------------------------------
 

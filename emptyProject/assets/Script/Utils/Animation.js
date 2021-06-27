@@ -203,7 +203,7 @@ function toggleMask (node, type) {
         node.opacity = 0;
         node.active = true;
         // 如果为in
-      } else if (type === 'in' && node.opacity !== maxOpacity) {
+      } else if (type === 'in' || node.opacity !== maxOpacity) {
         node.stopAllActions();
       }
       node.runAction(cc.sequence(

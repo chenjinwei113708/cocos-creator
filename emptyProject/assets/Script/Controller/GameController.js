@@ -41,7 +41,6 @@ cc.Class({
         this.countDownView = this.countDown.getComponent('CountDownView');
         this.turnView = this.turn.getComponent('TurnView');
 
-        console.log(this.turnView)
         // 设置gameController引用
         this.setGameController(
             this.gameView,
@@ -66,6 +65,9 @@ cc.Class({
         } else {
             window.addEventListener("resize", this.centerScript.orientCb.bind(this.centerScript, true));
         }
+
+        // 暴露获取gameController的方法
+        cc.$getGameController = () => this;
 
         // 数据加载完毕
         PlayformSDK.gameReady();
