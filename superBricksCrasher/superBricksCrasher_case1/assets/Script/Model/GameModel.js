@@ -57,6 +57,7 @@ export default class GameModel {
                     awardPage_box: {
                         scale: 0.75,
                     },
+                    
                     pps: {
                         scale: 0.75,
                         position: cc.v2(240, 0)

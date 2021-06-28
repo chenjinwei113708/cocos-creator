@@ -13,7 +13,8 @@ cc.Class({
         award: cc.Node, // 奖励相关
         progress: cc.Node, // 进度条
         countDown: cc.Node, // 倒计时
-        turn: cc.Node // 转盘
+        turn: cc.Node, // 转盘
+        ballAndLine:cc.Node,//虚线的起点
     },
 
     onLoad() {
@@ -40,6 +41,7 @@ cc.Class({
         this.progressView = this.progress.getComponent('ProgressView');
         this.countDownView = this.countDown.getComponent('CountDownView');
         this.turnView = this.turn.getComponent('TurnView');
+        this.graphView = this.ballAndLine.getComponent('GraphView');
 
         // 设置gameController引用
         this.setGameController(
@@ -51,8 +53,10 @@ cc.Class({
             this.awardView,
             this.progressView,
             this.countDownView,
-            this.turnView
+            this.turnView,
+            this.graphView
         );
+        
 
         // 根据model渲染各个元素状态 大小 位置等
         this.centerScript.initWithModel(this.gameModel);

@@ -7,7 +7,7 @@ import {
   foreverScale,
   scaleOut,
   scaleIn,
-  slideOut
+  slideOut,
 } from "../Utils/Animation";
 import { getRandom, getThrottle } from "../Utils/utils";
 cc.Class({
@@ -31,7 +31,7 @@ cc.Class({
       default: null,
       type: cc.Prefab,
     },
-    underWall: { type: cc.Node, default: null }
+    underWall: { type: cc.Node, default: null },
   },
 
   // 生命周期回调函数------------------------------------------------------------------------
@@ -45,6 +45,11 @@ cc.Class({
     // 设置金额全局变量
     // this.cashBegin = 0;
     // this.cashView.addCash(150,1);
+
+    // 获取gameConteoller
+    cc.$getGameController().setScript(this, "graphView");
+    // console.log(this.gameController.graphView);
+    // console.log(this.graphView);
   },
 
   start() {
@@ -58,7 +63,6 @@ cc.Class({
   },
   // 生命周期函数结束---------------------------------------------------------------------
 
-  
   // 工具函数----------------------------------------------------------------------------
   /**设置游戏状态 */
   setGameStatus(status) {
@@ -150,8 +154,8 @@ cc.Class({
     this.hand.active = false;
     this.bghand.active = false;
     // 绘制
-    // GraphView.onTouchStart(e);
-    GraphView.onTouchMove(e);
+    // graphView.onTouchStart(e);
+    this.graphView.onTouchMove(e);
   },
 
   /**点击事件移动 */
@@ -159,7 +163,7 @@ cc.Class({
     if (this.getGameStatus() !== GAME_STATUS.CAN_CLICK) return false;
 
     // 移动绘制的线条
-    GraphView.onTouchMove(e);
+    this.graphView.onTouchMove(e);
   },
 
   /**点击事件结束 */
@@ -170,7 +174,7 @@ cc.Class({
     this.underWall.active = true;
 
     // 清理引导线
-    GraphView.onTouchEnd(e);
+    this.graphView.onTouchEnd(e);
 
     // 生成小球
     this.createBalls(e);
@@ -203,10 +207,13 @@ cc.Class({
   /**
    * 生成小球
    */
-  createBalls (e) {
+  createBalls(e) {
     const delay = 80;
     // console.log(e);
-    const diffPos = this.getDiffByNode(this.launchPoint.parent.convertToNodeSpaceAR(e.touch._point), this.launchPoint.position);
+    const diffPos = this.getDiffByNode(
+      this.launchPoint.parent.convertToNodeSpaceAR(e.touch._point),
+      this.launchPoint.position
+    );
     // 避免无限接近于0的数
     const calcV = {};
     if (Math.abs(diffPos.x) < 1) {
@@ -216,7 +223,9 @@ cc.Class({
       // 获取xy的比例
       const radio = Math.abs(diffPos.y / diffPos.x);
       // console.log('[radio]', radio);
-      calcV.x = (this.gameInfo.initV / Math.sqrt(1 + Math.pow(radio, 2))) * (diffPos.x > 0 ? 1 : -1);
+      calcV.x =
+        (this.gameInfo.initV / Math.sqrt(1 + Math.pow(radio, 2))) *
+        (diffPos.x > 0 ? 1 : -1);
       calcV.y = Math.abs(radio * calcV.x) * (diffPos.y > 0 ? 1 : -1);
     }
     // console.log('[calcV]', calcV)
@@ -230,39 +239,41 @@ cc.Class({
         const RigidBody = ball.getComponent(cc.RigidBody);
         RigidBody.linearVelocity = cc.v2(calcV.x, calcV.y);
         this.gameInfo.currentBallNum++;
-      }, i * delay)
+      }, i * delay);
     }
   },
 
   /**
    * @param {*} brick 要被消除的brick
    */
-  clearBrick (brickNode) {
+  clearBrick(brickNode) {
     // console.log('[brickNode._name]', brickNode._name);
     brickNode.active = false;
     this.gameInfo.isClear[brickNode._name] = true;
     this.showPps(brickNode.position);
     return Promise.all([
       this.progressView.addProgress(1 / 5, 1),
-      this.cashView.addCash(60, 1)
+      this.cashView.addCash(60, 1),
     ]);
   },
 
   /**
    * @returns 是否完全被删除的布尔值
    */
-  isClearAll () {
-    return Object.keys(this.gameInfo.isClear).every(key => this.gameInfo.isClear[key])
+  isClearAll() {
+    return Object.keys(this.gameInfo.isClear).every(
+      (key) => this.gameInfo.isClear[key]
+    );
   },
 
-  handleClearAll () {
+  handleClearAll() {
     // console.log('[handleClearAll]');
     this.awardView.showAwardPage().then(() => {
       this.gameController.endGame();
     });
   },
 
-  resetGame () {
+  resetGame() {
     this.underWall.active = false;
     this.setGameStatus(GAME_STATUS.CAN_CLICK);
   },
@@ -293,9 +304,9 @@ cc.Class({
   /**获取两点的直线距离 */
   /**
    * 获取亮点之间的相对距离
-   * @param {*} pos1 
-   * @param {*} pos2 
-   * @returns 
+   * @param {*} pos1
+   * @param {*} pos2
+   * @returns
    */
   getDiffByNode(pos1, pos2) {
     return {
@@ -306,8 +317,8 @@ cc.Class({
 
   /**
    * 展示pp卡
-   * @param {Node} startPosition 
-   * @returns 
+   * @param {Node} startPosition
+   * @returns
    */
   showPps(startPosition) {
     return new Promise((resolve, reject) => {

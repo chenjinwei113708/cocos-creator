@@ -23,8 +23,8 @@ cc.Class({
     // 记录瞄准线长度变化
     this.curLength = 0;
 
-    // 设置全局
-    window.GraphView = this;
+    // // 设置全局
+    // window.GraphView = this
 
   },
 
