@@ -1,12 +1,18 @@
 import { GAME_INFO, GAME_STATUS } from '../Model/ConstValue';
-import { toggleMask } from '../Utils/Animation';
+import { toggleMask, flyTo } from '../Utils/Animation';
 // import Tools from '../Utils/utils'
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        mask: { type: cc.Node, default: null }
+        mask: { type: cc.Node, default: null },
+        money: { type: cc.Node, default: null },
+        moneys: { type: cc.Node, default: null },
+        moneyMask: { type: cc.Node, default: null },
+        tips: { type: cc.Node, default: [] },
+        moneyTip: { type: cc.Prefab, default: null },
+        addMoneyTipBox: { type: cc.Node, default: null }, // 存放增加金币提醒的盒子
     },  
 
 // 生命周期回调函数------------------------------------------------------------------------
@@ -18,8 +24,8 @@ cc.Class({
     start () {
         this.cashView.setIcon('$ ', 'head');
         // this.showHandDrag();
-        this.addEventListener();
-        // this.setGameStatus(GAME_STATUS);
+        this.showHand(this.money, 'position');
+        this.setGameStatus(GAME_STATUS.CAN_CLICK_MONEY);
     },
 // 生命周期函数结束---------------------------------------------------------------------
     
@@ -59,29 +65,6 @@ cc.Class({
 // 工具函数结束---------------------------------------------------------------------------
 
 // 点击事件相关-------------------------------------------------------------------------
-    /**增加点击事件 */
-    addEventListener () {
-        // this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
-        // this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
-        // this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
-        // this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchEnd, this);
-    },
-
-    /**点击事件start */
-    onTouchStart (e) {
-        // this.gameController.getAudioUtils().playEffect('bgClick', 0.8);
-    },
-
-    /**点击事件移动 */
-    onTouchMove (e) {
-
-    },
-
-    /**点击事件结束 */
-    onTouchEnd (e) {
-
-    },
-
     /**
      * 判断点击是否在node里面
      * @param {*} e 点击事件
@@ -102,6 +85,39 @@ cc.Class({
             return false;
         }
     },
+
+    /**
+     * 最开始点击到提示的金钱
+     */
+    handleClickMoney () {
+        if (this.getGameStatus() !== GAME_STATUS.CAN_CLICK_MONEY) return;
+        this.stopHand();
+        toggleMask(this.moneyMask);
+
+        // 处理金币飞向money box
+        flyTo(this.money, this.tips[0]).then(() => {
+            this.createMoneyTip(this.tips[1], '+$1000');
+        });
+    },
+
+    /**
+     * 创建金币提示
+     * @param {*} node 要在哪个位置显示
+     * @param {*} str 显示的文字
+     */
+    createMoneyTip (node, str = '') {
+        const moneyTip = cc.instantiate(this.moneyTip);
+        const txt = moneyTip.getChildByName('txt');
+        // 生成文字
+        txt.getComponent(cc.Label).string = str;
+        moneyTip.parent = this.addMoneyTipBox;
+        moneyTip.position = this.getPosByNode(moneyTip, node);
+        // 动画结束的时候消失
+        console.log(txt.getComponent(cc.Animation));
+        setTimeout(() => {
+            moneyTip.active = false;
+        }, txt.getComponent(cc.Animation).defaultClip.duration * 1000);
+    },
 // 点击事件相关结束---------------------------------------------------------------------
 
 // guide相关----------------------------------------------------------------------------
@@ -113,6 +129,10 @@ cc.Class({
     /**显示拖拽手 */
     showHandDrag (nodeArr, type) {
         this.guideView.showHandDrag(nodeArr, type);
+    },
+
+    stopHand () {
+        this.guideView.stopHand();
     },
 
 // guide相关结束---------------------------------------------------------------------------
@@ -131,5 +151,14 @@ cc.Class({
             x: Math.floor(Math.abs(pos1.x - pos2.x)),
             y: Math.floor(Math.abs(pos1.y - pos2.y))
         }
+    },
+    
+    /**
+     * @param {cc.Node} ndoe1 
+     * @param {cc.Node} node2 
+     * @returns 转换后的pos
+     */
+    getPosByNode (ndoe1, node2) {
+        return ndoe1.parent.convertToNodeSpaceAR(node2.parent.convertToWorldSpaceAR(node2.position));
     }
 });

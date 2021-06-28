@@ -1,0 +1,55 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "money_tip",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.8,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 1,
+  "curveData": {
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "frame": 0.3,
+          "value": [
+            0,
+            -16.24,
+            0
+          ]
+        },
+        {
+          "frame": 0.8,
+          "value": [
+            0,
+            65.423,
+            0
+          ]
+        }
+      ],
+      "opacity": [
+        {
+          "frame": 0,
+          "value": 0
+        },
+        {
+          "frame": 0.3,
+          "value": 255
+        },
+        {
+          "frame": 0.8,
+          "value": 0
+        }
+      ]
+    }
+  },
+  "events": []
+}

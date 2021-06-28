@@ -6,6 +6,8 @@ const GAME_INFO = {
 
 const GAME_STATUS = {
     DISABLED: 0,
+    CAN_CLICK_MONEY: 1,
+    
 }
 
 export {
