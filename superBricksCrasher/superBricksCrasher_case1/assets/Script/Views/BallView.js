@@ -21,7 +21,7 @@ cc.Class({
     this.ballInfo = {
       // isLaunch: false,
       colsWallTimes: 0, // 撞到墙的次数, 超过10次则消除
-      maxColsWall: 10
+      maxColsWall: 55
     }
   },
 

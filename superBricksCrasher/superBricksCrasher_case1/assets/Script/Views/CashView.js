@@ -39,7 +39,6 @@ cc.Class({
     
             this.isPlus = this.targetCash > this.currentCash ? true : false;
             this.eachAdd = Math.abs(this.targetCash - this.currentCash) * (0.0166666666666666) / addTime; // 每dt增加的cash
-            // console.log("111111");
             this.setUpdatable(true); // 设置为可以加钱状态
             setTimeout(() => {
                 resolve();

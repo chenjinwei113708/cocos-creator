@@ -31,6 +31,7 @@ cc.Class({
       default: null,
       type: cc.Prefab,
     },
+    underWall: { type: cc.Node, default: null }
   },
 
   // 生命周期回调函数------------------------------------------------------------------------
@@ -149,7 +150,8 @@ cc.Class({
     this.hand.active = false;
     this.bghand.active = false;
     // 绘制
-    GraphView.onTouchStart(e);
+    // GraphView.onTouchStart(e);
+    GraphView.onTouchMove(e);
   },
 
   /**点击事件移动 */
@@ -164,6 +166,9 @@ cc.Class({
   onTouchEnd(e) {
     if (this.getGameStatus() !== GAME_STATUS.CAN_CLICK) return false;
     this.setGameStatus(GAME_STATUS.DISABLED);
+    // 开启underwall
+    this.underWall.active = true;
+
     // 清理引导线
     GraphView.onTouchEnd(e);
 
@@ -233,7 +238,7 @@ cc.Class({
    * @param {*} brick 要被消除的brick
    */
   clearBrick (brickNode) {
-    console.log('[brickNode._name]', brickNode._name)
+    // console.log('[brickNode._name]', brickNode._name);
     brickNode.active = false;
     this.gameInfo.isClear[brickNode._name] = true;
     this.showPps(brickNode.position);
@@ -255,6 +260,11 @@ cc.Class({
     this.awardView.showAwardPage().then(() => {
       this.gameController.endGame();
     });
+  },
+
+  resetGame () {
+    this.underWall.active = false;
+    this.setGameStatus(GAME_STATUS.CAN_CLICK);
   },
 
   // 点击事件相关结束---------------------------------------------------------------------

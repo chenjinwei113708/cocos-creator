@@ -52,7 +52,7 @@ import getType from '../Utils/utils';
     showHand(node, type = 'parent') {
         // if (this.stopHand) this.stopHand = undefined; // 用于后面存放停止动画的变量
         this.stopHand();
-        console.log(111)
+        // console.log(111)
         // 根据模式更新hand的坐标
         if (type === 'parent') {
             this.updateHandByParent(node);

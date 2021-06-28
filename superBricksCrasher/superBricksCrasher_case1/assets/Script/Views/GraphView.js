@@ -109,7 +109,6 @@ cc.Class({
     const total_count = Math.round(vector_dir.mag() / delta);
     // 每次间隔向量​
     vector_dir.normalizeSelf().mulSelf(delta);
-    // console.log(this.graphic_line.node._ballDiaRatio);
     for (let index = 0; index < total_count; index++) {
       graphic_startLocation.addSelf(vector_dir);
       this.graphic_line.circle(

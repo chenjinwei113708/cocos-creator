@@ -125,7 +125,6 @@ cc.Class({
      * @param {Object} elemConf 元素的属性对象
      */
     drawElements (posObj, isLoad) {
-        // console.log('[isLoad]', isLoad);
         Object.keys(posObj).forEach((item) => {
             let path = 'Canvas/center/' + item
             this.drawElem(posObj[item], path, isLoad)

@@ -41,7 +41,6 @@ cc.Class({
         this.countDownView = this.countDown.getComponent('CountDownView');
         this.turnView = this.turn.getComponent('TurnView');
 
-        console.log(this.turnView)
         // 设置gameController引用
         this.setGameController(
             this.gameView,
