@@ -1,4 +1,4 @@
-import { toggleMask } from '../Utils/Animation';
+import { toggleMask, scaleIn } from '../Utils/Animation';
 
 cc.Class({
     extends: cc.Component,
@@ -22,7 +22,8 @@ cc.Class({
 
         this.gameController.setScript(this,
             'gameView',
-            'audioUtils'
+            'audioUtils',
+            'guideView'
         )
     },
 
@@ -32,11 +33,11 @@ cc.Class({
     },
 
     /**展示奖励页面 */
-    showAwardPage (node) {
+    showAwardPage (node = this.awardPage) {
         return new Promise((resolve, reject) => {
             this.toggleAwardMask('in');
             scaleIn(node).then(() => {
-                this.guideView.showHand(this.buttonTip)
+                this.guideView.showHand(this.buttonTip, 'position');
                 resolve();
             })
         })
