@@ -1,0 +1,82 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "handclip",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 2,
+  "sample": 4,
+  "speed": 1,
+  "wrapMode": 22,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "040bea03-5a79-45b7-a87f-0300050e675d"
+            }
+          }
+        ]
+      }
+    },
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -111.3,
+            45.2
+          ],
+          "motionPath": [
+            [
+              -46,
+              100.6,
+              -88.5,
+              76.6,
+              -31.2,
+              109
+            ],
+            [
+              21.9,
+              122,
+              12.3,
+              117.5,
+              133.9,
+              114.8
+            ]
+          ]
+        },
+        {
+          "frame": 2,
+          "value": [
+            179.5,
+            31.5
+          ],
+          "motionPath": [
+            [
+              98.6,
+              86.5,
+              140.2,
+              66.4,
+              61.1,
+              104.7
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    }
+  ]
+}
