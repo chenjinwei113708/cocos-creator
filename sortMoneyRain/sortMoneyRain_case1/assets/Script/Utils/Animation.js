@@ -6,41 +6,32 @@ const animInfo = {
 }
 
 /**可用于飞向pp卡并隐藏 */
-function flyTo (node1, node2, cb) {
+function flyTo (node1, node2, spawnFn = () => []) {
   return new Promise((resolve, reject) => {
     const flyTime = animInfo.flyTo.time;
     const minOpacity = 0;
     const scaleRatio = 4 / 5; // 开始缩放时飞行时间已经过了多少部分
     const minScale = 0.6;
     const endPos = node1.parent.convertToNodeSpaceAR(node2.parent.convertToWorldSpaceAR(node2));
-    node1.runAction(cc.sequence(
-      cc.moveTo(flyTime * scaleRatio, endPos),
+    const spawnActions = spawnFn(flyTime);
+    spawnActions.length === 0 ? spawnActions.push(cc.callFunc(() => {})) : spawnActions;
+    node1.runAction(cc.spawn(
+      // cc.rotateTo(flyTime, 720),
+      ...spawnActions,
       cc.sequence(
-        cc.spawn(
-          cc.scaleTo(flyTime * (1 - scaleRatio), minScale),
-          cc.fadeTo(flyTime * (1 - scaleRatio), minOpacity),
-        ),
-        cc.callFunc(() => {
-          node1.active = false;
-            cb && cb();
-            resolve();
-        })
-      ),
-      // cc.sequence(
-      //   cc.delayTime(flyTime * scaleRatio),
-      //   // 开始缩小并变透明
-      //   cc.sequence(
-      //     cc.spawn(
-      //       cc.scaleTo(flyTime * (1 - scaleRatio), minScale),
-      //       cc.fadeTo(flyTime * (1 - scaleRatio), minOpacity),
-      //     ),
-      //     cc.callFunc(() => {
-      //       node1.active = false;
-      //         cb && cb();
-      //         resolve();
-      //     })
-      //   )
-      // )
+        cc.moveTo(flyTime * scaleRatio, endPos),
+        cc.sequence(
+          cc.spawn(
+            cc.scaleTo(flyTime * (1 - scaleRatio), minScale),
+            cc.fadeTo(flyTime * (1 - scaleRatio), minOpacity),
+          ),
+          cc.callFunc(() => {
+            node1.active = false;
+              // cb && cb();
+              resolve();
+          })
+        )
+      )
     ))
   })
 }
@@ -199,11 +190,11 @@ function toggleMask (node, type) {
       // 如果active 为 false则直接显示
     } else {
       node.stopAllActions();
-      if (type === undefined && isActive === false) {
+      if (type === undefined || isActive === false) {
         node.opacity = 0;
         node.active = true;
         // 如果为in
-      } else if (type === 'in' || node.opacity !== maxOpacity) {
+      } else if (type === 'in' && node.opacity !== maxOpacity) {
         node.stopAllActions();
       }
       node.runAction(cc.sequence(

@@ -1,18 +1,21 @@
 import { GAME_INFO, GAME_STATUS } from '../Model/ConstValue';
-import { toggleMask, flyTo } from '../Utils/Animation';
-// import Tools from '../Utils/utils'
+import { toggleMask, flyTo, scaleIn, scaleOut } from '../Utils/Animation';
+import { getThrottle } from '../Utils/utils'
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
         mask: { type: cc.Node, default: null },
+        ppIcon: { type: cc.Node, default: null },
+        pps: { type: cc.Node, default: null },
         money: { type: cc.Node, default: null },
         moneys: { type: cc.Node, default: null },
         moneyMask: { type: cc.Node, default: null },
         tips: { type: cc.Node, default: [] },
         moneyTip: { type: cc.Prefab, default: null },
         addMoneyTipBox: { type: cc.Node, default: null }, // 存放增加金币提醒的盒子
+        ppPrefab: { type: cc.Prefab, default: null },
     },  
 
 // 生命周期回调函数------------------------------------------------------------------------
@@ -52,8 +55,16 @@ cc.Class({
             'guideView',
             'awardView',
             'progressView',
-            'cashView'
-        )
+            'cashView',
+            'paypalCashView'
+        );
+
+        // 获取声音方法
+        this.playMoneyMusic = this.getMoneyMusicThrottle(150);
+    },
+
+    getMoneyMusicThrottle (delay = 500) {
+        return getThrottle(() => this.audioUtils.playEffect('money'), delay);
     },
 
     /**切换mask的显示状态 
@@ -92,12 +103,30 @@ cc.Class({
     handleClickMoney () {
         if (this.getGameStatus() !== GAME_STATUS.CAN_CLICK_MONEY) return;
         this.stopHand();
+        // this.playMoneyMusic();
+        this.audioUtils.playEffect('bgClick');
         toggleMask(this.moneyMask);
 
         // 处理金币飞向money box
         flyTo(this.money, this.tips[0]).then(() => {
-            this.createMoneyTip(this.tips[1], '+$1000');
-        });
+            this.playMoneyMusic();
+            return this.createMoneyTip(this.tips[1], '+$1000');
+        }).then(() => Promise.all([
+            this.cashView.addCash(1000, 1),
+            this.paypalCashView.addCashTo(10, 1),
+            this.progressView.setProgress(0.3, 1)
+        ])).then(() => {
+            return this.receiveAllMoney();
+        }).then(() => Promise.all([
+            this.paypalCashView.addCashTo(500, 2),
+            this.progressView.setProgress(1, 2)
+        ])).then(() => {
+            this.awardView.showAwardPage();
+        }).then(() => {
+            this.audioUtils.playEffect('cheer');
+            this.awardView.showDownloadMask();
+            this.gameController.endGame();
+        })
     },
 
     /**
@@ -106,17 +135,48 @@ cc.Class({
      * @param {*} str 显示的文字
      */
     createMoneyTip (node, str = '') {
-        const moneyTip = cc.instantiate(this.moneyTip);
-        const txt = moneyTip.getChildByName('txt');
-        // 生成文字
-        txt.getComponent(cc.Label).string = str;
-        moneyTip.parent = this.addMoneyTipBox;
-        moneyTip.position = this.getPosByNode(moneyTip, node);
-        // 动画结束的时候消失
-        console.log(txt.getComponent(cc.Animation));
-        setTimeout(() => {
-            moneyTip.active = false;
-        }, txt.getComponent(cc.Animation).defaultClip.duration * 1000);
+        return new Promise((resolve, reject) => {
+            const moneyTip = cc.instantiate(this.moneyTip);
+            const txt = moneyTip.getChildByName('txt');
+            // 生成文字
+            txt.getComponent(cc.Label).string = str;
+            moneyTip.parent = this.addMoneyTipBox;
+            moneyTip.position = this.getPosByNode(moneyTip, node);
+            // 动画结束的时候消失
+            console.log(txt.getComponent(cc.Animation));
+            setTimeout(() => {
+                moneyTip.active = false;
+                resolve();
+            }, txt.getComponent(cc.Animation).defaultClip.duration * 1000);
+        })
+    },
+
+    /**所有金币变成pp并回收 */
+    receiveAllMoney () {
+        return new Promise((resolve, reject) => {
+            const delay = 60;
+            const promiseAll = [];
+            this.moneys.children.forEach((money, index) => {
+                setTimeout(() => {
+                    scaleOut(money).then(() => {
+                        const ppIcon = cc.instantiate(this.ppPrefab);
+                        const ratio = 2; // 放大倍数
+                        ppIcon.width = ratio * ppIcon.width;
+                        ppIcon.height = ratio * ppIcon.height;
+                        ppIcon.angle = money.angle;
+                        ppIcon.scale = 0;
+                        ppIcon.parent = this.pps;
+                        ppIcon.position = this.getPosByNode(ppIcon, money);
+                        return scaleIn(ppIcon).then(() => Promise.resolve(ppIcon));
+                    }).then((ppIcon) => {
+                        flyTo(ppIcon, this.ppIcon, (time) => [cc.rotateTo(time, 360)]);
+                    }).then(() => {
+                        this.playMoneyMusic();
+                        resolve();
+                    })
+                }, index * delay);
+            });
+        })
     },
 // 点击事件相关结束---------------------------------------------------------------------
 

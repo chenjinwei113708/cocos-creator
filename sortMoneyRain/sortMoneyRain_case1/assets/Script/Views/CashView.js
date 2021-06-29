@@ -43,8 +43,13 @@ cc.Class({
             this.setUpdatable(true); // 设置为可以加钱状态
             setTimeout(() => {
                 resolve();
-            }, addTime)
+            }, addTime * 1000);
         })
+    },
+
+    addCashTo (num, addTime) {
+        const diffCash = num - this.targetCash;
+        return this.addCash(diffCash, addTime);
     },
 
     /**设置是否可以增加 */

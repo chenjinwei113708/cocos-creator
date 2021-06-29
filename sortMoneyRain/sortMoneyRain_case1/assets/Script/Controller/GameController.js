@@ -10,6 +10,7 @@ cc.Class({
         audio: cc.Node, // 音频
         guide: cc.Node, // 引导
         cash: cc.Node, // 金币 / 分数
+        paypalCash: cc.Node,
         award: cc.Node, // 奖励相关
         progress: cc.Node, // 进度条
         countDown: cc.Node, // 倒计时
@@ -34,6 +35,7 @@ cc.Class({
         this.gameView = this.game.getComponent('GameView');
         this.guideView = this.guide.getComponent('GuideView');
         this.cashView = this.cash.getComponent('CashView');
+        this.paypalCashView = this.paypalCash.getComponent('CashView');
         this.centerScript = this.center.getComponent("CenterView");
         this.audioUtils = this.audio.getComponent('AudioUtils');
         this.awardView = this.award.getComponent('AwardView');
@@ -46,6 +48,7 @@ cc.Class({
             this.gameView,
             this.guideView,
             this.cashView,
+            this.paypalCashView,
             this.centerScript,
             this.audioUtils,
             this.awardView,

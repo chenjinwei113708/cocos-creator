@@ -96,15 +96,15 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 61,
-      "g": 226,
+      "r": 64,
+      "g": 255,
       "b": 26,
       "a": 255
     },
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 2,
-      "height": 33.5
+      "height": 34.76
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -151,8 +151,8 @@
     "_useOriginalSize": true,
     "_string": "",
     "_N$string": "",
-    "_fontSize": 25,
-    "_lineHeight": 25,
+    "_fontSize": 26,
+    "_lineHeight": 26,
     "_enableWrapText": true,
     "_N$file": null,
     "_isSystemFontUsed": true,
@@ -175,8 +175,8 @@
     "_enabled": true,
     "_color": {
       "__type__": "cc.Color",
-      "r": 61,
-      "g": 226,
+      "r": 64,
+      "g": 255,
       "b": 26,
       "a": 255
     },
