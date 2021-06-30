@@ -102,7 +102,7 @@ function scaleOut(node, cb) {
     node.runAction(
       cc.sequence(
         cc.scaleTo(sclaeTime1, maxScale),
-        cc.scaleTo(scaleTime2, 0.8),
+        cc.scaleTo(scaleTime2, 0.5),
         cc.callFunc(() => {
           node.active = false;
           cb && cb();
@@ -173,20 +173,19 @@ function slideInto(node, cb) {
   });
 }
 /**从右边滑入进来 */
-function slideInto1(node, position, cb) {
+function slideInto1(node, cb) {
   return new Promise((resolve, reject) => {
     const moveTime = 0.4;
-    const buffer = 15;
-    const bufferTime = 0.3;
     const canvas = cc.find("Canvas");
-    // node.position = cc.v2((canvas.width / 2) + (node.width / 2), 0); // 让其在整个页面的右边
-    node.position = position;
-    // console.log("11",position);
+    // node.position = cc.v2(canvas.width / 2 + node.width / 2, 0); // 让其在整个页面的右边
+    node.position = cc.v2(0, 0); // 让其在整个页面的右边
     node.active = true;
+    node.scale = 0.8;
     node.runAction(
       cc.sequence(
-        cc.moveTo(moveTime, cc.v2(-buffer, position.y)),
-        cc.moveTo(bufferTime, cc.v2(position.x, position.y)),
+        cc.moveTo(moveTime, cc.v2(-80, 80)),
+        cc.scaleTo(moveTime, 1.2),
+        // cc.scaleTo(moveTime, 0.5),
         cc.callFunc(() => {
           resolve();
           cb && cb();

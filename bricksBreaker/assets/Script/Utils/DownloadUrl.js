@@ -1,6 +1,6 @@
 export const DownloadUrl = {
-    iosUrl: 'https://play.google.com/store/apps/details?id=com.superbricks.breaker',
-    androidUrl: 'https://play.google.com/store/apps/details?id=com.superbricks.breaker',
+    iosUrl: 'https://play.google.com/store/apps/details?id=com.skneet.bricksbreaker',
+    androidUrl: 'https://play.google.com/store/apps/details?id=com.skneet.bricksbreaker',
     
     getUrl: function() {
         let userAgent = navigator.userAgent || navigator.vendor;

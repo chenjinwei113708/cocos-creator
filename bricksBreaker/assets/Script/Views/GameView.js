@@ -31,6 +31,7 @@ cc.Class({
     ballPrefab: { type: cc.Prefab, default: null },
     underWall: { type: cc.Node, default: null },
     ppCardPrefab: { type: cc.Prefab, default: null },
+    ppPosition: { type: cc.Node, default: null },
   },
 
   // 生命周期回调函数------------------------------------------------------------------------
@@ -48,6 +49,7 @@ cc.Class({
     // 获取gameConteoller
     cc.$getGameController().setScript(this, "graphView");
     // this.showPPcard();
+    console.log(this.node);
   },
 
   start() {
@@ -239,6 +241,7 @@ cc.Class({
         this.gameInfo.currentBallNum++;
       }, i * delay);
     }
+    console.log("[11]",this.launchPoint);
   },
 
   /**
@@ -250,7 +253,7 @@ cc.Class({
     this.gameInfo.isClear[brickNode._name] = true;
     this.showPps(brickNode.position);
     return Promise.all([
-      this.progressView.addProgress(1 / 5, 1),
+      this.progressView.addProgress(1 / 10, 1),
       this.cashView.addCash(30, 1),
     ]);
   },
@@ -264,9 +267,21 @@ cc.Class({
     );
   },
 
+  /**
+   * 用来展示pp卡 奖励
+   */
+  addEvent() {
+    this.progressView.addProgress(5 / 10, 1);
+    this.cashView.addCash(150, 2).then(()=>{
+      this.awardView.hideAwardPage();
+    });
+  },
+  /**
+   * 结束之后的展示
+   */
   handleClearAll() {
     // console.log('[handleClearAll]');
-    this.awardView.showAwardPage().then(() => {
+    this.awardView.showAwardPage1().then(() => {
       this.gameController.endGame();
     });
   },
@@ -295,20 +310,22 @@ cc.Class({
   /**展示奖励页 */
   showAwardPage() {
     // console.log('展示奖励页~')
-    this.awardView.showAwardPage();
-  },
-  showPPcard(other) {
-    var position = other.node.position;
-    console.log(other.node.position);
-    this.setPPCard(this.launchPoint, cc.v2(position.x + 150, position.y + 250));
+    this.awardView.showAwardPage1();
   },
 
-  setPPCard(parent, position) {
+  /**
+   * 展示pp卡
+   * @param {*} other
+   */
+  showPPcard(other) {
+    this.setPPCard(other.node);
+  },
+
+  setPPCard(parent) {
     const ppCard = cc.instantiate(this.ppCardPrefab);
     ppCard.parent = parent;
-    // ppCard.position = position;
     ppCard.position = cc.v2(0, 0);
-    // slideInto1(ppCard, position);
+    slideInto1(ppCard);
     scaleOut(ppCard);
   },
   // award相关结束-----------------------------------------------------------------------------

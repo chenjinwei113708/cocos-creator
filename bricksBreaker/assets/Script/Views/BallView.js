@@ -72,10 +72,11 @@ cc.Class({
 
   handleColsClearWall () {
     // 消除的操作
-    const rigidBody = this.node.getComponent(cc.RigidBody);
-    rigidBody.enabledContactListener = false;
-    rigidBody.linearVelocity = cc.v2(0, 0);
-    this.node.active = false;
+    // const rigidBody = this.node.getComponent(cc.RigidBody);
+    // rigidBody.enabledContactListener = false;
+    // rigidBody.linearVelocity = cc.v2(0, 0);
+    // this.node.active = false;
+    this.node.removeFromParent();
     this.checkClearOne();
   },
 

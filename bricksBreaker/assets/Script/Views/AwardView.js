@@ -1,4 +1,9 @@
-import { toggleMask, scaleIn } from "../Utils/Animation";
+import {
+  toggleMask,
+  scaleIn,
+  scaleOut,
+  foreverScale,
+} from "../Utils/Animation";
 
 cc.Class({
   extends: cc.Component,
@@ -6,8 +11,9 @@ cc.Class({
   properties: {
     mask: cc.Node,
     downloadMask: cc.Node, // 下载遮罩层
-    awardPage: { type: cc.Node, default: null },
-    buttonTip: { type: cc.Node, default: null },
+    awardPage: { type: cc.Node, default: [] },
+    buttonTip: { type: cc.Node, default: [] },
+    light: { type: cc.Node, default: null },
     PPPage: cc.Node,
     PPPageBlur: cc.Node,
   },
@@ -28,25 +34,42 @@ cc.Class({
   },
 
   /**展示奖励页面 */
-  showAwardPage(node = this.awardPage) {
+  showAwardPage1(node = this.awardPage[1]) {
+    foreverScale(this.light);
     return new Promise((resolve, reject) => {
       this.toggleAwardMask("in");
       scaleIn(node).then(() => {
-        this.guideView.showHand(this.buttonTip);
+        this.guideView.showHand(this.buttonTip[1]);
+        // this.showDownloadMask();
+        resolve();
+      });
+    });
+  },
+
+  /**展示奖励页面 */
+  showAwardPage(node = this.awardPage[0]) {
+    return new Promise((resolve, reject) => {
+      this.toggleAwardMask("in");
+      scaleIn(node).then(() => {
+        this.guideView.showHand(this.buttonTip[0]);
         this.showDownloadMask();
         resolve();
       });
     });
   },
 
-  hideAwardPage(node) {
+  hideAwardPage() {
     return new Promise((resolve, reject) => {
       // 隐藏手
       this.guideView.stopHand();
       this.toggleAwardMask("out");
-      scaleOut(this.awardPage1).then(() => {
-        resolve();
-      });
+      scaleOut(this.awardPage[1])
+        .then(() => {
+          resolve();
+        })
+        .then(() => {
+          this.showAwardPage(this.awardPage[0]);
+        });
     });
   },
 
