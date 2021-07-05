@@ -22,6 +22,7 @@ cc.Class({
     /**onLoad会比start快 */
     onLoad () {
         this.gameViewInit();
+        // console.log(cc.rotateTo(0.5, 360));
     },
 
     start () {
@@ -102,9 +103,11 @@ cc.Class({
      */
     handleClickMoney () {
         if (this.getGameStatus() !== GAME_STATUS.CAN_CLICK_MONEY) return;
+        // 点击之后 引导动作暂停
         this.stopHand();
         // this.playMoneyMusic();
         this.audioUtils.playEffect('bgClick');
+        // mask 转换
         toggleMask(this.moneyMask);
 
         // 处理金币飞向money box
@@ -158,6 +161,7 @@ cc.Class({
             const promiseAll = [];
             this.moneys.children.forEach((money, index) => {
                 setTimeout(() => {
+                    // 金钱开始消失，然后开始显示pp卡
                     scaleOut(money).then(() => {
                         const ppIcon = cc.instantiate(this.ppPrefab);
                         const ratio = 2; // 放大倍数
@@ -166,9 +170,11 @@ cc.Class({
                         ppIcon.angle = money.angle;
                         ppIcon.scale = 0;
                         ppIcon.parent = this.pps;
+                        // 这个动作主要是进行绑定（类似）
                         ppIcon.position = this.getPosByNode(ppIcon, money);
                         return scaleIn(ppIcon).then(() => Promise.resolve(ppIcon));
                     }).then((ppIcon) => {
+                        // 开始的pp卡和金钱一样，角度都是不一样的，所以我们要进行角度的调整
                         flyTo(ppIcon, this.ppIcon, (time) => [cc.rotateTo(time, 360)]);
                     }).then(() => {
                         this.playMoneyMusic();

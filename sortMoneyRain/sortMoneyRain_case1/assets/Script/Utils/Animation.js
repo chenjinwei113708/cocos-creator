@@ -13,7 +13,9 @@ function flyTo (node1, node2, spawnFn = () => []) {
     const scaleRatio = 4 / 5; // 开始缩放时飞行时间已经过了多少部分
     const minScale = 0.6;
     const endPos = node1.parent.convertToNodeSpaceAR(node2.parent.convertToWorldSpaceAR(node2));
+    // 这里的作用是控制动画的时间 保持一致
     const spawnActions = spawnFn(flyTime);
+    // 如果没有传入函数，则执行空的回调函数
     spawnActions.length === 0 ? spawnActions.push(cc.callFunc(() => {})) : spawnActions;
     node1.runAction(cc.spawn(
       // cc.rotateTo(flyTime, 720),
