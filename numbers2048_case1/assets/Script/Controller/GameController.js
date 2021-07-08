@@ -13,6 +13,7 @@ cc.Class({
         center:cc.Node,
         game: cc.Node,
         cash: cc.Node,
+        award: cc.Node,
 
     },
 

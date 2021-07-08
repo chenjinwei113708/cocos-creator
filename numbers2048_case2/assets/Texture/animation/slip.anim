@@ -1,0 +1,68 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "slip",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 1.8,
+  "sample": 5,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "paths": {},
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -9.315,
+            29.531,
+            0
+          ]
+        },
+        {
+          "frame": 1,
+          "value": [
+            -0.061,
+            -0.032,
+            0
+          ]
+        },
+        {
+          "frame": 1.8,
+          "value": [
+            8.456,
+            -28.694,
+            0
+          ]
+        }
+      ],
+      "width": [
+        {
+          "frame": 0,
+          "value": 6.7
+        },
+        {
+          "frame": 1,
+          "value": 66
+        },
+        {
+          "frame": 1.8,
+          "value": 6.7
+        }
+      ]
+    },
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "5d28472e-8133-4aef-9c87-b72bf768b475"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}
