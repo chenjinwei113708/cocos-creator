@@ -1,0 +1,116 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "handclip",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 4,
+  "sample": 4,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "040bea03-5a79-45b7-a87f-0300050e675d"
+            }
+          }
+        ]
+      }
+    },
+    "props": {
+      "position": [
+        {
+          "frame": 0,
+          "value": [
+            -111.3,
+            45.2
+          ],
+          "motionPath": [
+            [
+              -48.9,
+              90.3,
+              -86.2,
+              72.8,
+              -21.7,
+              103.2
+            ]
+          ]
+        },
+        {
+          "frame": 1,
+          "value": [
+            20.8,
+            107.4
+          ],
+          "motionPath": [
+            [
+              99.1,
+              86.9,
+              62.8,
+              104.2,
+              141.7,
+              66.5
+            ]
+          ]
+        },
+        {
+          "frame": 2,
+          "value": [
+            179.5,
+            31.5
+          ],
+          "motionPath": [
+            [
+              98.6,
+              86.5,
+              140.2,
+              66.4,
+              61.1,
+              104.7
+            ]
+          ]
+        },
+        {
+          "frame": 3,
+          "value": [
+            20.8,
+            108.2
+          ],
+          "motionPath": [
+            [
+              -57.4,
+              86.1,
+              -24.2,
+              101.8,
+              -91,
+              70.3
+            ]
+          ]
+        },
+        {
+          "frame": 4,
+          "value": [
+            -112.8,
+            45.2
+          ],
+          "motionPath": []
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0,
+      "func": "",
+      "params": []
+    }
+  ]
+}
